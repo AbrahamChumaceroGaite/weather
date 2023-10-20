@@ -1,0 +1,7 @@
+{
+    "roles": {
+        "Administrador": "Administrador",
+        "operador": "Operador",
+        "cliente": "Cliente"
+    }
+}

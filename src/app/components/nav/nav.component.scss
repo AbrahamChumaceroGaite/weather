@@ -1,0 +1,46 @@
+.nb-layout {
+  &.sidebar-hidden {
+    .sidebar {
+      display: none;
+    }
+
+    .nav-header .toggle-sidebar {
+      display: none;
+    }
+  }
+}
+
+.nav-header {
+  background-color: rgba(10, 80, 112, 0.979);
+  color: white;
+}
+
+.user-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  color: white;
+}
+
+.nb-user {
+  margin-left: auto;
+}
+
+@media (max-width: 767px) {
+  .nav-header .toggle-sidebar {
+    display: block;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+}
+
+.sidebar {
+  transition: all 0.3s ease-in-out;
+
+  &.collapsed {
+    transform: translateX(-100%);
+  }
+}

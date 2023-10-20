@@ -1,0 +1,43 @@
+<div class="{{formHeader}}">
+    <p-dialog [(visible)]="visible" [breakpoints]="{ '960px': '105vw' }" [style]="{width: '40vw'}" [maximizable]="true" [styleClass]="'custom-dialog-icons'">
+      <p-header>
+        <nb-icon icon="{{ formlogo }}"></nb-icon> {{ formTitle }}
+      </p-header>
+      <br>
+    <form [formGroup]="form" (ngSubmit)="submitForm()" class="form-columns">
+        <div class="columns">
+            <div class="form-group">
+                <nb-form-field>
+                    <nb-icon nbPrefix icon="pin"></nb-icon>
+                    <nb-select placeholder="Seleccione la Provincia" formControlName="idprovince">
+                        <nb-option *ngFor="let province of provinces" [value]="province.id">{{ province.name }}</nb-option>
+                      </nb-select>
+                </nb-form-field>
+                <div class="form-footer">
+                    <div class="form-alert" *ngIf="form.get('idprovince')?.invalid && form.get('idprovince')?.touched">
+                        La Provincia es requerida. </div>
+                </div>
+              </div>             
+        </div>
+        <div class="columns">
+            <div class="form-group">
+                <nb-form-field>
+                  <nb-icon nbPrefix icon="home"></nb-icon>
+                  <input nbInput fullWidth type="text" placeholder="Nombre del Municipio" [status]="form.get('name')?.invalid && form.get('name')?.touched ? 'danger' : 'basic'" formControlName="name"/>
+                </nb-form-field>
+                <div class="form-footer">
+                    <div class="form-alert" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+                        El Nombre del Municipio es Requerido. </div>
+                </div>
+              </div>  
+        </div>
+    </form>
+    <ng-template pTemplate="footer">
+        <button nbButton status="success" (click)="submitForm()" [nbSpinner]="loading" type="submit" [disabled]="!form.valid">
+            {{ submitButtonText }}
+          </button>
+          <button nbButton status="basic" (click)="cancel()">Cancelar</button>
+    </ng-template>
+  </p-dialog>
+  </div>  
+  

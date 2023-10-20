@@ -1,0 +1,78 @@
+<p-toolbar styleClass="table-header mb-4 gap-2">
+  <div class="search-input">
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="filterByName($event)" placeholder="Buscar Estacion..." />
+    </span>
+  </div>
+  <div class="btn-spacer">
+    <button pButton pRipple label="Nuevo" icon="pi pi-plus" (click)="dialog()" pTooltip="Agregar Estacion"
+      tooltipPosition="bottom" class="p-button-success"></button>
+    <button pButton pRipple label="Excel" icon="pi pi-file-excel" pTooltip="Exportar Excel" tooltipPosition="bottom"
+      class="p-button-help"></button>
+  </div>
+  <div class="spacer"></div>
+</p-toolbar>
+<br>
+<p-table #dt [value]="deviceIdData" dataKey="id" [rowHover]="true" [rows]="10" [showCurrentPageReport]="true"
+  [rowsPerPageOptions]="[5, 10, 25, 50]" [loading]="loading" [paginator]="true" responsiveLayout="stack"
+  [breakpoint]="'960px'" styleClass="p-datatable-gridlines"
+  currentPageReportTemplate="Pagina {first} con {last} de {totalRecords} filas" [filterDelay]="0"
+  [globalFilterFields]="['name']">
+  <ng-template pTemplate="caption">
+    <nb-icon nbPrefix icon="list"></nb-icon>
+    Lista de Estaciones
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="id">
+        ID
+        <p-sortIcon field="id"></p-sortIcon>
+      </th>
+      <th pSortableColumn="name" class="table-column">
+        Nombre
+        <p-sortIcon field="name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="status" class="table-column">
+        Estado
+        <p-sortIcon field="status"></p-sortIcon>
+      </th>
+      <th pSortableColumn="location" class="table-column">
+        Locacion
+        <p-sortIcon field="location"></p-sortIcon>
+      </th>
+      <th pSortableColumn="department" class="table-column">
+        Departamento
+        <p-sortIcon field="department"></p-sortIcon>
+      </th>
+      <th pSortableColumn="createdAt" class="table-column">
+        Fecha Creado
+        <p-sortIcon field="createdAt"></p-sortIcon>
+      </th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-device>
+    <tr>
+      <td><span class="p-column-title">ID</span>{{ device.id }}</td>
+      <td><span class="p-column-title">Nombre</span>{{ device.name }}</td>
+      <td><span class="p-column-title">Estado</span>{{ device.status.toString() === '1' ? 'Activo' : 'Suspendido' }}
+      </td>
+      <td><span class="p-column-title">Locacion</span>{{ device.location }}</td>
+      <td><span class="p-column-title">Departamento</span>{{ device.department }}</td>
+      <td>
+        <span class="p-column-title">Fecha Creado</span>{{ device.createdAt | date : "dd/MM/yy HH:mm" }}
+      </td>
+      <td>
+        <div class="btn-spacer">
+          <button (click)="dialog(device.id)" nbButton outline status="success">
+            <nb-icon icon="edit"></nb-icon>
+          </button>
+          <button (click)="dialogDelete(device.id)" nbButton outline status="danger">
+            <nb-icon icon="trash"></nb-icon>
+          </button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

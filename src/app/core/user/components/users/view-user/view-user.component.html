@@ -1,0 +1,88 @@
+<p-toolbar styleClass="table-header mb-4 gap-2">
+  <div class="search-input">
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input
+        pInputText
+        type="text"
+        (input)="filterByName($event)"
+        placeholder="Buscar Usuario..."
+      />
+    </span>
+  </div> 
+    <div class="btn-spacer">
+    <button
+      pButton
+      pRipple
+      label="Nuevo"
+      icon="pi pi-plus"
+      (click)="dialog()"
+      pTooltip="Agregar Usuario"
+      tooltipPosition="bottom"
+      class="p-button-success"
+    ></button>
+  </div>
+  <div class="spacer"></div>
+</p-toolbar>
+<br />
+<p-table
+  #dt
+  [value]="userData"
+  dataKey="id"
+  [rowHover]="true"
+  [rows]="10"
+  [showCurrentPageReport]="true"
+  [rowsPerPageOptions]="[5, 10, 25, 50]"
+  [loading]="loading"
+  [paginator]="true"
+  responsiveLayout="stack"
+  [breakpoint]="'960px'"
+  styleClass="p-datatable-gridlines"
+  currentPageReportTemplate="Pagina {first} con {last} de {totalRecords} filas"
+  [filterDelay]="0"
+  [globalFilterFields]="['name']"
+>
+  <ng-template pTemplate="caption">
+    <nb-icon nbPrefix icon="list"></nb-icon>
+    Lista de Usuarios
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="id"> ID
+        <p-sortIcon field="id"></p-sortIcon>
+      </th>
+      <th pSortableColumn="name" class="table-column">Nombre
+        <p-sortIcon field="name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="email" class="table-column">Correo
+        <p-sortIcon field="email"></p-sortIcon>
+      </th>
+      <th pSortableColumn="rol" class="table-column">Rol
+        <p-sortIcon field="rol"></p-sortIcon>
+      </th>
+      <th pSortableColumn="createdAt" class="table-column">Fecha Creado
+        <p-sortIcon field="createdAt"></p-sortIcon>
+      </th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-user>
+    <tr>
+      <td><span class="p-column-title">ID</span>{{ user.id }}</td>
+      <td><span class="p-column-title">Nombre</span>{{ user.name }}</td>
+      <td><span class="p-column-title">Correo</span>{{ user.email }}</td>
+      <td><span class="p-column-title">Rol</span>{{ user.rol }}</td>
+      <td><span class="p-column-title">Fecha Creado</span>{{ user.createdAt | date : "dd/MM/yy HH:mm" }}</td>
+      <td>
+        <div class="btn-spacer">
+          <button (click)="dialog(user.id)" nbButton outline status="success">
+            <nb-icon icon="edit"></nb-icon>
+          </button>
+          <button (click)="dialogDelete(user.id)" nbButton outline status="danger">
+            <nb-icon icon="trash"></nb-icon>
+          </button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

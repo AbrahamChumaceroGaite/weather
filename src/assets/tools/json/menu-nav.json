@@ -1,0 +1,67 @@
+{
+  "nav": [
+    {
+      "title": "Tablero Administrativo",
+      "icon": "book-outline",
+      "link": "home/admin/device"
+    },
+    {
+      "title": "Estaciones",
+      "icon": "pantone",
+      "children": [
+        {
+          "title": "Estaciones",
+          "icon": "smartphone-outline",
+          "link": "view/device/tabs"
+        }
+      ]
+    },
+    {
+      "title": "Usuarios",
+      "icon": "people-outline",
+      "children": [
+        {
+          "title": "Clientes",
+          "icon": "person-outline",
+          "link": "view/client/tabs"
+        },
+        {
+          "title": "Operadores",
+          "icon": "shield-outline",
+          "link": "view/user"
+        }
+      ]
+    },
+    {
+      "title": "Organizacion Territorial",
+      "icon": "map-outline",
+      "children": [
+        {
+          "title": "Provincia",
+          "icon": "globe-outline",
+          "link": "view/province"
+        },
+        {
+          "title": "Municipio",
+          "icon": "globe-2-outline",
+          "link": "view/municipality"
+        },
+        {
+          "title": "Comunidad",
+          "icon": "npm-outline",
+          "link": "view/community"
+        },
+        {
+          "title": "Locacion",
+          "icon": "flag-outline",
+          "link": "view/location"
+        }
+      ]
+    }
+  ],
+  "option": [
+    { "title": "Cerrar Sesión", 
+      "icon": "log-out", 
+      "link": "home" }
+  ]
+}

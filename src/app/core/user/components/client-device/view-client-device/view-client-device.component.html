@@ -1,0 +1,93 @@
+<p-toolbar styleClass="table-header">
+    <div class="search-input">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="filterByName($event)" placeholder="Buscar Cliente..."
+        />
+      </span>
+    </div>
+    <div class="btn-spacer">
+        <button pButton pRipple label="Nuevo" icon="pi pi-plus" (click)="dialog()" pTooltip="Asignar Estacion a Cliente" tooltipPosition="bottom" class="p-button-success"></button>
+        <button pButton pRipple label="Excel" icon="pi pi-file-excel"  pTooltip="Exportar Excel" tooltipPosition="bottom" class="p-button-help"></button>
+      </div>
+      <div class="spacer"></div>
+  </p-toolbar>
+  <br>
+  <p-table
+    #dt
+    [value]="clientDeviceData"
+    dataKey="id"
+    [rowHover]="true"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[5, 10, 25, 50]"
+    [loading]="loading"
+    [paginator]="true"
+    responsiveLayout="stack"
+    [breakpoint]="'960px'"
+    styleClass="p-datatable-gridlines"
+    currentPageReportTemplate="Pagina {first} con {last} de {totalRecords} filas"
+    [filterDelay]="0"
+    [globalFilterFields]="['client']">
+  <ng-template pTemplate="caption">        
+    <nb-icon nbPrefix icon="list"></nb-icon> 
+    Lista de Usuarios    
+  </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id" >
+          ID
+          <p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="client" class="table-column">
+          Cliente
+          <p-sortIcon field="client"></p-sortIcon>
+        </th>
+        <th pSortableColumn="idevice" class="table-column">
+          Nº Estacion
+          <p-sortIcon field="idevice"></p-sortIcon>
+        </th>
+        <th pSortableColumn="device" class="table-column">
+          Nombre Estacion
+          <p-sortIcon field="device"></p-sortIcon>
+        </th>
+        <th pSortableColumn="createdAt" class="table-column">
+          Fecha Asignacion
+          <p-sortIcon field="createdAt"></p-sortIcon>
+        </th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-client>
+      <tr>
+        <td><span class="p-column-title">ID</span>{{ client.id }}</td>
+        <td><span class="p-column-title">Cliente</span>{{ client.client }}</td>
+        <td><span class="p-column-title">Nº Estacion</span>{{ client.idevice }}</td>
+        <td><span class="p-column-title">Nombre Estacion</span>{{ client.device }}</td>
+        <td>
+          <span class="p-column-title">Fecha Creado</span>{{ client.createdAt | date : "dd/MM/yy HH:mm" }}
+        </td>
+        <td>
+          <div class="btn-spacer">
+            <button
+              (click)="dialog(client.id)"
+              nbButton
+              outline
+              status="success"
+            >
+              <nb-icon icon="edit"></nb-icon>
+            </button>
+            <button
+              (click)="dialogDelete(client.id)"
+              nbButton
+              outline
+              status="danger"
+            >
+              <nb-icon icon="trash"></nb-icon>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  

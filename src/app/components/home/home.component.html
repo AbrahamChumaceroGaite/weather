@@ -1,0 +1,26 @@
+<nb-layout>
+  <nb-layout-header fixed class="nav-header">
+    <div class="header-content">
+      <div class="welcome-text">
+        BIENVENIDO A LA DEMO
+      </div>
+      <button nbButton status="primary" size="small" (click)="openLoginDialog()" class="login-button">
+        <nb-icon icon="person-outline"></nb-icon>
+        Iniciar sesión
+      </button>
+    </div>
+  </nb-layout-header>
+
+  <nb-layout-column>
+    <app-view-admin-home-home></app-view-admin-home-home>
+  </nb-layout-column>
+
+  <nb-layout-footer fixed>
+    <div class="footer-content">
+      <div class="footer-text">© 2023 Universidad Católica Boliviana "San Pablo" - Abraham</div>
+      <div class="footer-icons">
+        <!-- Agrega más iconos según tus necesidades -->
+      </div>
+    </div>
+  </nb-layout-footer>
+</nb-layout>

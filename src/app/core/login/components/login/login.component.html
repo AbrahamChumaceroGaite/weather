@@ -1,0 +1,40 @@
+<p-dialog [(visible)]="visible" [breakpoints]="{'960px': '105vw'}" [style]="{width: '40vw'}">
+  <nb-card>
+    <nb-card-body>
+      <h2 class="form-title">Iniciar sesión</h2>
+
+      <form (ngSubmit)="onSubmit()" #loginForm="ngForm" autocomplete="off">
+        <div class="form-group">
+          <label class="form-label" for="email">Email:</label>
+          <div class="input-container">
+            <nb-form-field>
+              <nb-icon nbPrefix icon="at-outline"></nb-icon>
+              <input nbInput fullWidth type="email" id="email" name="email" [(ngModel)]="email" required
+                #emailInput="ngModel" [class.input-error]="emailInput.invalid && emailInput.dirty">
+            </nb-form-field>
+          </div>
+          <div *ngIf="emailInput.invalid && emailInput.dirty" class="error-message">
+            Email es requerido
+          </div>
+
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Contraseña:</label>
+          <div class="input-container">
+            <input nbInput fullWidth type="password" id="password" name="password" [(ngModel)]="pass" required
+              #passInput="ngModel" [class.input-error]="passInput.invalid && passInput.dirty">
+            <nb-icon icon="lock-closed-outline" class="input-icon" pack="eva"></nb-icon>
+          </div>
+          <div *ngIf="passInput.invalid && passInput.dirty" class="error-message">
+            Contraseña es requerida
+          </div>
+        </div>
+
+        <div class="form-group">
+          <button nbButton fullWidth type="submit" [disabled]="loginForm.invalid">Iniciar sesión</button>
+        </div>
+      </form>
+    </nb-card-body>
+  </nb-card>
+</p-dialog>

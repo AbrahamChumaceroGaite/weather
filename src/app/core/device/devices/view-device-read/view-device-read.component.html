@@ -1,0 +1,78 @@
+<p-toolbar styleClass="table-header mb-4 gap-2">
+    <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+        selectedItemsLabel="{0} columnas seleccionadas" [style]="{ 'min-width': '200px' }"
+        placeholder="Selecciona las Columnas">
+    </p-multiSelect>
+    <div class="btn-spacer">
+        <button pButton pRipple label="Excel" icon="pi pi-file-excel" pTooltip="Exportar Excel" tooltipPosition="bottom"
+            class="p-button-help"></button>
+    </div>
+    <label> Fecha inicio </label>
+    <input pInputText type="date" id="startDate" class="p-inputtext" (change)="filterByDate()" />
+    <label> Fecha final </label>
+    <input pInputText type="date" id="endDate" class="p-inputtext" (change)="filterByDate()" />
+    <button pButton pRipple label="Limpiar" class="p-button-secondary" (click)="clearDateFilter()"></button>
+    <div class="spacer"></div>
+    <p-button icon="pi pi-refresh"></p-button>
+</p-toolbar>
+
+<br />
+<p-table [columns]="selectedColumns" #dt [value]="deviceData" dataKey="Id" [rowHover]="true" [rows]="5"
+    [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50]" [loading]="loading" [paginator]="true"
+    responsiveLayout="stack" [resizableColumns]="true" styleClass="mt-3" [scrollable]="true"
+    currentPageReportTemplate="Pagina {first} con {last} de {totalRecords} filas" [filterDelay]="0"
+    [globalFilterFields]="['device_id', 'client', 'status']">
+    <ng-template pTemplate="caption">
+        <nb-icon nbPrefix icon="list"></nb-icon>
+        Lista de Lecturas
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th pSortableColumn="id" class="p-col-resizable">
+                ID
+                <p-sortIcon field="id"></p-sortIcon>
+            </th>
+            <th pSortableColumn="device_id" class="table-columns-device p-col-resizable" >
+                Estacion
+                <p-sortIcon field="device_id"></p-sortIcon>
+            </th>
+            <th pSortableColumn="client" class="table-columns-device p-col-resizable">
+                Cliente
+                <p-sortIcon field="device_id"></p-sortIcon>
+            </th>
+            <th *ngFor="let col of columns" class="p-col-resizable">
+                {{ col.header }}
+            </th>
+            <th pSortableColumn="createdAt" class="p-col-resizable">
+                Registrado
+                <p-sortIcon field="createdAt"></p-sortIcon>
+            </th>
+        </tr>
+        <tr>
+            <th></th>
+            <th  class="table-columns-device p-col-resizable">
+                <p-columnFilter type="text" field="device_id"></p-columnFilter>
+            </th>
+            <th class="table-columns-device p-col-resizable">
+                <p-columnFilter type="text" field="client"></p-columnFilter>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-device let-columns="columns">
+        <tr>
+            <td><span class="p-column-title">Registro</span>{{ device.Id }}</td>
+            <td >
+                <span class="p-column-title">Estacion</span>{{ device.device_id }}
+            </td>
+            <td><span class="p-column-title">Cliente</span>{{ device.client }}</td>
+            <td *ngFor="let col of columns">
+                <span class="p-column-title"></span>
+                {{ device[col.field] }}
+            </td>
+            <td>
+                <span class="p-column-title">Registrado</span>{{ device.createdAt | date : "dd/MM/yy HH:mm" }}
+            </td>
+            <td></td>
+        </tr>
+    </ng-template>
+</p-table>

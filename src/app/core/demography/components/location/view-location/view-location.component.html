@@ -1,0 +1,92 @@
+<p-toolbar styleClass="table-header">
+    <div class="search-input">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="filterByName($event)" placeholder="Buscar Locacion..."
+        />
+      </span>
+    </div>
+    <div class="btn-spacer">
+        <button pButton pRipple label="Nuevo" icon="pi pi-plus" (click)="dialog()" pTooltip="Agregar Locacion" tooltipPosition="bottom" class="p-button-success"></button>
+        <button pButton pRipple label="Excel" icon="pi pi-file-excel"  pTooltip="Exportar Excel" tooltipPosition="bottom" class="p-button-help"></button>
+      </div> 
+      <div class="spacer"></div>
+  </p-toolbar>
+  <br>
+  <p-table
+    #dt
+    [value]="locationData"
+    dataKey="id"
+    [rowHover]="true"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[5, 10, 25, 50]"
+    [loading]="loading"
+    [paginator]="true"
+    responsiveLayout="stack"
+    [breakpoint]="'960px'"
+    styleClass="p-datatable-gridlines"
+    currentPageReportTemplate="Pagina {first} con {last} de {totalRecords} filas"
+    [filterDelay]="0"
+    [globalFilterFields]="['name']">
+    <ng-template pTemplate="caption">        
+      <nb-icon nbPrefix icon="list"></nb-icon> 
+      Lista de Locaciones    
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id" >
+          ID
+          <p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="department" class="table-column">
+          Departamento
+          <p-sortIcon field="department"></p-sortIcon>
+        </th>
+        <th pSortableColumn="province" class="table-column">
+          Provincia
+          <p-sortIcon field="province"></p-sortIcon>
+        </th>
+        <th pSortableColumn="municipality" class="table-column">
+            Municpio
+            <p-sortIcon field="municipality"></p-sortIcon>
+          </th>
+          <th pSortableColumn="community" class="table-column">
+            Comunidad
+            <p-sortIcon field="community"></p-sortIcon>
+          </th>
+          <th pSortableColumn="location" class="table-column">
+            Locacion
+            <p-sortIcon field="location"></p-sortIcon>
+          </th>
+        <th pSortableColumn="createdAt" class="table-column">
+          Fecha Creado
+          <p-sortIcon field="createdAt"></p-sortIcon>
+        </th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-location>
+      <tr>
+        <td><span class="p-column-title">ID</span>{{ location.id }}</td>
+        <td><span class="p-column-title">Departamento</span>{{ location.department }}</td>
+        <td><span class="p-column-title">Provincia</span>{{ location.province }}</td>
+        <td><span class="p-column-title">Municipio</span>{{ location.municipality }}</td>
+        <td><span class="p-column-title">Locacion</span>{{ location.community }}</td>
+        <td><span class="p-column-title">Comunidad</span>{{ location.name }}</td>
+        <td><span class="p-column-title">Fecha Creado</span>{{ location.createdAt | date : "dd/MM/yy HH:mm" }}</td>
+        <td>
+          <div class="btn-spacer">
+            <button (click)="dialog(location.id)" nbButton outline status="success">
+              <nb-icon icon="edit"></nb-icon>
+            </button>
+            <button
+              (click)="dialogDelete(location.id)" nbButton outline status="danger">
+              <nb-icon icon="trash"></nb-icon>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  

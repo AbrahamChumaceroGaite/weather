@@ -1,0 +1,45 @@
+<div class="{{formHeader}}">
+    <p-dialog [(visible)]="visible" [breakpoints]="{ '960px': '105vw' }" [style]="{width: '40vw'}" [maximizable]="true" [styleClass]="'custom-dialog-icons'">
+      <p-header>
+        <nb-icon icon="{{ formlogo }}"></nb-icon> {{ formTitle }}
+      </p-header>
+      <br>
+    <form [formGroup]="form" (ngSubmit)="submitForm()" class="form-columns">
+        <div class="columns">
+            <div class="form-group">
+                <nb-form-field>
+                    <nb-icon nbPrefix icon="person"></nb-icon>
+                    <nb-select placeholder="Seleccione al Cliente" formControlName="idclient">
+                        <nb-option *ngFor="let client of clients" [value]="client.id">{{ client.name }}</nb-option>
+                      </nb-select>
+                </nb-form-field>
+                <div class="form-footer">
+                    <div class="form-alert" *ngIf="form.get('idclient')?.invalid && form.get('idclient')?.touched">
+                        Necesitas un Cliente. </div>
+                </div>
+              </div>             
+        </div>
+        <div class="columns">
+            <div class="form-group">
+                <nb-form-field>
+                    <nb-icon nbPrefix icon="smartphone"></nb-icon>
+                    <nb-select placeholder="Seleccione la Estacion" formControlName="idevice">
+                        <nb-option *ngFor="let device of devices" [value]="device.id">{{ device.name }}</nb-option>
+                      </nb-select>
+                </nb-form-field>
+                <div class="form-footer">
+                    <div class="form-alert" *ngIf="form.get('idevice')?.invalid && form.get('idevice')?.touched">
+                        Debes Asignar la Estacion. </div>
+                </div>
+              </div>  
+        </div>
+    </form>
+    <ng-template pTemplate="footer">
+        <button nbButton status="success" (click)="submitForm()" [nbSpinner]="loading" type="submit" [disabled]="!form.valid">
+            {{ submitButtonText }}
+          </button>
+          <button nbButton status="basic" (click)="cancel()">Cancelar</button>
+    </ng-template>
+  </p-dialog>
+  </div>  
+  

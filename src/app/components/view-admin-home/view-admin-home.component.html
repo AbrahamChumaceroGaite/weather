@@ -1,0 +1,65 @@
+<div class="dashboard-content">
+
+    <nb-card class="indice" status="">
+        <nb-card-header>Ult. Registro: {{ date | date : "dd/MM/yy HH:mm" }}</nb-card-header>
+        <nb-card-body [ngStyle]="{ 'background-image': getBackgroundImage(temp) }" class="temp-report">
+            <p-carousel [value]="deviceCarouselData" [numVisible]="4" [numScroll]="1" [circular]="true"
+                verticalViewPortHeight="360px" [responsiveOptions]="responsiveOptions" [autoplayInterval]="5000">
+                <ng-template let-item pTemplate="item">
+                    <div class="border-1 surface-border border-round text-center py-5 px-3">
+                        <div class="carousel-item">
+                            <span class="carousel-values">{{ item.title }}</span>
+                            <img [src]="item.img" alt="Image" style="height: 90px">
+                            <div class="mb-3"></div>
+                            <div class="carousel-values">
+                                <span class="value">{{ item.values }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-carousel>
+        </nb-card-body>
+
+    </nb-card>
+
+    <p-toolbar styleClass="table-header">
+        <label for="">Filtros</label>
+        <nb-select placeholder="Seleccione la Estacion" [(ngModel)]="selectedDevice" (selectedChange)="applyFilter()">
+            <nb-option *ngFor="let device of deviceIdData" [value]="device.id">
+                {{ device.name }} </nb-option>
+        </nb-select>
+        <div class="spacer"></div>
+        <label> Fecha inicio </label>
+        <input pInputText type="date" id="startDate" class="p-inputtext" />
+        <label> Fecha final </label>
+        <input pInputText type="date" id="endDate" class="p-inputtext" />
+    </p-toolbar>
+
+    <div class="graph-content">
+        <nb-card status="">
+            <nb-card-header>Ubicación Dispositivo</nb-card-header>
+            <nb-card-body>
+                <div id="leaflet-map" class="map" leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)">
+                </div>
+            </nb-card-body>
+        </nb-card>
+        <nb-card accent="info" class="dash-graph">
+            <nb-card-header>
+              <span>Registro de Históricos</span>
+              <nb-form-field>
+                <nb-icon nbPrefix icon="smartphone"></nb-icon>
+                <nb-select placeholder="Filtro de Variables Ambientales" (selectedChange)="filterData($event)">
+                  <nb-option *ngFor="let option of deviceDataGraph" [value]="option">{{ option.label }}</nb-option>
+                </nb-select>
+              </nb-form-field>
+            </nb-card-header>
+            <nb-card-body>
+              <apx-chart [series]="DeviceHistoricData.series" [chart]="DeviceHistoricData.chart"
+                [dataLabels]="DeviceHistoricData.dataLabels" [markers]="DeviceHistoricData.markers"
+                [title]="DeviceHistoricData.title" [fill]="DeviceHistoricData.fill" [yaxis]="DeviceHistoricData.yaxis"
+                [xaxis]="DeviceHistoricData.xaxis" [tooltip]="DeviceHistoricData.tooltip" [autoUpdateSeries]="true">
+              </apx-chart>
+            </nb-card-body>
+          </nb-card>
+    </div>
+</div>

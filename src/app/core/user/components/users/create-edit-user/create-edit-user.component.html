@@ -1,0 +1,75 @@
+<div class="{{formHeader}}">
+    <p-dialog [(visible)]="visible" [breakpoints]="{ '960px': '105vw' }" [style]="{width: '40vw'}" [maximizable]="true" [styleClass]="'custom-dialog-icons'">
+      <p-header>
+        <nb-icon icon="{{ formlogo }}"></nb-icon> {{ formTitle }}
+      </p-header>
+      <br>
+    <form [formGroup]="form" (ngSubmit)="submitForm()" class="form-columns">
+        <div class="columns">
+            <div class="form-group">
+                <nb-form-field>
+                  <nb-icon nbPrefix icon="person"></nb-icon>
+                  <input nbInput fullWidth type="text" placeholder="Nombre Usuario" [status]="form.get('name')?.invalid && form.get('name')?.touched ? 'danger' : 'basic'" formControlName="name" [maxlength]="30" />
+                </nb-form-field>
+                <div class="form-footer">
+                    <div class="form-alert" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+                        Nombre requerido. Debe tener al menos 5 caracteres.
+                      </div>
+                        <div class="spacer"> </div>
+                  <div class="form-hint">{{ form.get('name')?.value?.length || 0 }} / 30</div>
+                </div>
+              </div>  
+              <div class="form-group">
+                <nb-form-field>
+                  <nb-icon nbPrefix icon="lock"></nb-icon>
+                  <input nbInput fullWidth type="password" [type]="getInputType()" [status]="form.get('pass')?.invalid && form.get('pass')?.touched ? 'danger' : 'basic'" formControlName="pass"/>
+                  <button nbSuffix nbButton ghost type="button" (click)="toggleShowPassword()">
+                    <nb-icon [icon]="showPassword ? 'eye-outline' : 'eye-off-2-outline'" pack="eva" [attr.aria-label]="showPassword ? 'hide password' : 'show password'">
+                    </nb-icon>
+                  </button>
+                </nb-form-field>
+                <div class="form-footer">
+                  <div class="form-alert" *ngIf="form.get('pass')?.invalid && form.get('pass')?.touched">
+                    Contraseña requerida. Debe tener al menos 6 caracteres y contener al menos un número y un símbolo.
+                  </div>
+                </div>
+              </div>
+              
+        </div>
+        <div class="columns">         
+            <div class="form-group">
+                <nb-form-field>
+                  <nb-icon nbPrefix icon="at"></nb-icon>
+                  <input nbInput fullWidth type="email" placeholder="Correo Usuario"  [status]="form.get('email')?.invalid && form.get('email')?.touched ? 'danger' : 'basic'" formControlName="email" [maxlength]="20" />
+                </nb-form-field>
+                <div class="form-footer">
+                    <div class="form-alert" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+                        El Correo debe ser Valido. </div>
+                        <div class="spacer"> </div>
+                  <div class="form-hint">{{ form.get('email')?.value?.length || 0 }} / 20</div>
+                </div>
+              </div> 
+              <div class="form-group">
+                <nb-form-field>
+                    <nb-icon nbPrefix icon="award"></nb-icon>
+                    <nb-select placeholder="Seleccione el Rol" formControlName="idrol">
+                        <nb-option *ngFor="let rol of rols" [value]="rol.id">{{ rol.rol }}</nb-option>
+                      </nb-select>
+                </nb-form-field>
+                <div class="form-footer">
+                    <div class="form-alert" *ngIf="form.get('idrol')?.invalid && form.get('idrol')?.touched">
+                        El Rol es requerida. </div>
+                </div>
+              </div>             
+             
+        </div>
+    </form>
+    <ng-template pTemplate="footer">
+        <button nbButton status="success" (click)="submitForm()" [nbSpinner]="loading" type="submit" [disabled]="!form.valid">
+            {{ submitButtonText }}
+          </button>
+          <button nbButton status="basic" (click)="cancel()">Cancelar</button>
+    </ng-template>
+  </p-dialog>
+  </div>  
+  
