@@ -46,7 +46,8 @@ export class HomeComponent implements OnInit {
   showLoginModal(): void {
     this.ref = this.dialogService.open(LoginComponent, {
       header: 'Iniciar sesión',
-      width: '55%',
+      styleClass: 'login-modal',
+  /*     width: '60%', */
       contentStyle: { overflow: 'auto' },
       baseZIndex: 10000,
     });

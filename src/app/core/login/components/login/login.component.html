@@ -1,7 +1,7 @@
 <br>
 <form id="loginform" #loginform (ngSubmit)="onSubmit()" [formGroup]="form" autocomplete="off">
   <div class="form-column">
-
+    <p-messages (value)="messages2" [enableService]="false"></p-messages>
     <div class="form-content">
       <label htmlFor="username">
         <i class="pi pi-user"></i>CI o DNI</label>

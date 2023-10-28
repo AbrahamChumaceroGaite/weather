@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessagesService } from 'src/app/services/dialog/message.service';
+import { Message } from 'primeng/api';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +12,8 @@ import { MessagesService } from 'src/app/services/dialog/message.service';
 })
 export class LoginComponent {
   form!: FormGroup;
+  messages2: Message[] | undefined;
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -36,8 +39,15 @@ export class LoginComponent {
         this.router.navigate(['/home/admin/device']);
       },
       (err: any) => {
+        this.showLoginFailed();
         this.MessagesService.showFailedLogin();
       }
     );
+  }
+
+  showLoginFailed() {
+    this.messages2 = [
+      { severity: 'error', summary: 'Error', detail: 'No se pudo iniciar sesión' },
+  ];
   }
 }
