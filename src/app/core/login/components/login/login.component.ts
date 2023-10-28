@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Router } from '@angular/router';
-import { NbToastrService } from '@nebular/theme';
-import { NbDialogRef } from '@nebular/theme';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MessagesService } from 'src/app/services/dialog/message.service';
 
 @Component({
   selector: 'app-login',
@@ -10,40 +10,34 @@ import { NbDialogRef } from '@nebular/theme';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  email: string = '';
-  pass: string = '';
-  visible = true;
+  form!: FormGroup;
   constructor(
-    private authService: AuthService, 
-    private router: Router, 
-    private toastr: NbToastrService,
-    private dialogRef: NbDialogRef<LoginComponent>
+    private authService: AuthService,
+    private router: Router,
+    private MessagesService: MessagesService,
+    private fb: FormBuilder,
   ) { }
 
-  onSubmit(): void {
-    const body: any = {
-      email: this.email,
-      pass: this.pass
-    };    
-    this.authService.login(body).subscribe(
-        (res: any) => {
-          console.log('Inicio de sesión exitoso:', res);
-          this.router.navigate(['/home/admin/device']);
-          // Redireccionar al usuario después de iniciar sesión
-
-
-          // Mostrar mensaje de bienvenida
-          this.toastr.success('¡Bienvenido!', 'Inicio de sesión exitoso');
-        },
-        (error: any) => {
-          console.log('Error al iniciar sesión:', error);
-          // Mostrar mensaje de error al usuario
-          this.toastr.danger('Error al iniciar sesión', 'Error');
-        }
-      );
+  ngOnInit(): void {
+    this.loadform();
   }
-  cancel() {
-    this.dialogRef.close();
-    this.visible = false;
+
+  loadform() {
+    this.form = this.fb.group({
+      ci: ['', [Validators.required, Validators.minLength(3)]],
+      pass: ['', Validators.required],
+    })
+  }
+
+  onSubmit(): void {
+    this.authService.login(this.form.value).subscribe(
+      (res: any) => {      
+        this.MessagesService.showSuccessLogin();
+        this.router.navigate(['/home/admin/device']);
+      },
+      (err: any) => {
+        this.MessagesService.showFailedLogin();
+      }
+    );
   }
 }

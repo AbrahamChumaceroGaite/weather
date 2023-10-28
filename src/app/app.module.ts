@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 /**Componentes */
 import { HomeComponent } from './components/home/home.component';
@@ -16,21 +17,22 @@ import { NebularLibraryModule } from './modules/nebular-library.module';
 import { NbContextMenuModule } from '@nebular/theme';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { NgApexchartsModule } from 'ng-apexcharts';
-
-/**Librerias Graficas */
 import { NbThemeModule, NbSidebarModule, NbMenuModule, NbDialogModule, NbFormFieldModule, NbToastrModule, NbLayoutModule, NbRouteTabsetComponent, NbRouteTabsetModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
-import { RegisterComponent } from './core/login/components/register/register.component';
+import { DialogService } from 'primeng/dynamicdialog';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { ViewAdminHomeHomeComponent } from './components/view-admin-home/view-admin-home.component';
+import { environment } from 'src/environments/environment';
+import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
+import { ngxUiLoaderConfigTemplate } from './utils/ngxuiloader';
+import { CarouselModule } from 'ngx-owl-carousel-o';
+import { MessageService } from 'primeng/api';
+const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     NavComponent,
-    RegisterComponent,
-    ViewAdminHomeHomeComponent
   ],
   imports: [
     NgApexchartsModule,
@@ -42,6 +44,9 @@ import { ViewAdminHomeHomeComponent } from './components/view-admin-home/view-ad
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgxUiLoaderModule,
+    NgxUiLoaderModule.forRoot(ngxUiLoaderConfigTemplate),
+    NgxUiLoaderHttpModule.forRoot({ showForeground: true }),
     NbFormFieldModule,
     NbEvaIconsModule,
     NbDialogModule.forRoot(),
@@ -51,10 +56,12 @@ import { ViewAdminHomeHomeComponent } from './components/view-admin-home/view-ad
     NbMenuModule.forRoot(),
     NbToastrModule.forRoot(),
     NbRouteTabsetModule,
+    CarouselModule,
     NebularLibraryModule,
     PrimengLibraryModule,
     NbThemeModule.forRoot({ name: 'corporate' }),
     NbLayoutModule,
+    SocketIoModule.forRoot(config),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable
@@ -62,7 +69,7 @@ import { ViewAdminHomeHomeComponent } from './components/view-admin-home/view-ad
       registrationStrategy: 'registerWhenStable:30000'
     }),
   ],
-  providers: [],
+  providers: [DialogService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

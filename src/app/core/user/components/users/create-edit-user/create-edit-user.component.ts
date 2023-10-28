@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
-import { MessageService } from 'src/app/services/dialog/message.service';
+import { MessagesService } from 'src/app/services/dialog/message.service';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/core/user/services/user.service';
 import { RolerService } from 'src/app/core/user/services/roler.service';
@@ -30,7 +30,7 @@ export class CreateEditUserComponent implements OnInit {
     private userService: UserService,
     private rolService: RolerService,
     private confirmService: ConfirmService,
-    private messageService: MessageService,
+    private MessagesService: MessagesService,
     private fb: FormBuilder,
     private dialogRef: NbDialogRef<CreateEditUserComponent>
   ) { }
@@ -82,12 +82,12 @@ export class CreateEditUserComponent implements OnInit {
         if (result === 'Confirmed') {
           this.userService.put(this.id, formValue).subscribe(
             () => {
-              this.messageService.showConfirmEdit();
+              this.MessagesService.showConfirmEdit();
               this.cancel();
               this.loading = false;
             },
             (error) => {
-              this.messageService.showError();
+              this.MessagesService.showError();
               this.loading = false;
               console.log(error);
             }
@@ -96,11 +96,11 @@ export class CreateEditUserComponent implements OnInit {
       });
     } else {
       this.userService.post(formValue).subscribe((res)=>{
-        this.messageService.showConfirmPost();
+        this.MessagesService.showConfirmPost();
         this.cancel();
       }, (err)=>{
         console.log("ERROR",err)
-        this.messageService.showError();
+        this.MessagesService.showError();
         this.cancel();
       });
     }

@@ -1,10 +1,20 @@
 @use "themes" as *;
 @use "@nebular/theme/styles/globals" as *;
 @use '../src/app/styles/dashboard.scss';
+@use '../src/app/styles/login.scss';
+@use '../src/app/styles/landing-page.css';
+@use '../src/assets/vendor/bootstrap/css/bootstrap.min.css';
+@use '../src/assets/vendor/bootstrap-icons/bootstrap-icons.css';
+@use '../src/assets/vendor/boxicons/css/boxicons.min.css';
+@use '../src/assets/vendor/glightbox/css/glightbox.min.css';
+@use '../src/assets/vendor/remixicon/remixicon.css';
+@use '../src/assets/vendor/swiper/swiper-bundle.min.css';
 @import "primeicons/primeicons.css";
 @import "node_modules/leaflet/dist/leaflet.css";
 @import "~leaflet/dist/leaflet.css";
 @import '~mapbox-gl/dist/mapbox-gl.css';
+@import 'ngx-owl-carousel-o/lib/styles/scss/owl.carousel';
+@import 'ngx-owl-carousel-o/lib/styles/scss/owl.theme.default';
 
 @include nb-install() {
   @include nb-theme-global();
@@ -160,8 +170,6 @@
 .tabs-background {
   background-color: white;
 }
-
-
 
 .dashboard-info {
   flex: 1;

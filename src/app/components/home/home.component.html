@@ -1,26 +1,336 @@
-<nb-layout>
-  <nb-layout-header fixed class="nav-header">
-    <div class="header-content">
-      <div class="welcome-text">
-        BIENVENIDO A LA DEMO
-      </div>
-      <button nbButton status="primary" size="small" (click)="openLoginDialog()" class="login-button">
-        <nb-icon icon="person-outline"></nb-icon>
-        Iniciar sesión
-      </button>
-    </div>
-  </nb-layout-header>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
 
-  <nb-layout-column>
-    <app-view-admin-home-home></app-view-admin-home-home>
-  </nb-layout-column>
+</head>
 
-  <nb-layout-footer fixed>
-    <div class="footer-content">
-      <div class="footer-text">© 2023 Universidad Católica Boliviana "San Pablo" - Abraham</div>
-      <div class="footer-icons">
-        <!-- Agrega más iconos según tus necesidades -->
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top header-inner-pages">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <div class="logo-header">
+        <a class="logo"><img src="assets/icons/icon-48x48.png" alt="logo" class="img-fluid"></a>
+        <h1 class="title">{{header_info.title}}</h1>
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto" (click)="scrollToSection('home')">Bienvenido</a></li>
+          <li><a class="nav-link scrollto" (click)="scrollToSection('about')">Proyecto P3</a></li>
+          <li><a class="nav-link scrollto" (click)="scrollToSection('services')">Servicio</a></li>
+          <li><a class="nav-link scrollto" (click)="scrollToSection('mapping')">Mapa</a></li>
+          <li><a class="nav-link scrollto" (click)="showLoginModal()"><i class="bx bx-user-circle"></i></a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <!-- End Header -->
+
+  <!-- ======= home ======= -->
+  <section #home id="home">
+
+    <div id="homeCarousel" data-bs-interval="5000" class="carousel slide carousel-fade" data-bs-ride="carousel">
+
+      <ol class="carousel-indicators" id="home-carousel-indicators"></ol>
+
+      <div class="carousel-inner" role="listbox">
+
+        <div class="carousel-item active" style="background-image: url(assets/img/slide/slide-2.jpg)">
+          <div class="carousel-container">
+            <div class="container">
+              <h2 class="animated fadeInDown">{{header_info.subtitle}}</h2>
+              <p class="animated fadeInUp">{{header_info.content}}</p>
+              <div style="flex-direction: column; display: flex; gap: 5px;">
+                <p-button label="Ver mas" icon="pi pi-angle-down" iconPos="left" severity="info"
+                  (click)="scrollToSection('about')"></p-button>
+                <p-button label="Iniciar Sesión" icon="pi pi-user" class="login-togle" iconPos="left" severity="success"
+                  (click)="showLoginModal()"></p-button>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
-  </nb-layout-footer>
-</nb-layout>
+
+    <owl-carousel-o [options]="customOptions">
+      <ng-container *ngFor="let slide of images">
+        <ng-template carouselSlide [id]="slide.id">
+          <img [src]="slide.src" [alt]="slide.alt" [title]="slide.title">
+          <div class="carousel-text">
+            <div class="container">
+              <h2 class="animated fadeInDown">{{header_info.subtitle}}</h2>
+              <p class="animated fadeInUp">{{header_info.content}}</p>
+              <p-button label="Ver mas" icon="pi pi-angle-down" iconPos="left" severity="info"
+                (click)="scrollToSection('about')"></p-button>
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+    </owl-carousel-o>
+
+  </section>
+  <!-- End home -->
+
+  <main id="main">
+
+    <!-- ======= About Section ======= -->
+    <section #about id="about" class="about">
+      <div class="container-fluid">
+
+        <div class="row justify-content-center">
+          <div class="col-xl-5 col-lg-6 video-box d-flex justify-content-center align-items-stretch position-relative">
+            <!--             <a href="https://www.youtube.com/watch?v=MOQPAhbYZLY&ab_channel=ProyectoCReA-UCB" class="glightbox play-btn mb-4"></a> -->
+            <iframe class="glightbox play-btn mb-4" width="560" height="315"
+              src="https://www.youtube.com/embed/MOQPAhbYZLY?si=n5pluFYszUYQb5FD" title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+          </div>
+
+          <div
+            class="col-xl-5 col-lg-6 icon-boxes d-flex flex-column align-items-stretch justify-content-center py-5 px-lg-5">
+            <h3>{{boxes.title1}}</h3>
+            <p>{{boxes.content1}}</p>
+
+            <div class="icon-box">
+              <div class="icon"><i class="bx bx-baguette"></i></div>
+              <h4 class="title"><a>{{boxes.title2}}</a></h4>
+              <p class="description">{{boxes.content2}}</p>
+            </div>
+
+            <div class="icon-box">
+              <div class="icon"><i class="bx bx-bar-chart-square"></i></div>
+              <h4 class="title"><a>{{boxes.title3}}</a></h4>
+              <p class="description">{{boxes.content3}}</p>
+            </div>
+
+            <div class="icon-box">
+              <div class="icon"><i class="bx bx-cloud"></i></div>
+              <h4 class="title"><a>{{boxes.title4}}</a></h4>
+              <p class="description">{{boxes.content4}}</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+    <!-- End About Section -->
+
+    <!-- ======= Counts Section ======= -->
+    <section id="counts" class="counts section-bg">
+      <div class="container-fluid">
+
+        <div class="row counters" style="justify-content: center; justify-items: center;">
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-purecounter-start="0" data-purecounter-duration="1" class="purecounter">12</span>
+            <p>Dispositivos</p>
+          </div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-purecounter-start="0" data-purecounter-duration="1" class="purecounter">34</span>
+            <p>Usuarios</p>
+          </div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-purecounter-start="0" data-purecounter-duration="1" class="purecounter">54</span>
+            <p>Locaciones</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Counts Section -->
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services">
+      <div class="container-fluid">
+
+        <div class="section-title">
+          <h2>SERVICIO</h2>
+          <h3><span>{{boxes.title5}}</span></h3>
+          <p>{{boxes.content5}}</p>
+        </div>
+
+        <div class="row justify-content-center">
+          <div class="col-xl-10">
+            <div class="row">
+              <div class="col-lg-4 col-md-6 icon-box">
+                <div class="icon"><i class="ri-bar-chart-box-line"></i></div>
+                <h4 class="title"><a>{{services.title1}}</a></h4>
+                <p class="description">{{services.content1}}</p>
+              </div>
+              <div class="col-lg-4 col-md-6 icon-box">
+                <div class="icon"><i class="ri-chat-smile-3-fill"></i></div>
+                <h4 class="title"><a>{{services.title2}}</a></h4>
+                <p class="description">{{services.content2}}</p>
+              </div>
+              <div class="col-lg-4 col-md-6 icon-box">
+                <div class="icon"><i class="ri-customer-service-2-line"></i></div>
+                <h4 class="title"><a>{{services.title3}}</a></h4>
+                <p class="description">{{services.content3}}</p>
+              </div>
+              <div class="col-lg-4 col-md-6 icon-box">
+                <div class="icon"><i class="ri-upload-cloud-fill"></i></div>
+                <h4 class="title"><a>{{services.title4}}</a></h4>
+                <p class="description">{{services.content4}}</p>
+              </div>
+              <div class="col-lg-4 col-md-6 icon-box">
+                <div class="icon"><i class="ri-money-dollar-circle-line"></i></div>
+                <h4 class="title"><a>{{services.title5}}</a></h4>
+                <p class="description">{{services.content5}}</p>
+              </div>
+              <div class="col-lg-4 col-md-6 icon-box">
+                <div class="icon"><i class="ri-sun-fill"></i></div>
+                <h4 class="title"><a>{{services.title6}}</a></h4>
+                <p class="description">{{services.content6}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End Services Section -->
+
+    <!-- ======= Cta Section ======= -->
+    <section id="cta" class="cta">
+      <div class="container">
+        <div class="text-center">
+          <h3>{{maps.title}}</h3>
+          <p> {{maps.content}}</p>
+        </div>
+      </div>
+    </section>
+    <!-- End Cta Section -->
+
+    <!-- ======= mapping Section ======= -->
+    <section id="mapping" class="mapping">
+      <div class="container-fluid">
+
+        <div class="section-title">
+          <h2>Mapa</h2>
+          <h3>Departamentos donde se usa <span>S.M.I</span></h3>
+          <p>Dentro de los mismos se utilizan en distintos puntos de distribución, mediante tu cuenta podras ver
+            exactamente donde se encuentra tu dispositivo S.M.I.</p>
+        </div>
+        <div class="row">
+          <div class="map-card">
+            <div id="leaflet-map" class="map" leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)">
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+    <!-- End mapping Section -->
+
+    <!-- ======= Contact Section ======= -->
+    <!-- <section id="contact" class="contact section-bg">
+      <div class="container-fluid">
+
+        <div class="section-title">
+          <h2>Contact</h2>
+          <h3>Get In Touch With <span>Us</span></h3>
+          <p>Ut possimus qui ut temporibus culpa velit eveniet modi omnis est adipisci expedita at voluptas atque vitae
+            autem.</p>
+        </div>
+
+        <div class="row justify-content-center">
+          <div class="col-xl-10">
+            <div class="row">
+
+              <div class="col-lg-6">
+
+                <div class="row justify-content-center">
+
+                  <div class="col-md-6 info d-flex flex-column align-items-stretch">
+                    <i class="bx bx-map"></i>
+                    <h4>Address</h4>
+                    <p>A108 Adam Street,<br>New York, NY 535022</p>
+                  </div>
+                  <div class="col-md-6 info d-flex flex-column align-items-stretch">
+                    <i class="bx bx-phone"></i>
+                    <h4>Call Us</h4>
+                    <p>+1 5589 55488 55<br>+1 5589 22548 64</p>
+                  </div>
+                  <div class="col-md-6 info d-flex flex-column align-items-stretch">
+                    <i class="bx bx-envelope"></i>
+                    <h4>Email Us</h4>
+                    <p>contact@example.com<br>info@example.com</p>
+                  </div>
+                  <div class="col-md-6 info d-flex flex-column align-items-stretch">
+                    <i class="bx bx-time-five"></i>
+                    <h4>Working Hours</h4>
+                    <p>Mon - Fri: 9AM to 5PM<br>Sunday: 9AM to 1PM</p>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="col-lg-6">
+                <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+                  <div class="row">
+                    <div class="col-md-6 form-group">
+                      <label for="name">Your Name</label>
+                      <input type="text" name="name" class="form-control" id="name" required>
+                    </div>
+                    <div class="col-md-6 form-group mt-3 mt-md-0">
+                      <label for="email">Your Email</label>
+                      <input type="email" class="form-control" name="email" id="email" required>
+                    </div>
+                  </div>
+                  <div class="form-group mt-3">
+                    <label for="subject">Subject</label>
+                    <input type="text" class="form-control" name="subject" id="subject" required>
+                  </div>
+                  <div class="form-group mt-3">
+                    <label for="message">Message</label>
+                    <textarea class="form-control" name="message" rows="8" required></textarea>
+                  </div>
+                  <div class="my-3">
+                    <div class="loading">Loading</div>
+                    <div class="error-message"></div>
+                    <div class="sent-message">Your message has been sent. Thank you!</div>
+                  </div>
+                  <div class="text-center"><button type="submit">Send Message</button></div>
+                </form>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section> -->
+    <!-- End Contact Section -->
+
+  </main>
+  <!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>Universidad Catolica San Pablo Tarija</span></strong>. Todos los derechos
+        reservados
+      </div>
+      <div class="credits">
+        Desarrollado por <a>Abraham Chumacero Gaite</a>
+      </div>
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+
+
+</body>

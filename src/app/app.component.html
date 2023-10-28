@@ -1,4 +1,5 @@
+<ngx-ui-loader></ngx-ui-loader>
 
-<app-nav *ngIf="authService.isAuthenticated()"></app-nav>
-<app-home *ngIf="!authService.isAuthenticated()"></app-home>
-
+<div ngxUiLoaderBlurred>
+    <router-outlet></router-outlet>
+</div>

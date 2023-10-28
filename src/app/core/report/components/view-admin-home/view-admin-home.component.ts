@@ -2,7 +2,6 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular
 import { Device } from 'src/app/models/device';
 import { DeviceService } from 'src/app/core/device/services/device.service';
 import { DeviceID } from 'src/app/models/device';
-import { ChartService } from '../../services/charts-service.service';
 import { ApexService } from 'src/app/services/graphics/apex.service';
 
 import * as Leaflet from 'leaflet';

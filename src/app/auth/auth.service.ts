@@ -7,6 +7,9 @@ import { environment } from 'src/environments/environment';
 interface LoginResponse {
   token: string;
   name: string;
+  rol: string;
+  idrol: string;
+  iduser: string;
 }
 
 @Injectable({
@@ -19,34 +22,34 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(body: any): Observable<any> {
-    const url = `${this.baseUrl}/login`;
+    const url = `${this.baseUrl}/login/`;
   
     return this.http.post<LoginResponse>(url, body).pipe(
       tap(res => {
-        const token = res.token;
-        const name = res.name;
-        localStorage.setItem('token', token);
-        localStorage.setItem('name', name);
+        console.log(res)
+        sessionStorage.setItem('token', res.token);
+        sessionStorage.setItem('iduser', res.iduser);
+        sessionStorage.setItem('name', res.name);
+        sessionStorage.setItem('rol', res.rol);
       })
     );
   }
 
-/*   post(body: any) {
-    return this.httpClient.post(this.baseUrl + '/login', body);
-  } */
 
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('name'); // Agrega esta línea para eliminar el nombre de usuario
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('iduser');
+    sessionStorage.removeItem('name');
+    sessionStorage.removeItem('rol'); // Agrega esta línea para eliminar el nombre de usuario
   }
 
 
   isAuthenticated(): boolean {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     return !!token; // Devuelve true si existe un token almacenado, de lo contrario, devuelve false
   }
 
   getUserName(): string {
-    return localStorage.getItem('name') || '';
+    return sessionStorage.getItem('name') || '';
   }
 }

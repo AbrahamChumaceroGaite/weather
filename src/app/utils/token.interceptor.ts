@@ -3,7 +3,7 @@ import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent, HttpErrorResponse
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
-import { MessageService } from '../services/dialog/message.service';
+import { MessagesService } from '../services/dialog/message.service';
 import { ConfirmService } from '../services/dialog/confirm.service';
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -11,7 +11,7 @@ export class TokenInterceptor implements HttpInterceptor {
   constructor(
     private authService: AuthService,     
     private confirmService: ConfirmService,
-    private messageService: MessageService) { }
+    private MessagesService: MessagesService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = this.authService.getToken();

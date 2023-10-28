@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
-import { MessageService } from 'src/app/services/dialog/message.service';
+import { MessagesService } from 'src/app/services/dialog/message.service';
 import { DeviceID } from 'src/app/models/device';
 import { DeviceService } from 'src/app/core/device/services/device.service';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
@@ -32,7 +32,7 @@ export class CreateEditDeviceComponent {
     private deviceService: DeviceService,
     private locationService: LocationService,
     private confirmService: ConfirmService,
-    private messageService: MessageService,
+    private MessagesService: MessagesService,
     private fb: FormBuilder,
     private dialogRef: NbDialogRef<CreateEditDeviceComponent>
   ) { }
@@ -82,12 +82,12 @@ ngOnInit(): void {
         if (result === 'Confirmed') {
           this.deviceService.putIdentity(this.id, formValue).subscribe(
             () => {
-              this.messageService.showConfirmEdit();
+              this.MessagesService.showConfirmEdit();
               this.cancel();
               this.loading = false;
             },
             (error) => {
-              this.messageService.showError();
+              this.MessagesService.showError();
               this.loading = false;
               console.log(error);
             }
@@ -96,11 +96,11 @@ ngOnInit(): void {
       });
     } else {
       this.deviceService.postIdentity(formValue).subscribe((res)=>{
-        this.messageService.showConfirmPost();
+        this.MessagesService.showConfirmPost();
         this.cancel();
       }, (err)=>{
         console.log("ERROR",err)
-        this.messageService.showError();
+        this.MessagesService.showError();
         this.cancel();
       });
     }

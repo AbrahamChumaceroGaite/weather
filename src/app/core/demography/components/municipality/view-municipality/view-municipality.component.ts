@@ -5,7 +5,7 @@ import { Table } from 'primeng/table';
 import { Municipality } from 'src/app/models/demography';
 import { MunicipalityService } from 'src/app/core/demography/services/municipality.service';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
-import { MessageService } from 'src/app/services/dialog/message.service';
+import { MessagesService } from 'src/app/services/dialog/message.service';
 
 @Component({
   selector: 'app-view-municipality',
@@ -20,7 +20,7 @@ export class ViewMunicipalityComponent {
   constructor(private municipalityService: MunicipalityService,   
     private dialogService: NbDialogService,
     private confirmService: ConfirmService,
-    private messageService: MessageService) { }
+    private MessagesService: MessagesService) { }
 
   ngOnInit(): void {
     this.getData();
@@ -53,10 +53,10 @@ export class ViewMunicipalityComponent {
     this.confirmService.deleteDialog(id).then(result => {
       if (result === 'Confirmed'){
         this.municipalityService.delete(id).subscribe(res=>{
-            this.messageService.showConfirmDelete();
+            this.MessagesService.showConfirmDelete();
             this.getData();
         },(err)=>{
-          this.messageService.showError();
+          this.MessagesService.showError();
         })
       }
     })

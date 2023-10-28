@@ -6,7 +6,7 @@ import { Table } from 'primeng/table';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/core/user/services/user.service';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
-import { MessageService } from 'src/app/services/dialog/message.service';
+import { MessagesService } from 'src/app/services/dialog/message.service';
 
 
 @Component({
@@ -23,7 +23,7 @@ export class ViewUserComponent implements OnInit {
   constructor(private userService: UserService,   
     private dialogService: NbDialogService,
     private confirmService: ConfirmService,
-    private messageService: MessageService) { }
+    private MessagesService: MessagesService) { }
 
   ngOnInit(): void {
     this.getData();
@@ -56,10 +56,10 @@ export class ViewUserComponent implements OnInit {
     this.confirmService.deleteDialog(id).then(result => {
       if (result === 'Confirmed'){
         this.userService.delete(id).subscribe(res=>{
-            this.messageService.showConfirmDelete();
+            this.MessagesService.showConfirmDelete();
             this.getData();
         },(err)=>{
-          this.messageService.showError();
+          this.MessagesService.showError();
         })
       }
     })

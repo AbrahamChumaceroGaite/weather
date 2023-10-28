@@ -3,8 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
-
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
+  { path: 'about', component: HomeComponent },
   { path: '', loadChildren: () => import('./core/demography/demography.module').then(m => m.DemographyModule) },
   { path: '', loadChildren: () => import('./core/device/device.module').then(m => m.DeviceModule) },
   { path: '', loadChildren: () => import('./core/login/login.module').then(m => m.LoginModule) },

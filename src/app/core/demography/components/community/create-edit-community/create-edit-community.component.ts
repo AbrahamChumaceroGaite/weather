@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
-import { MessageService } from 'src/app/services/dialog/message.service';
+import { MessagesService } from 'src/app/services/dialog/message.service';
 import { MunicipalityService } from 'src/app/core/demography/services/municipality.service';
 import { CommunityService } from 'src/app/core/demography/services/community.service';
 import { Municipality, Community } from 'src/app/models/demography';
@@ -27,7 +27,7 @@ export class CreateEditCommunityComponent {
     private municipalityService: MunicipalityService,
     private communityService: CommunityService,
     private confirmService: ConfirmService,
-    private messageService: MessageService,
+    private MessagesService: MessagesService,
     private fb: FormBuilder,
     private dialogRef: NbDialogRef<CreateEditCommunityComponent>
   ) { }
@@ -79,12 +79,12 @@ ngOnInit(): void {
         if (result === 'Confirmed') {
           this.communityService.put(this.id, formValue).subscribe(
             () => {
-              this.messageService.showConfirmEdit();
+              this.MessagesService.showConfirmEdit();
               this.cancel();
               this.loading = false;
             },
             (error) => {
-              this.messageService.showError();
+              this.MessagesService.showError();
               this.loading = false;
               console.log(error);
             }
@@ -93,11 +93,11 @@ ngOnInit(): void {
       });
     } else {
       this.communityService.post(formValue).subscribe((res)=>{
-        this.messageService.showConfirmPost();
+        this.MessagesService.showConfirmPost();
         this.cancel();
       }, (err)=>{
         console.log("ERROR",err)
-        this.messageService.showError();
+        this.MessagesService.showError();
         this.cancel();
       });
     }
