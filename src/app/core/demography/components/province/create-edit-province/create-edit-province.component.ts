@@ -22,7 +22,7 @@ export class CreateEditProvinceComponent {
   formHeader!: string;
   submitButtonText!: string;
   isFormSubmitted: boolean = false;
-  loading = false;
+  loading = true;
   visible = true;
 
   constructor(
@@ -35,6 +35,7 @@ export class CreateEditProvinceComponent {
   ) { }
 
   ngOnInit(): void {
+    console.log("EDIT: ", this.id)
     this.form = this.fb.group({
       iddepartment: ['', Validators.required],
       name: ['', Validators.required],
@@ -42,6 +43,7 @@ export class CreateEditProvinceComponent {
     if (this.id) {
       this.provinceService.getById(this.id).subscribe((data: Province[]) => {
         for (let i of data) {
+          this.loading = false;
           this.formHeader = 'edit-header';
           this.formlogo = 'edit';
           this.formTitle = `Editar: ` + i.name;
@@ -61,6 +63,7 @@ export class CreateEditProvinceComponent {
 
   getDeparment() {
     this.departmentService.getList().subscribe((data: Department[]) => {
+      this.loading = false;
       this.deparments = data;
     })
   }
@@ -85,10 +88,10 @@ export class CreateEditProvinceComponent {
               this.cancel();
               this.loading = false;
             },
-            (error) => {
-              this.MessagesService.showError();
+            (err) => {
+              this.MessagesService.showMsjError(err.error.message);
               this.loading = false;
-              console.log(error);
+              
             }
           );
         }
@@ -99,7 +102,7 @@ export class CreateEditProvinceComponent {
         this.cancel();
       }, (err) => {
         console.log("ERROR", err)
-        this.MessagesService.showError();
+        this.MessagesService.showMsjError(err.error.message);
         this.cancel();
       });
     }

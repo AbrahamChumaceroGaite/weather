@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Department } from 'src/app/models/demography';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -44,18 +44,24 @@ export class DepartmentService {
   }
 
   getById(id: number): Observable<Department[]> {
-    return this.httpClient.get<Department[]>(this.api + '/getById/' + id);
+    return this.httpClient.get<Department[]>(this.api + '/getById/' + id)
   }
 
   post(body: FormData) {
-    return this.httpClient.post(this.api + '/post', body);
+    return this.httpClient.post(this.api + '/post', body).pipe(
+      map((response:any) => response.message) 
+    );
   }
 
   put(id: number, body: any) {
-    return this.httpClient.put(this.api + '/update/' + id, body);
+    return this.httpClient.put(this.api + '/update/' + id, body).pipe(
+      map((response:any) => response.message) 
+    );
   }
 
   delete(id: number) {
-    return this.httpClient.delete(this.api + '/delete/' + id);
+    return this.httpClient.delete(this.api + '/delete/' + id).pipe(
+      map((response:any) => response.message) 
+    );
   }
 }

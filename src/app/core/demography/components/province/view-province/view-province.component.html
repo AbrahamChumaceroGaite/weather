@@ -1,35 +1,59 @@
-<p-menubar>
-  <ng-template pTemplate="start">
-    <button nbButton status="success" (click)="dialog()"><nb-icon icon="plus"></nb-icon></button>
-  </ng-template>
-  <ng-template pTemplate="end">
+<p-table #dt [value]="items" [rowHover]="true" [totalRecords]="totalRecords" [rows]="10" [showCurrentPageReport]="true"
+  [rowsPerPageOptions]="[5, 10, 25, 50]" [loading]="loading" [lazy]="true" (onLazyLoad)="getData($event)"
+  [paginator]="true" responsiveLayout="stack" [breakpoint]="'960px'" styleClass="p-datatable-sm" [filterDelay]="0"
+  [globalFilterFields]="['name']" currentPageReportTemplate="Pagina {first} con {last} de {totalRecords} filas">
+  <ng-template pTemplate="caption">
     <span class="p-input-icon-left">
       <i class="pi pi-search"></i>
-      <input pInputText type="text" style="width: 150px" [(ngModel)]="filterValue" (input)="filterByName()"
-        placeholder="Provincia..." />
+      <input pInputText type="text" style="width: auto" [(ngModel)]="filterValue" (input)="filterByName()"
+        placeholder="Buscar Provincia" />
     </span>
   </ng-template>
-</p-menubar>
-<br>
-<p-table #dt [value]="items" [rowHover]="true" [scrollable]="true" scrollHeight="400px" [scrollable]="true"
-  [loading]="loading" [lazy]="true" (onLazyLoad)="getData($event)" styleClass="p-datatable-sm" [filterDelay]="0"
-  [globalFilterFields]="['name']" >
   <ng-template pTemplate="header">
     <tr>
-      <th pSortableColumn="name" class="table-column" style="width:300px">
+      <th pSortableColumn="department">
+        Departamento
+        <p-sortIcon field="department"></p-sortIcon>
+      </th>
+      <th pSortableColumn="name">
         Provincia
         <p-sortIcon field="name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="createdAt">
+        Creado
+        <p-sortIcon field="createdAt"></p-sortIcon>
+      </th>
+      <th pSortableColumn="createdUpd">
+        Ult. Actualización
+        <p-sortIcon field="createdUpd"></p-sortIcon>
+      </th>
+      <th>
+        Acciones
       </th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-item>
-    <tr [nbPopover]="templateRef" nbPopoverTrigger="hover" nbPopoverPlacement="left">
-      <td (click)="onRowSelect(item.name)"><span class="p-column-title">Provincia</span> 
-        {{ item.department }} - {{ item.name }}</td>
-      <ng-template #templateRef>
-        <button nbButton style="margin: 2px;" status="warning" (click)="dialog(item.id)"><nb-icon icon="edit"></nb-icon></button>
-        <button nbButton style="margin: 2px;" status="danger" (click)="dialogDelete(item.id)"><nb-icon icon="trash"></nb-icon></button>
-      </ng-template>
+    <tr>
+      <td><span class="p-column-title">Departamento</span> {{ item.department }}</td>
+      <td><span class="p-column-title">Provincia</span> {{ item.name }}</td>
+      <td><span class="p-column-title">Creado</span> {{ item.createdAt | date : "dd/MM/yy
+        HH:mm" }}</td>
+      <td><span class="p-column-title">Ult. Actualización</span> {{ item.createdUpd | date : "dd/MM/yy
+        HH:mm" }}</td>
+      <td>
+        <button nbButton style="margin: 2px;" status="warning" size="tiny" (click)="dialog(item.id)"><nb-icon
+            icon="edit"></nb-icon></button>
+        <button nbButton style="margin: 2px;" status="danger" size="tiny" (click)="dialogDelete(item.id)"><nb-icon
+            icon="trash"></nb-icon></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="paginatorleft">
+    <p-button type="button" icon="pi pi-replay" (click)="refreshTable()" styleClass="p-button-text"></p-button>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="7">Tabla Vacia.</td>
     </tr>
   </ng-template>
 </p-table>

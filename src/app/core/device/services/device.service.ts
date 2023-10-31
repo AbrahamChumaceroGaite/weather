@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Device, DeviceID } from 'src/app/models/device';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -42,18 +42,26 @@ export class DeviceService {
   }
 
   getIdentityById(id: number) : Observable<DeviceID[]>{
-    return this.httpClient.get<DeviceID[]>(this.api + '/get/identity/ById/' + id);
+    return this.httpClient.get<DeviceID[]>(this.api + '/get/identity/ById/' + id).pipe(
+      map((response:any) => response.message) 
+    );
   }
  
   postIdentity(body: FormData){
-    return this.httpClient.post(this.api + '/post/identity', body);
+    return this.httpClient.post(this.api + '/post/identity', body).pipe(
+      map((response:any) => response.message) 
+    );
   }
   
   putIdentity(id: number, body: any){
-    return this.httpClient.put(this.api + '/update/identity/' + id, body);
+    return this.httpClient.put(this.api + '/update/identity/' + id, body).pipe(
+      map((response:any) => response.message) 
+    );
   }
 
   deleteIdentity(id: number){
-    return this.httpClient.delete(this.api + '/delete/identity/' + id);
+    return this.httpClient.delete(this.api + '/delete/identity/' + id).pipe(
+      map((response:any) => response.message) 
+    );
   }
 }

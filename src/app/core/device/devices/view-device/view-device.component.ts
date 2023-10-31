@@ -58,7 +58,7 @@ export class ViewDeviceComponent {
             this.MessagesService.showConfirmDelete();
             this.getData();
         },(err)=>{
-          this.MessagesService.showError();
+          this.MessagesService.showMsjError(err.error.message);
         })
       }
     })

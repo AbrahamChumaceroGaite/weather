@@ -6,6 +6,7 @@ import { MunicipalityService } from 'src/app/core/demography/services/municipali
 import { ProvinceService } from 'src/app/core/demography/services/province.service';
 import { Province, Municipality } from 'src/app/models/demography';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
+import { ShareDataService } from 'src/app/services/shared/shared.service';
 
 @Component({
   selector: 'app-create-edit-municipality',
@@ -14,26 +15,34 @@ import { ConfirmService } from 'src/app/services/dialog/confirm.service';
 })
 export class CreateEditMunicipalityComponent {
   @Input() id!: number;
-  provinces: Province [] = [];
-  
+  provinces: Province[] = [];
+
   form!: FormGroup;
   formTitle!: string;
   formlogo!: string;
   formHeader!: string;
   submitButtonText!: string;
   isFormSubmitted: boolean = false;
-  loading = false;
+  loading = true;
   visible = true;
+  dataSelected: any;
+
   constructor(
+    private ShareDataService: ShareDataService,
     private municipalityService: MunicipalityService,
     private provinceService: ProvinceService,
     private confirmService: ConfirmService,
     private MessagesService: MessagesService,
     private fb: FormBuilder,
     private dialogRef: NbDialogRef<CreateEditMunicipalityComponent>
-  ) { }
+  ) {
+    this.ShareDataService.selectedValue$.subscribe((value) => {
+      this.dataSelected = value;
+    });
+  }
 
-ngOnInit(): void {
+  ngOnInit(): void {
+    console.log("EDIT: ", this.id)
     this.form = this.fb.group({
       idprovince: ['', Validators.required],
       name: ['', Validators.required],
@@ -41,6 +50,7 @@ ngOnInit(): void {
     if (this.id) {
       this.municipalityService.getById(this.id).subscribe((data: Municipality[]) => {
         for (let i of data) {
+          this.loading = false;
           this.formHeader = 'edit-header';
           this.formlogo = 'edit';
           this.formTitle = `Editar: ` + i.name;
@@ -59,11 +69,12 @@ ngOnInit(): void {
   }
 
   getProvince() {
-    this.provinceService.getList().subscribe((data:Province[])=>{
+    this.provinceService.getByDept(this.dataSelected).subscribe((data: Province[]) => {
+      this.loading = false;
       this.provinces = data;
     })
   }
-  
+
   submitForm() {
     if (this.form.valid) {
       this.loading = true;
@@ -84,26 +95,25 @@ ngOnInit(): void {
               this.cancel();
               this.loading = false;
             },
-            (error) => {
-              this.MessagesService.showError();
+            (err) => {
+              this.MessagesService.showMsjError(err.error.message);
               this.loading = false;
-              console.log(error);
+              
             }
           );
-        } 
+        }
       });
     } else {
-      this.municipalityService.post(formValue).subscribe((res)=>{
+      this.municipalityService.post(formValue).subscribe((res) => {
         this.MessagesService.showConfirmPost();
         this.cancel();
-      }, (err)=>{
-        console.log("ERROR",err)
-        this.MessagesService.showError();
+      }, (err) => {
+        this.MessagesService.showMsjError(err.error.message);
         this.cancel();
       });
     }
   }
-  
+
   cancel() {
     this.dialogRef.close();
     this.visible = false;

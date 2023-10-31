@@ -8,33 +8,44 @@ import { ConfirmService } from 'src/app/services/dialog/confirm.service';
 import { MessagesService } from 'src/app/services/dialog/message.service';
 import { ShareDataService } from 'src/app/services/shared/shared.service';
 import { LazyLoadEvent } from 'primeng/api';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-view-province',
   templateUrl: './view-province.component.html',
   styleUrls: ['./view-province.component.scss']
 })
+
 export class ViewProvinceComponent {
   @ViewChild('dt') dt!: Table;
   items: Province[] = [];
   totalRecords = 0;
   loading: boolean = true;
   filterValue: string = '';
+  dataSelected: any;
 
   constructor(
-    private provinceService: ProvinceService,  
-    private shareDataService: ShareDataService, 
+    public ref2: DynamicDialogRef,
+    private ShareDataService: ShareDataService,
+    private provinceService: ProvinceService,
     private dialogService: NbDialogService,
     private confirmService: ConfirmService,
-    private MessagesService: MessagesService) { }
+    private MessagesService: MessagesService,
+    ) {
+      this.ShareDataService.selectedValue$.subscribe((value) => {
+        this.dataSelected = value;
+        this.refreshTable();
+      });
+    }
 
   ngOnInit(): void {
-  
+
   }
 
-  getData(event: LazyLoadEvent){
+  getData(event: LazyLoadEvent) {
     setTimeout(() => {
-      this.provinceService.get(event).subscribe((data) => {
+      this.provinceService.get(this.dataSelected, event).subscribe((data) => {
+        console.log(data)
         this.items = data.items;
         this.totalRecords = data.totalRecords;
         this.loading = false;
@@ -45,12 +56,13 @@ export class ViewProvinceComponent {
     }, 1000);
   }
 
-  dialog(id?: number) {
+  dialog(id: number) {
+    this.ref2.close();
     this.dialogService.open(CreateEditProvinceComponent, {
       context: {
         id
       }
-    }).onClose.subscribe( res=> this.refreshTable());
+    }).onClose.subscribe(res => this.ref2.close());
   }
 
   filterByName() {
@@ -60,22 +72,19 @@ export class ViewProvinceComponent {
       this.dt.filterGlobal(null, 'contains'); // Restablecer el filtro global
     }
   }
-  
-  dialogDelete(id: number){
+
+  dialogDelete(id: number) {
+    this.ref2.close();
     this.confirmService.deleteDialog(id).then(result => {
-      if (result === 'Confirmed'){
-        this.provinceService.delete(id).subscribe(res=>{
-            this.MessagesService.showConfirmDelete();
-            this.refreshTable();
-        },(err)=>{
-          this.MessagesService.showError();
+      if (result === 'Confirmed') {
+        this.provinceService.delete(id).subscribe(res => {
+          this.MessagesService.showConfirmDelete();
+          this.ref2.close();
+        }, (err) => {
+          this.MessagesService.showMsjError(err.error.message);
         })
       }
     })
-  }
-
-  onRowSelect(event: any) {
-    this.shareDataService.setSelectedValue(event);
   }
 
   refreshTable() {

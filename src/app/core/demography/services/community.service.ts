@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Community } from 'src/app/models/demography';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -20,8 +20,13 @@ export class CommunityService {
     return this.httpClient.get<Community[]>(this.api + '/get');
   }
 
-  get(event: LazyLoadEvent): Observable<{ items: Community[]; totalRecords: number }> {
+  getByDept(id:number): Observable<Community[]> {
+    return this.httpClient.get<Community[]>(this.api + '/getByDept/' + id);
+  }
+
+  get(id: number, event: LazyLoadEvent): Observable<{ items: Community[]; totalRecords: number }> {
     const params: any = {
+      id: id,
       first: event.first, // Índice del primer elemento a cargar
       rows: event.rows, // Cantidad de elementos a cargar por página
     };
@@ -45,18 +50,24 @@ export class CommunityService {
   }
 
   getById(id: number): Observable<Community[]> {
-    return this.httpClient.get<Community[]>(this.api + '/getById/' + id);
+    return this.httpClient.get<Community[]>(this.api + '/getById/' + id)
   }
 
   post(body: FormData) {
-    return this.httpClient.post(this.api + '/post', body);
+    return this.httpClient.post(this.api + '/post', body).pipe(
+      map((response:any) => response.message) 
+    );
   }
 
   put(id: number, body: any) {
-    return this.httpClient.put(this.api + '/update/' + id, body);
+    return this.httpClient.put(this.api + '/update/' + id, body).pipe(
+      map((response:any) => response.message) 
+    );
   }
 
   delete(id: number) {
-    return this.httpClient.delete(this.api + '/delete/' + id);
+    return this.httpClient.delete(this.api + '/delete/' + id).pipe(
+      map((response:any) => response.message) 
+    );
   }
 }

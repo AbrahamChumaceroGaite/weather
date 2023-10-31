@@ -1,88 +1,74 @@
-<div class="content-box">
-  <app-view-province></app-view-province>
-  <div class="content-layout">
-    <p-menubar>
-      <ng-template pTemplate="end">
-        <div class="view-menubar">
-          <button nbButton status="success"><nb-icon icon="plus" (click)="dialog()" nbTooltip="hola"></nb-icon></button>
-          <span class="p-input-icon-left">
-            <i class="pi pi-search"></i>
-            <input pInputText type="text" (input)="filterByName($event)" placeholder="Buscar Comunidad..." />
-          </span>
+<p-table #dt [value]="items" dataKey="id" [rowHover]="true" [rows]="10" [totalRecords]="totalRecords"
+  [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50]" [loading]="loading" [lazy]="true"
+  (onLazyLoad)="getData($event)" [paginator]="true" responsiveLayout="stack" [breakpoint]="'960px'"
+  styleClass="p-datatable-sm" currentPageReportTemplate="Pagina {first} con {last} de {totalRecords} filas"
+  [filterDelay]="0" [globalFilterFields]="['department, province, name']">
+  <ng-template pTemplate="caption">
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" tyle="width: auto" [(ngModel)]="filterValue" (input)="filterByName()"
+        placeholder="Buscar Municipio..." />
+    </span>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="id">
+        ID
+        <p-sortIcon field="id"></p-sortIcon>
+      </th>
+      <th pSortableColumn="department" class="table-column">
+        Departamento
+        <p-sortIcon field="department"></p-sortIcon>
+      </th>
+      <th pSortableColumn="province" class="table-column">
+        Provincia
+        <p-sortIcon field="province"></p-sortIcon>
+      </th>
+      <th pSortableColumn="name" class="table-column">
+        Municpio
+        <p-sortIcon field="name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="createdAt" class="table-column">
+        Creado
+        <p-sortIcon field="createdAt"></p-sortIcon>
+      </th>
+      <th pSortableColumn="createdUpd" class="table-column">
+        Ult. Actualización
+        <p-sortIcon field="createdUpd"></p-sortIcon>
+      </th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-municipality>
+    <tr>
+      <td><span class="p-column-title">ID</span>{{ municipality.id }}</td>
+      <td><span class="p-column-title">Departamento</span>{{ municipality.department }}</td>
+      <td><span class="p-column-title">Provincia</span>{{ municipality.province }}</td>
+      <td><span class="p-column-title">Municipio</span>{{ municipality.name }}</td>
+      <td>
+        <span class="p-column-title">Fecha Creado</span>{{ municipality.createdAt | date : "dd/MM/yy HH:mm" }}
+      </td>
+      <td>
+        <span class="p-column-title">Fecha Creado</span>{{ municipality.createdUpd | date : "dd/MM/yy HH:mm" }}
+      </td>
+      <td>
+        <div class="btn-spacer">
+          <button (click)="dialog(municipality.id)" nbButton size="tiny" status="warning">
+            <nb-icon icon="edit"></nb-icon>
+          </button>
+          <button (click)="dialogDelete(municipality.id)" nbButton size="tiny" status="danger">
+            <nb-icon icon="trash"></nb-icon>
+          </button>
         </div>
-      </ng-template>
-    </p-menubar>
-    <br>
-    <p-table
-    #dt
-    [value]="municipalityData"
-    dataKey="id"
-    [rowHover]="true"
-    [rows]="10"
-    [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[5, 10, 25, 50]"
-    [loading]="loading"
-    [paginator]="true"
-    responsiveLayout="stack"
-    [breakpoint]="'960px'"
-    styleClass="p-datatable-gridlines"
-    currentPageReportTemplate="Pagina {first} con {last} de {totalRecords} filas"
-    [filterDelay]="0"
-    [globalFilterFields]="['name']">
-    <ng-template pTemplate="caption">        
-      <nb-icon nbPrefix icon="list"></nb-icon> 
-      Lista de Municipios    
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th pSortableColumn="id" >
-          ID
-          <p-sortIcon field="id"></p-sortIcon>
-        </th>
-        <th pSortableColumn="department" class="table-column">
-          Departamento
-          <p-sortIcon field="department"></p-sortIcon>
-        </th>
-        <th pSortableColumn="province" class="table-column">
-          Provincia
-          <p-sortIcon field="province"></p-sortIcon>
-        </th>
-        <th pSortableColumn="municipality" class="table-column">
-            Municpio
-            <p-sortIcon field="municipality"></p-sortIcon>
-          </th>
-        <th pSortableColumn="createdAt" class="table-column">
-          Fecha Creado
-          <p-sortIcon field="createdAt"></p-sortIcon>
-        </th>
-        <th>Acciones</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-municipality>
-      <tr>
-        <td><span class="p-column-title">ID</span>{{ municipality.id }}</td>
-        <td><span class="p-column-title">Departamento</span>{{ municipality.department }}</td>
-        <td><span class="p-column-title">Provincia</span>{{ municipality.province }}</td>
-        <td><span class="p-column-title">Municipio</span>{{ municipality.name }}</td>
-        <td>
-          <span class="p-column-title">Fecha Creado</span>{{ municipality.createdAt | date : "dd/MM/yy HH:mm" }}
-        </td>
-        <td>
-          <div class="btn-spacer">
-            <button (click)="dialog(municipality.id)" nbButton outline status="success">
-              <nb-icon icon="edit"></nb-icon>
-            </button>
-            <button
-              (click)="dialogDelete(municipality.id)" nbButton outline status="danger">
-              <nb-icon icon="trash"></nb-icon>
-            </button>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-  </div>
-</div>
-
-
-  
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="paginatorleft">
+    <p-button type="button" icon="pi pi-replay" (click)="refreshTable()" styleClass="p-button-text"></p-button>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="7">Tabla Vacia.</td>
+    </tr>
+  </ng-template>
+</p-table>

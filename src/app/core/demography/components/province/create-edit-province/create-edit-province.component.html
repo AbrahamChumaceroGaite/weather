@@ -8,7 +8,7 @@
     <form [formGroup]="form" (ngSubmit)="submitForm()" class="form-columns">
       <div class="columns">
         <div class="form-group">
-          <nb-form-field>
+          <nb-form-field  [nbSpinner]="loading">
             <nb-icon nbPrefix icon="pin"></nb-icon>
             <nb-select placeholder="Seleccione Departamento" formControlName="iddepartment">
               <nb-option *ngFor="let department of deparments" [value]="department.id">{{ department.name }}</nb-option>
@@ -40,7 +40,6 @@
         [disabled]="!form.valid">
         {{ submitButtonText }}
       </button>
-      <button nbButton status="basic" (click)="cancel()">Cancelar</button>
     </ng-template>
   </p-dialog>
 </div>

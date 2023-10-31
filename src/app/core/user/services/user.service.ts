@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -18,18 +18,26 @@ export class UserService {
   }
 
   getById(id: number): Observable<User[]>{
-    return this.httpClient.get<User[]>(this.api + '/getById/' + id);
+    return this.httpClient.get<User[]>(this.api + '/getById/' + id).pipe(
+      map((response:any) => response.message) 
+    );
   }
 
   post(body: FormData){
-    return this.httpClient.post(this.api + '/post', body);
+    return this.httpClient.post(this.api + '/post', body).pipe(
+      map((response:any) => response.message) 
+    );
   }
 
   put(id: number, body: any){
-    return this.httpClient.put(this.api + '/update/' + id, body);
+    return this.httpClient.put(this.api + '/update/' + id, body).pipe(
+      map((response:any) => response.message) 
+    );
   }
 
   delete(id: number){
-    return this.httpClient.delete(this.api + '/delete/' + id);
+    return this.httpClient.delete(this.api + '/delete/' + id).pipe(
+      map((response:any) => response.message) 
+    );
   }
 }

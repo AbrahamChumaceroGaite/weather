@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Location } from 'src/app/models/demography';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -14,11 +14,11 @@ export class LocationService {
   constructor(private httpClient: HttpClient) {
   }
 
-  get(): Observable<Location[]> {
+  getList(): Observable<Location[]> {
     return this.httpClient.get<Location[]>(this.api + '/get');
   }
 
-  getLazy(id: any, event: LazyLoadEvent): Observable<{ items: Location[]; totalRecords: number }> {
+  get(id: any, event: LazyLoadEvent): Observable<{ items: Location[]; totalRecords: number }> {
     const params: any = {
       id: id,
       first: event.first, // Índice del primer elemento a cargar
@@ -44,18 +44,24 @@ export class LocationService {
   }
 
   getById(id: number): Observable<Location[]> {
-    return this.httpClient.get<Location[]>(this.api + '/getById/' + id);
+    return this.httpClient.get<Location[]>(this.api + '/getById/' + id)
   }
 
   post(body: FormData) {
-    return this.httpClient.post(this.api + '/post', body);
+    return this.httpClient.post(this.api + '/post', body).pipe(
+      map((response:any) => response.message) 
+    );
   }
 
   put(id: number, body: any) {
-    return this.httpClient.put(this.api + '/update/' + id, body);
+    return this.httpClient.put(this.api + '/update/' + id, body).pipe(
+      map((response:any) => response.message) 
+    );
   }
 
   delete(id: number) {
-    return this.httpClient.delete(this.api + '/delete/' + id);
+    return this.httpClient.delete(this.api + '/delete/' + id).pipe(
+      map((response:any) => response.message) 
+    );
   }
 }

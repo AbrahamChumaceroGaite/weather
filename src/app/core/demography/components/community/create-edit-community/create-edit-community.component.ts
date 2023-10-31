@@ -6,6 +6,7 @@ import { MunicipalityService } from 'src/app/core/demography/services/municipali
 import { CommunityService } from 'src/app/core/demography/services/community.service';
 import { Municipality, Community } from 'src/app/models/demography';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
+import { ShareDataService } from 'src/app/services/shared/shared.service';
 
 @Component({
   selector: 'app-create-edit-community',
@@ -21,16 +22,23 @@ export class CreateEditCommunityComponent {
   formHeader!: string;
   submitButtonText!: string;
   isFormSubmitted: boolean = false;
-  loading = false;
+  loading = true;
   visible = true;
+  dataSelected: any;
+
   constructor(
+    private ShareDataService: ShareDataService,
     private municipalityService: MunicipalityService,
     private communityService: CommunityService,
     private confirmService: ConfirmService,
     private MessagesService: MessagesService,
     private fb: FormBuilder,
     private dialogRef: NbDialogRef<CreateEditCommunityComponent>
-  ) { }
+  ) {
+    this.ShareDataService.selectedValue$.subscribe((value) => {
+      this.dataSelected = value;
+    });
+   }
 
 ngOnInit(): void {
     this.form = this.fb.group({
@@ -40,6 +48,7 @@ ngOnInit(): void {
     if (this.id) {
       this.communityService.getById(this.id).subscribe((data: Community[]) => {
         for (let i of data) {
+          this.loading = false;
           this.formHeader = 'edit-header';
           this.formlogo = 'edit';
           this.formTitle = `Editar: ` + i.name;
@@ -58,8 +67,9 @@ ngOnInit(): void {
   }
 
   getMunicipality() {
-    this.municipalityService.get().subscribe((data:Municipality[])=>{
+    this.municipalityService.getByDept(this.dataSelected).subscribe((data:Municipality[])=>{
       this.municipies = data;
+      this.loading = false;
     })
   }
 
@@ -83,10 +93,9 @@ ngOnInit(): void {
               this.cancel();
               this.loading = false;
             },
-            (error) => {
-              this.MessagesService.showError();
+            (err) => {
+              this.MessagesService.showMsjError(err.error.message);
               this.loading = false;
-              console.log(error);
             }
           );
         } 
@@ -96,8 +105,7 @@ ngOnInit(): void {
         this.MessagesService.showConfirmPost();
         this.cancel();
       }, (err)=>{
-        console.log("ERROR",err)
-        this.MessagesService.showError();
+        this.MessagesService.showMsjError(err.error.message);
         this.cancel();
       });
     }

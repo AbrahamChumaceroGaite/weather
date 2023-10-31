@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Province } from 'src/app/models/demography';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -18,8 +18,13 @@ export class ProvinceService {
     return this.httpClient.get<Province[]>(this.api + '/get');
   }
 
-  get(event: LazyLoadEvent): Observable<{ items: Province[]; totalRecords: number }> {
+  getByDept(id:number): Observable<Province[]> {
+    return this.httpClient.get<Province[]>(this.api + '/getByDept/' + id);
+  }
+
+  get(id: number, event: LazyLoadEvent): Observable<{ items: Province[]; totalRecords: number }> {
     const params: any = {
+      id: id,
       first: event.first, // Índice del primer elemento a cargar
       rows: event.rows, // Cantidad de elementos a cargar por página
     };
@@ -43,18 +48,24 @@ export class ProvinceService {
   }
 
   getById(id: number): Observable<Province[]> {
-    return this.httpClient.get<Province[]>(this.api + '/getById/' + id);
+    return this.httpClient.get<Province[]>(this.api + '/getById/' + id)
   }
 
   post(body: FormData) {
-    return this.httpClient.post(this.api + '/post', body);
+    return this.httpClient.post(this.api + '/post', body).pipe(
+      map((response:any) => response.message) 
+    )
   }
 
   put(id: number, body: any) {
-    return this.httpClient.put(this.api + '/update/' + id, body);
+    return this.httpClient.put(this.api + '/update/' + id, body).pipe(
+      map((response:any) => response.message) 
+    );
   }
 
   delete(id: number) {
-    return this.httpClient.delete(this.api + '/delete/' + id);
+    return this.httpClient.delete(this.api + '/delete/' + id).pipe(
+      map((response:any) => response.message) 
+    );
   }
 }

@@ -86,10 +86,10 @@ export class CreateEditUserComponent implements OnInit {
               this.cancel();
               this.loading = false;
             },
-            (error) => {
-              this.MessagesService.showError();
+            (err) => {
+              this.MessagesService.showMsjError(err.error.message);
               this.loading = false;
-              console.log(error);
+              
             }
           );
         } 
@@ -98,9 +98,8 @@ export class CreateEditUserComponent implements OnInit {
       this.userService.post(formValue).subscribe((res)=>{
         this.MessagesService.showConfirmPost();
         this.cancel();
-      }, (err)=>{
-        console.log("ERROR",err)
-        this.MessagesService.showError();
+      }, (err) => {
+              this.MessagesService.showMsjError(err.error.message);
         this.cancel();
       });
     }

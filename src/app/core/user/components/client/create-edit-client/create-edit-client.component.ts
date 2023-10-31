@@ -91,10 +91,10 @@ export class CreateEditClientComponent implements OnInit {
               this.cancel();
               this.loading = false;
             },
-            (error) => {
-              this.MessagesService.showError();
+            (err) => {
+              this.MessagesService.showMsjError(err.error.message);
               this.loading = false;
-              console.log(error);
+              
             }
           );
         } 
@@ -103,9 +103,8 @@ export class CreateEditClientComponent implements OnInit {
       this.clientService.post(formValue).subscribe((res)=>{
         this.MessagesService.showConfirmPost();
         this.cancel();
-      }, (err)=>{
-        console.log("ERROR",err)
-        this.MessagesService.showError();
+      }, (err) => {
+              this.MessagesService.showMsjError(err.error.message);
         this.cancel();
       });
     }
@@ -121,7 +120,7 @@ export class CreateEditClientComponent implements OnInit {
   }
 
   getLocations(){
-    this.locationService.get().subscribe((data: Location[])=>{
+    this.locationService.getList().subscribe((data: Location[])=>{
       this.locations = data
     })
   }

@@ -91,10 +91,10 @@ export class CreateEditClientDeviceComponent {
               this.cancel();
               this.loading = false;
             },
-            (error) => {
-              this.MessagesService.showError();
+            (err) => {
+              this.MessagesService.showMsjError(err.error.message);
               this.loading = false;
-              console.log(error);
+              
             }
           );
         } 
@@ -103,9 +103,8 @@ export class CreateEditClientDeviceComponent {
       this.clientDeviceService.post(formValue).subscribe((res)=>{
         this.MessagesService.showConfirmPost();
         this.cancel();
-      }, (err)=>{
-        console.log("ERROR",err)
-        this.MessagesService.showError();
+      }, (err) => {
+              this.MessagesService.showMsjError(err.error.message);
         this.cancel();
       });
     }

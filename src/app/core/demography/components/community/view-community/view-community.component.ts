@@ -7,8 +7,8 @@ import { CommunityService } from 'src/app/core/demography/services/community.ser
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
 import { MessagesService } from 'src/app/services/dialog/message.service';
 import { ShareDataService } from 'src/app/services/shared/shared.service';
-import { AuthService } from 'src/app/auth/auth.service';
 import { LazyLoadEvent } from 'primeng/api';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-view-community',
@@ -23,32 +23,26 @@ export class ViewCommunityComponent {
   loading: boolean = true;
   filterValue: string = '';
   dataSelected: any;
+
   constructor(
-    private AuthService: AuthService,
+    public ref2: DynamicDialogRef,
+    private ShareDataService: ShareDataService,
     private communityService: CommunityService,
-    private shareDataService: ShareDataService,
     private dialogService: NbDialogService,
     private confirmService: ConfirmService,
     private MessagesService: MessagesService
   ) {
-    this.shareDataService.selectedValue$.subscribe((value) => {
-      console.log("value", value)
+    this.ShareDataService.selectedValue$.subscribe((value) => {
       this.dataSelected = value;
     });
   }
 
   ngOnInit(): void {
-    this.setTitle();
-
-  }
-
-  setTitle() {
-    this.AuthService.setTitle('Comunidades', 'list');
   }
 
   getData(event: LazyLoadEvent) {
     setTimeout(() => {
-      this.communityService.get(event).subscribe((data) => {
+      this.communityService.get(this.dataSelected, event).subscribe((data) => {
         this.items = data.items;
         this.totalRecords = data.totalRecords;
         this.loading = false;
@@ -60,6 +54,7 @@ export class ViewCommunityComponent {
   }
 
   dialog(id?: number) {
+    this.ref2.close();
     this.dialogService.open(CreateEditCommunityComponent, {
       context: {
         id
@@ -67,22 +62,24 @@ export class ViewCommunityComponent {
     }).onClose.subscribe(res => this.refreshTable());
   }
 
-  filterByName(event: Event) {
-    const value = (event.target as HTMLInputElement)?.value;
-    if (value) {
-      this.filterValue = value.trim().toLowerCase();
-      this.dt.filter(this.filterValue, 'name', 'contains');
+  filterByName() {
+    this.loading = true;
+    if (this.filterValue) {
+      this.dt.filterGlobal(this.filterValue, 'contains');
+    } else {
+      this.dt.filterGlobal(null, 'contains'); // Restablecer el filtro global
     }
   }
 
   dialogDelete(id: number) {
+    this.ref2.close();
     this.confirmService.deleteDialog(id).then(result => {
       if (result === 'Confirmed') {
         this.communityService.delete(id).subscribe(res => {
           this.MessagesService.showConfirmDelete();
           this.refreshTable();
         }, (err) => {
-          this.MessagesService.showError();
+          this.MessagesService.showMsjError(err.error.message);
         })
       }
     })

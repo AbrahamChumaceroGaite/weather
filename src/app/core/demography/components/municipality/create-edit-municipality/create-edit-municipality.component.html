@@ -7,7 +7,7 @@
     <form [formGroup]="form" (ngSubmit)="submitForm()" class="form-columns">
         <div class="columns">
             <div class="form-group">
-                <nb-form-field>
+                <nb-form-field  [nbSpinner]="loading">
                     <nb-icon nbPrefix icon="pin"></nb-icon>
                     <nb-select placeholder="Seleccione la Provincia" formControlName="idprovince">
                         <nb-option *ngFor="let province of provinces" [value]="province.id">{{ province.name }}</nb-option>

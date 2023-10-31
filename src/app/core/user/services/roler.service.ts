@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Roles } from 'src/app/models/rol';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -18,7 +18,9 @@ export class RolerService {
   }
 
   getById(id: number): Observable<Roles[]>{
-    return this.httpClient.get<Roles[]>(this.api + '/getById/' + id);
+    return this.httpClient.get<Roles[]>(this.api + '/getById/' + id).pipe(
+      map((response:any) => response.message) 
+    );
   }
 
 }

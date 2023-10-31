@@ -2,12 +2,15 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Department } from 'src/app/models/demography';
 import { DepartmentService } from '../../services/department.service';
 import { AuthService } from 'src/app/auth/auth.service';
-import { ShareDataService } from 'src/app/services/shared/shared.service';
 import { MessagesService } from 'src/app/services/dialog/message.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { DialogService } from 'primeng/dynamicdialog';
+import { ShareDataService } from 'src/app/services/shared/shared.service';
+import { createProvince, showProvince, createCommunity, showCommunity, createMunicipality, showMunicipality, createLocation, showLocation } from '../../functions/modals';
+import { MenuItem } from 'primeng/api';
+import { menu } from '../../utils/menu';
 import { NbDialogService } from '@nebular/theme';
-import { CreateEditLocationComponent } from '../location/create-edit-location/create-edit-location.component';
 
 @Component({
   selector: 'app-admin-demography',
@@ -19,33 +22,90 @@ export class AdminDemographyComponent implements OnInit {
   idDepartment: number = 0;
   items: Department[] = [];
   itemsTable: any[] = [];
+
+  itemsMenu: MenuItem[] = menu;
   loading: boolean = true;
   filterValue: string = '';
   totalRecords = 0;
   totalUsers = 0;
 
   constructor(
-    private DepartmentService: DepartmentService,
-    private dialogService: NbDialogService,
-    private AuthService: AuthService,
     private ShareDataService: ShareDataService,
+    private DepartmentService: DepartmentService,
+    private AuthService: AuthService,
+    private DialogService: DialogService,
+    private NbDialogService: NbDialogService,
     private MessagesService: MessagesService) { }
 
-
   ngOnInit(): void {
+    this.getMenuItems();
     this.getData();
   }
-
-  setTitle(name: string) {
-    this.AuthService.setTitle(name, '');
-  }
-
   getData(): void {
     this.DepartmentService.getList().subscribe(data => {
       this.items = data
       this.idDepartment = this.items[0].id;
-      this.setTitle( ' Demografia - ' + this.items[0].name);
+      this.ShareDataService.setSelectedValue(this.idDepartment);
+      this.setTitle(' Demografia - ' + this.items[0].name);
     });
+  }
+  getMenuItems() {
+    this.itemsMenu = menu.map((item: any) => {
+      const convertedItem: MenuItem = {
+        label: item.label,
+        items: item.items.map((subItem: any) => ({
+          label: subItem.label,
+          icon: subItem.icon,
+          command: (event: any) => this.handleCommand(subItem.command.toString()),
+        })),
+      };
+      return convertedItem;
+    });
+  }
+
+  handleCommand(command: string) {
+    switch (command) {
+      case "() => 'PNew'":
+        createProvince(this.NbDialogService).then((ref) => {
+          this.refreshTable();
+        });
+        break;
+      case "() => 'PList'":
+        showProvince(this.DialogService).then((ref) => {
+          this.refreshTable();
+        });
+        break;
+      case "() => 'MNew'":
+        createMunicipality(this.NbDialogService).then((ref) => {
+          this.refreshTable();
+        });
+        break;
+      case "() => 'MList'":
+        showMunicipality(this.DialogService).then((ref) => {
+          this.refreshTable();
+        });
+        break;
+      case "() => 'CNew'":
+        createCommunity(this.NbDialogService).then((ref) => {
+          this.refreshTable();
+        });
+        break;
+      case "() => 'CList'":
+        showCommunity(this.DialogService).then((ref) => {
+          this.refreshTable();
+        });
+        break;
+      case "() => 'LNew'":
+        createLocation(this.NbDialogService).then((ref) => {
+          this.refreshTable();
+        });
+        break;
+      case "() => 'LList'":
+        showLocation(this.DialogService).then((ref) => {
+          this.refreshTable();
+        });
+        break;
+    }
   }
 
   getTableData(event: LazyLoadEvent) {
@@ -62,14 +122,6 @@ export class AdminDemographyComponent implements OnInit {
     }, 1000);
   }
 
-  dialog(id?: number) {
-    this.dialogService.open(CreateEditLocationComponent, {
-      context: {
-        id
-      }
-    }).onClose.subscribe(res => this.refreshTable());
-  }
-
   filterByName() {
     this.loading = true;
     if (this.filterValue) {
@@ -83,11 +135,17 @@ export class AdminDemographyComponent implements OnInit {
     this.loading = true;
     this.idDepartment = event;
     const name = this.items.find(x => x.id === event)?.name;
-    this.setTitle( ' Demografia - ' + name);
+    this.setTitle(' Demografia - ' + name);
+    this.ShareDataService.setSelectedValue(event);
     this.refreshTable();
   }
 
+  setTitle(name: string) {
+    this.AuthService.setTitle(name, '');
+  }
+
   refreshTable() {
+    this.loading = true;
     const lazyLoadEvent: LazyLoadEvent = {
       first: 0,
       rows: 10,
@@ -95,5 +153,4 @@ export class AdminDemographyComponent implements OnInit {
     this.getTableData(lazyLoadEvent);
   }
 
-  
 }

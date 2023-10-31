@@ -48,7 +48,6 @@ export class LandingComponent {
     this.ref = this.dialogService.open(LoginComponent, {
       header: 'Iniciar sesión',
       styleClass: 'login-modal',
-  /*     width: '60%', */
       contentStyle: { overflow: 'auto' },
       baseZIndex: 10000,
     });
