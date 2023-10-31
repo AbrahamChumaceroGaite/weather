@@ -1,18 +1,19 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { LoginComponent } from '../../core/login/components/login/login.component';
+import { LoginComponent } from '../login/login.component';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { owl_landing_page } from 'src/app/utils/owl-config';
-import { header_info, boxes, services, maps, images, coordinates } from 'src/app/utils/home-data';
+import { header_info, boxes, services, maps, images, coordinates } from 'src/app/templates/home-data';
 import * as Leaflet from 'leaflet';
 import "leaflet-control-geocoder";
 
+
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  selector: 'app-landing',
+  templateUrl: './landing.component.html',
+  styleUrls: ['./landing.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class LandingComponent {
   @ViewChild('map', { static: true }) mapElement!: ElementRef;
   images = images;
   header_info = header_info;
@@ -95,3 +96,4 @@ export class HomeComponent implements OnInit {
   }
 
 }
+

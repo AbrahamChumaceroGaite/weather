@@ -60,4 +60,20 @@ export class ConfirmService {
         });
     }
 
+    public DialogloginFailed() {
+        return new Promise((resolve, reject) => {
+            Swal.fire({
+                title: 'Su sesión ha caducado',
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Ingresar de nuevo',
+            }).then((result) => {
+                if (result.value) {
+                    resolve('Confirmed');
+                }  else {
+                    resolve('Not Confirmed');
+                }
+            });
+        });
+    }
 }

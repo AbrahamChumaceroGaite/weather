@@ -6,6 +6,8 @@ import { Province } from 'src/app/models/demography';
 import { ProvinceService } from 'src/app/core/demography/services/province.service';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
 import { MessagesService } from 'src/app/services/dialog/message.service';
+import { ShareDataService } from 'src/app/services/shared/shared.service';
+import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
   selector: 'app-view-province',
@@ -14,24 +16,33 @@ import { MessagesService } from 'src/app/services/dialog/message.service';
 })
 export class ViewProvinceComponent {
   @ViewChild('dt') dt!: Table;
-  provinceData: Province[] = [];
+  items: Province[] = [];
+  totalRecords = 0;
   loading: boolean = true;
   filterValue: string = '';
 
-  constructor(private provinceService: ProvinceService,   
+  constructor(
+    private provinceService: ProvinceService,  
+    private shareDataService: ShareDataService, 
     private dialogService: NbDialogService,
     private confirmService: ConfirmService,
     private MessagesService: MessagesService) { }
 
   ngOnInit(): void {
-    this.getData();
+  
   }
 
-  getData(){
-    this.provinceService.get().subscribe((data:Province[]) => {
-      this.provinceData = data;
-      this.loading = false
-    })
+  getData(event: LazyLoadEvent){
+    setTimeout(() => {
+      this.provinceService.get(event).subscribe((data) => {
+        this.items = data.items;
+        this.totalRecords = data.totalRecords;
+        this.loading = false;
+      }, (error) => {
+        this.loading = false;
+        this.MessagesService.showMsjError(error.error.message)
+      });
+    }, 1000);
   }
 
   dialog(id?: number) {
@@ -39,14 +50,14 @@ export class ViewProvinceComponent {
       context: {
         id
       }
-    }).onClose.subscribe( res=> this.getData());
+    }).onClose.subscribe( res=> this.refreshTable());
   }
 
-  filterByName(event: Event) {
-    const value = (event.target as HTMLInputElement)?.value;
-    if (value) {
-      this.filterValue = value.trim().toLowerCase();
-      this.dt.filter(this.filterValue, 'name', 'contains');
+  filterByName() {
+    if (this.filterValue) {
+      this.dt.filterGlobal(this.filterValue, 'contains');
+    } else {
+      this.dt.filterGlobal(null, 'contains'); // Restablecer el filtro global
     }
   }
   
@@ -55,12 +66,24 @@ export class ViewProvinceComponent {
       if (result === 'Confirmed'){
         this.provinceService.delete(id).subscribe(res=>{
             this.MessagesService.showConfirmDelete();
-            this.getData();
+            this.refreshTable();
         },(err)=>{
           this.MessagesService.showError();
         })
       }
     })
+  }
+
+  onRowSelect(event: any) {
+    this.shareDataService.setSelectedValue(event);
+  }
+
+  refreshTable() {
+    const lazyLoadEvent: LazyLoadEvent = {
+      first: 0,
+      rows: 10,
+    };
+    this.getData(lazyLoadEvent);
   }
 
 }

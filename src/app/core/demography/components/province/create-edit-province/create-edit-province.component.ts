@@ -7,6 +7,7 @@ import { ProvinceService } from 'src/app/core/demography/services/province.servi
 import { Department, Province } from 'src/app/models/demography';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
 
+
 @Component({
   selector: 'app-create-edit-province',
   templateUrl: './create-edit-province.component.html',
@@ -14,7 +15,7 @@ import { ConfirmService } from 'src/app/services/dialog/confirm.service';
 })
 export class CreateEditProvinceComponent {
   @Input() id!: number;
-  deparments: Department [] = [];
+  deparments: Department[] = [];
   form!: FormGroup;
   formTitle!: string;
   formlogo!: string;
@@ -23,16 +24,17 @@ export class CreateEditProvinceComponent {
   isFormSubmitted: boolean = false;
   loading = false;
   visible = true;
-constructor(
+
+  constructor(
     private departmentService: DepartmentService,
-    private provinceService: ProvinceService,
+    private provinceService: ProvinceService, 
     private confirmService: ConfirmService,
     private MessagesService: MessagesService,
     private fb: FormBuilder,
     private dialogRef: NbDialogRef<CreateEditProvinceComponent>
   ) { }
 
-ngOnInit(): void {
+  ngOnInit(): void {
     this.form = this.fb.group({
       iddepartment: ['', Validators.required],
       name: ['', Validators.required],
@@ -58,7 +60,7 @@ ngOnInit(): void {
   }
 
   getDeparment() {
-    this.departmentService.get().subscribe((data:Department[])=>{
+    this.departmentService.getList().subscribe((data: Department[]) => {
       this.deparments = data;
     })
   }
@@ -89,20 +91,22 @@ ngOnInit(): void {
               console.log(error);
             }
           );
-        } 
+        }
       });
     } else {
-      this.provinceService.post(formValue).subscribe((res)=>{
+      this.provinceService.post(formValue).subscribe((res) => {
         this.MessagesService.showConfirmPost();
         this.cancel();
-      }, (err)=>{
-        console.log("ERROR",err)
+      }, (err) => {
+        console.log("ERROR", err)
         this.MessagesService.showError();
         this.cancel();
       });
     }
   }
+
   
+
   cancel() {
     this.dialogRef.close();
     this.visible = false;

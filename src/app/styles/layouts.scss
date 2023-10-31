@@ -1,0 +1,43 @@
+.content-box {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    width: 100%;
+    position: relative;
+
+    nb-card-header {
+        background-color: rgba(5, 49, 66, 0.877);
+        color: white;
+    }
+
+    nb-card-body{
+        background: url("../../assets/thumbails/bo.png") center center no-repeat;
+        background-size: cover;
+
+        .p-scrollPanel {
+            height: 400px;         
+    
+            .timeline-container {
+                z-index: 1;
+                .department {
+                    cursor: pointer;
+    
+                    &:hover {
+                        color: #1E90FF;
+                    }
+                }
+            }
+    
+        }
+    }
+
+    
+
+
+}
+
+.content-layout {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}

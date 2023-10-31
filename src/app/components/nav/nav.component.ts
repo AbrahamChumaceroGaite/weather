@@ -2,7 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { NbMenuItem, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 import { filter, map } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
-import { MenuNavService } from 'src/app/services/tools/menu-json.service';
+import { navMenuModel } from 'src/app/models/nav';
+import { MENU_ITEMS, OPTION_ITEMS } from 'src/app/templates/menu';
+
+interface CustomMenuItem extends NbMenuItem {
+  id?: string;
+  permissions?: any
+}
 
 @Component({
   selector: 'app-nav',
@@ -10,8 +16,11 @@ import { MenuNavService } from 'src/app/services/tools/menu-json.service';
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit {
-  navItems!: NbMenuItem[];
-  navMenu: [] = [];
+  navItems: CustomMenuItem[] = [];
+  navMenu: navMenuModel[] = [];
+  username!: string;
+  rol!: string;
+  title: any;
   userMenuItems: NbMenuItem[] = [
     { title: 'Modo Nocturno' },
     { title: 'Salir' }
@@ -19,51 +28,63 @@ export class NavComponent implements OnInit {
   isCollapsed = false;
   isPhone!: boolean;
   router: any;
-  constructor(private themeService: NbThemeService,
-    private menunavService: MenuNavService, 
+
+  constructor(
+    public authService: AuthService,
     private nbmenuService: NbMenuService,
-    private sidebarService: NbSidebarService,
-    private authService: AuthService) {}
+    private sidebarService: NbSidebarService) { }
 
-  ngOnInit(): void {    
-    this.menunavService.get().subscribe((data: any) => {
-      this.navItems = data.nav;
-      this.navMenu = data.option;
-    });
-    this.nbmenuService.onItemClick().pipe(filter(({ tag }) => tag === 'my-context-menu'),
-    map(({ item: { title } }) => title)).subscribe(title => {
-      switch(title){
-        case 'Modo Oscuro':
-
-          this.switchTheme();
-          break;
-        case 'Cerrar Sesión':
-          this.logout();
-          break;
-      }
-    });
+  ngOnInit(): void {
+    this.getMenu();
     this.checkViewport();
     window.addEventListener('resize', this.checkViewport);
+  }
+
+  getMenu() {
+    const userPermissions = this.authService.getUserPermissions();
+    this.username = this.authService.getUsername();
+    this.rol = this.authService.getRol();
+    this.navItems = this.filterMenuItems(userPermissions);
+    this.navMenu = OPTION_ITEMS;
+    this.nbmenuService.onItemClick().pipe(filter(({ tag }) => tag === 'my-context-menu'),
+      map(({ item: { title } }) => title)).subscribe(title => {
+        switch (title) {
+          case 'Modo Oscuro':
+          case 'Cerrar Sesión':
+            this.logout()
+            break;
+        }
+      });
+  }
+
+  filterMenuItems(userPermissions: any[], menuItems: CustomMenuItem[] = MENU_ITEMS): CustomMenuItem[] {
+    return menuItems.filter((menuItem) => {
+      if (menuItem.children) {
+        // Si tiene hijos, filtramos recursivamente los hijos
+        menuItem.children = this.filterMenuItems(userPermissions, menuItem.children);
+        // Mostramos el elemento padre solo si tiene hijos visibles
+        return menuItem.children.length > 0;
+      } else if (menuItem.id) {
+        return userPermissions.some((permission) => {
+          return String(menuItem.id) === String(permission.idcomponente) && permission.ver === 1;
+        });
+      }
+      return true;
+    }) as CustomMenuItem[];
   }
 
   toggleSidebar(): void {
     this.sidebarService.toggle(true, 'sidebar');
   }
+
   onSidebarCollapse(collapsed: boolean): void {
     this.isCollapsed = collapsed;
-  }
-  switchTheme() {
-    this.themeService.changeTheme(this.themeService.currentTheme === 'dark' ? 'default' : 'dark');
-  }
-
-  getUserName(): string {
-    return this.authService.getUserName();
   }
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/home']);
   }
+
   checkViewport = () => {
     this.isPhone = window.innerWidth <= 767;
     if (this.isPhone) {
@@ -76,5 +97,5 @@ export class NavComponent implements OnInit {
   ngOnDestroy() {
     window.removeEventListener('resize', this.checkViewport);
   }
-  
+
 }

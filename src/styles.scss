@@ -2,50 +2,42 @@
 @use "@nebular/theme/styles/globals" as *;
 @use '../src/app/styles/dashboard.scss';
 @use '../src/app/styles/login.scss';
+@use '../src/app/styles/forms.scss';
 @use '../src/app/styles/landing-page.css';
+@use '../src/app/styles/layouts.scss';
 @use '../src/assets/vendor/bootstrap/css/bootstrap.min.css';
 @use '../src/assets/vendor/bootstrap-icons/bootstrap-icons.css';
 @use '../src/assets/vendor/boxicons/css/boxicons.min.css';
 @use '../src/assets/vendor/glightbox/css/glightbox.min.css';
 @use '../src/assets/vendor/remixicon/remixicon.css';
 @use '../src/assets/vendor/swiper/swiper-bundle.min.css';
-@import "primeicons/primeicons.css";
 @import "node_modules/leaflet/dist/leaflet.css";
 @import "~leaflet/dist/leaflet.css";
 @import '~mapbox-gl/dist/mapbox-gl.css';
 @import 'ngx-owl-carousel-o/lib/styles/scss/owl.carousel';
 @import 'ngx-owl-carousel-o/lib/styles/scss/owl.theme.default';
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
 
 @include nb-install() {
   @include nb-theme-global();
 }
 
+#myUser .user-name {
+  color: white;
+}
+
+#myUser .user-title {
+  color: white;
+}
+
+nb-actions .actions-icon-color {
+  color: white;
+}
+
 /* You can add global styles to this file, and also import other style files */
-.create-header {
 
-  .p-dialog-header-close-icon,
-  .p-dialog-header-maximize-icon {
-    color: white;
-  }
-
-  .p-dialog .p-dialog-header {
-    background-color: rgb(51, 131, 178) !important;
-    color: white;
-  }
-}
-
-.edit-header {
-
-  .p-dialog-header-close-icon,
-  .p-dialog-header-maximize-icon {
-    color: white;
-  }
-
-  .p-dialog .p-dialog-header {
-    background-color: rgb(75, 198, 124) !important;
-    color: white;
-  }
-}
 
 .nav-header nb-icon {
   color: white;
@@ -56,67 +48,6 @@
   color: white;
 }
 
-.form-device {
-  gap: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  align-content: flex-start;
-
-}
-
-.attention {
-  background-color: beige;
-  text-transform: capitalize;
-  display: flex;
-  font-weight: bold;
-  margin: 5px;
-
-  .attention-icon {
-    font-size: 60px;
-    margin: 5px;
-  }
-}
-
-.form-columns {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 20px;
-
-  .columns {
-    display: flex;
-    flex-direction: column;
-    vertical-align: middle;
-    align-content: center;
-    gap: 20px;
-  }
-}
-
-.form-extra {
-  display: flex;
-  align-items: center;
-  align-content: center;
-  gap: 10px;
-  vertical-align: middle;
-}
-
-.form-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 5px;
-}
-
-.form-hint {
-  text-align: end;
-  font-size: small;
-}
-
-.form-alert {
-  color: red;
-  text-align: start;
-  font-size: small;
-  justify-content: left;
-}
 
 .invalid-feedback {
   color: #f44336;

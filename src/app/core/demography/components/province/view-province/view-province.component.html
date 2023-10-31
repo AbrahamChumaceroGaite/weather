@@ -1,77 +1,35 @@
-<p-toolbar styleClass="table-header mb-4 gap-2">
-    <div class="search-input">
-      <span class="p-input-icon-left">
-        <i class="pi pi-search"></i>
-        <input pInputText type="text" (input)="filterByName($event)" placeholder="Buscar Provincia..."/>
-      </span>
-    </div>
-      <div class="btn-spacer">
-      <button pButton pRipple label="Nuevo" icon="pi pi-plus" (click)="dialog()" pTooltip="Agregar Provincia" tooltipPosition="bottom" class="p-button-success"></button>
-    </div>
-    <div class="spacer"></div>
-  </p-toolbar>
-  <br>
-  <p-table
-    #dt
-    [value]="provinceData"
-    dataKey="id"
-    [rowHover]="true"
-    [rows]="10"
-    [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[5, 10, 25, 50]"
-    [loading]="loading"
-    [paginator]="true"
-    responsiveLayout="stack"
-    [breakpoint]="'960px'"
-    styleClass="p-datatable-gridlines"
-    currentPageReportTemplate="Pagina {first} con {last} de {totalRecords} filas"
-    [filterDelay]="0"
-    [globalFilterFields]="['name']">
-    <ng-template pTemplate="caption">        
-      <nb-icon nbPrefix icon="list"></nb-icon> 
-      Lista de Provincias    
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th pSortableColumn="id" >
-          ID
-          <p-sortIcon field="id"></p-sortIcon>
-        </th>
-        <th pSortableColumn="department" class="table-column">
-          Departamento
-          <p-sortIcon field="department"></p-sortIcon>
-        </th>
-        <th pSortableColumn="name" class="table-column">
-          Provincia
-          <p-sortIcon field="name"></p-sortIcon>
-        </th>
-        <th pSortableColumn="createdAt" class="table-column">
-          Fecha Creado
-          <p-sortIcon field="createdAt"></p-sortIcon>
-        </th>
-        <th>Acciones</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-province>
-      <tr>
-        <td><span class="p-column-title">ID</span>{{ province.id }}</td>
-        <td><span class="p-column-title">Departamento</span>{{ province.department }}</td>
-        <td><span class="p-column-title">Provincia</span>{{ province.name }}</td>
-        <td>
-          <span class="p-column-title">Fecha Creado</span>{{ province.createdAt | date : "dd/MM/yy HH:mm" }}
-        </td>
-        <td>
-          <div class="btn-spacer">
-            <button (click)="dialog(province.id)" nbButton outline status="success">
-              <nb-icon icon="edit"></nb-icon>
-            </button>
-            <button
-              (click)="dialogDelete(province.id)" nbButton outline status="danger">
-              <nb-icon icon="trash"></nb-icon>
-            </button>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-  
+<p-menubar>
+  <ng-template pTemplate="start">
+    <button nbButton status="success" (click)="dialog()"><nb-icon icon="plus"></nb-icon></button>
+  </ng-template>
+  <ng-template pTemplate="end">
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" style="width: 150px" [(ngModel)]="filterValue" (input)="filterByName()"
+        placeholder="Provincia..." />
+    </span>
+  </ng-template>
+</p-menubar>
+<br>
+<p-table #dt [value]="items" [rowHover]="true" [scrollable]="true" scrollHeight="400px" [scrollable]="true"
+  [loading]="loading" [lazy]="true" (onLazyLoad)="getData($event)" styleClass="p-datatable-sm" [filterDelay]="0"
+  [globalFilterFields]="['name']" >
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="name" class="table-column" style="width:300px">
+        Provincia
+        <p-sortIcon field="name"></p-sortIcon>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-item>
+    <tr [nbPopover]="templateRef" nbPopoverTrigger="hover" nbPopoverPlacement="left">
+      <td (click)="onRowSelect(item.name)"><span class="p-column-title">Provincia</span> 
+        {{ item.department }} - {{ item.name }}</td>
+      <ng-template #templateRef>
+        <button nbButton style="margin: 2px;" status="warning" (click)="dialog(item.id)"><nb-icon icon="edit"></nb-icon></button>
+        <button nbButton style="margin: 2px;" status="danger" (click)="dialogDelete(item.id)"><nb-icon icon="trash"></nb-icon></button>
+      </ng-template>
+    </tr>
+  </ng-template>
+</p-table>

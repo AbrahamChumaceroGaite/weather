@@ -59,7 +59,7 @@ ngOnInit(): void {
   }
 
   getProvince() {
-    this.provinceService.get().subscribe((data:Province[])=>{
+    this.provinceService.getList().subscribe((data:Province[])=>{
       this.provinces = data;
     })
   }

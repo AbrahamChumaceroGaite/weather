@@ -58,7 +58,7 @@ export class CreateEditLocationComponent {
   }
 
   getCommunity() {
-    this.communityService.get().subscribe((data:Community[])=>{
+    this.communityService.getList().subscribe((data:Community[])=>{
       this.communities = data;
     })
   }

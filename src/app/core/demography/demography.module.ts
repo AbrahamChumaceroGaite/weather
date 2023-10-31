@@ -14,6 +14,7 @@ import { ViewLocationComponent } from './components/location/view-location/view-
 import { NebularLibraryModule } from 'src/app/modules/nebular-library.module';
 import { PrimengLibraryModule } from 'src/app/modules/primeng-library.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AdminDemographyComponent } from './components/admin-demography/admin-demography.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CreateEditCommunityComponent,
     ViewCommunityComponent,
     CreateEditLocationComponent,
-    ViewLocationComponent
+    ViewLocationComponent,
+    AdminDemographyComponent
   ],
   imports: [
     CommonModule,

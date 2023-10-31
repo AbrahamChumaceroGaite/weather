@@ -9,7 +9,7 @@ export class MessagesService {
   constructor(
     private toastrService: NbToastrService,
     private MessagesService: MessageService
-    ) {}
+  ) { }
 
   showConfirmPost(): void {
     this.toastrService.success('Revise la tabla', 'Registro Exitoso');
@@ -35,10 +35,7 @@ export class MessagesService {
     this.MessagesService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo iniciar su sesión' });
   }
 
-  showImageError(): void {
-    this.toastrService.warning(
-      'El formato es Incorrecto. Debe ser 300x300 y en formato .PNG',
-      '¡Uh, oh! Eso esta mal'
-    );
+  showMsjError(msj: string): void {
+    this.toastrService.danger(msj, '¡Algo salio mal!', { destroyByClick: true });
   }
 }

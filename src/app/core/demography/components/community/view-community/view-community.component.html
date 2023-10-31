@@ -1,86 +1,70 @@
-<p-toolbar styleClass="table-header mb-4 gap-2">
-    <div class="search-input">
-      <span class="p-input-icon-left">
-        <i class="pi pi-search"></i>
-        <input pInputText type="text" (input)="filterByName($event)" placeholder="Buscar Comunidad..."
-        />
-      </span>
+<div class="content-box">
+  <app-view-province></app-view-province>
+  <div class="content-layout">
+    <div>
+      Valor seleccionado: {{ dataSelected | json }}
     </div>
-    <div class="btn-spacer">
-      <button pButton pRipple label="Nuevo" icon="pi pi-plus" (click)="dialog()" pTooltip="Agregar Comunidad" tooltipPosition="bottom" class="p-button-success"></button>
-    </div>
-    <div class="spacer"></div>
-  </p-toolbar>
-  <br>
-  <p-table
-    #dt
-    [value]="communityData"
-    dataKey="id"
-    [rowHover]="true"
-    [rows]="10"
-    [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[5, 10, 25, 50]"
-    [loading]="loading"
-    [paginator]="true"
-    responsiveLayout="stack"
-    [breakpoint]="'960px'"
-    styleClass="p-datatable-gridlines"
-    currentPageReportTemplate="Pagina {first} con {last} de {totalRecords} filas"
-    [filterDelay]="0"
-    [globalFilterFields]="['name']">
-    <ng-template pTemplate="caption">        
-      <nb-icon nbPrefix icon="list"></nb-icon> 
-      Lista de Comunidades    
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th pSortableColumn="id" >
-          ID
-          <p-sortIcon field="id"></p-sortIcon>
-        </th>
-        <th pSortableColumn="department" class="table-column">
-          Departamento
-          <p-sortIcon field="department"></p-sortIcon>
-        </th>
-        <th pSortableColumn="province" class="table-column">
-          Provincia
-          <p-sortIcon field="province"></p-sortIcon>
-        </th>
-        <th pSortableColumn="municipality" class="table-column">
-            Municpio
+    <p-menubar>
+      <ng-template pTemplate="end">
+        <div class="view-menubar">
+          <button nbButton status="success"><nb-icon icon="plus" (click)="dialog()" nbTooltip="hola"></nb-icon></button>
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="filterByName($event)" placeholder="Buscar Comunidad..." />
+          </span>
+        </div>
+      </ng-template>
+    </p-menubar>
+    <br>
+    <p-table #dt [value]="items" dataKey="id" [rowHover]="true" [totalRecords]="totalRecords" [rows]="10"
+      [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50]" [loading]="loading" [lazy]="true"
+      (onLazyLoad)="getData($event)" [paginator]="true" responsiveLayout="stack" [breakpoint]="'960px'"
+      styleClass="p-datatable-sm" currentPageReportTemplate="Pagina {first} con {last} de {totalRecords} filas"
+      [filterDelay]="0" [globalFilterFields]="['name, province, municipality']">
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="id">
+            ID
+            <p-sortIcon field="id"></p-sortIcon>
+          </th>
+
+          <th pSortableColumn="province" class="table-column">
+            Provincia
+            <p-sortIcon field="province"></p-sortIcon>
+          </th>
+          <th pSortableColumn="municipality" class="table-column">
+            Municipio
             <p-sortIcon field="municipality"></p-sortIcon>
           </th>
-          <th pSortableColumn="community" class="table-column">
+          <th pSortableColumn="name" class="table-column">
             Comunidad
-            <p-sortIcon field="community"></p-sortIcon>
+            <p-sortIcon field="name"></p-sortIcon>
           </th>
-        <th pSortableColumn="createdAt" class="table-column">
-          Fecha Creado
-          <p-sortIcon field="createdAt"></p-sortIcon>
-        </th>
-        <th>Acciones</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-community>
-      <tr>
-        <td><span class="p-column-title">ID</span>{{ community.id }}</td>
-        <td><span class="p-column-title">Departamento</span>{{ community.department }}</td>
-        <td><span class="p-column-title">Provincia</span>{{ community.province }}</td>
-        <td><span class="p-column-title">Municipio</span>{{ community.municipality }}</td>
-        <td><span class="p-column-title">Comunidad</span>{{ community.name }}</td>
-        <td><span class="p-column-title">Fecha Creado</span>{{ community.createdAt | date : "dd/MM/yy HH:mm" }}</td>
-        <td>
-          <div class="btn-spacer">
-            <button (click)="dialog(community.id)" nbButton outline status="success">
-              <nb-icon icon="edit"></nb-icon>
-            </button>
-            <button
-              (click)="dialogDelete(community.id)" nbButton outline status="danger">
-              <nb-icon icon="trash"></nb-icon>
-            </button>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-  
+          <th pSortableColumn="createdAt" class="table-column">
+            Fecha Creado
+          </th>
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-community>
+        <tr>
+          <td><span class="p-column-title">ID</span>{{ community.id }}</td>
+          <td><span class="p-column-title">Provincia</span>{{ community.province }}</td>
+          <td><span class="p-column-title">Municipio</span>{{ community.municipality }}</td>
+          <td><span class="p-column-title">Comunidad</span>{{ community.name }}</td>
+          <td><span class="p-column-title">Fecha Creado</span>{{ community.createdAt | date : "dd/MM/yy HH:mm" }}</td>
+          <td>
+            <div class="btn-spacer">
+              <button (click)="dialog(community.id)" nbButton outline status="success">
+                <nb-icon icon="edit"></nb-icon>
+              </button>
+              <button (click)="dialogDelete(community.id)" nbButton outline status="danger">
+                <nb-icon icon="trash"></nb-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

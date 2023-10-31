@@ -13,7 +13,8 @@ import { Message } from 'primeng/api';
 export class LoginComponent {
   form!: FormGroup;
   messages2: Message[] | undefined;
-
+  error: boolean = false;
+  loading: boolean = false;
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -33,21 +34,19 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
+    this.loading = true;
     this.authService.login(this.form.value).subscribe(
       (res: any) => {      
         this.MessagesService.showSuccessLogin();
-        this.router.navigate(['/home/admin/device']);
+        this.loading = false;       
       },
       (err: any) => {
-        this.showLoginFailed();
+        this.loading = false;
+        this.error = true;
         this.MessagesService.showFailedLogin();
       }
     );
   }
 
-  showLoginFailed() {
-    this.messages2 = [
-      { severity: 'error', summary: 'Error', detail: 'No se pudo iniciar sesión' },
-  ];
-  }
+
 }

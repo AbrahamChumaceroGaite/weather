@@ -1,18 +1,19 @@
-<p-toolbar styleClass="table-header mb-4 gap-2">
-    <div class="search-input">
-      <span class="p-input-icon-left">
-        <i class="pi pi-search"></i>
-        <input pInputText type="text" (input)="filterByName($event)" placeholder="Buscar Municipio..."
-        />
-      </span>
-    </div>
-      <div class="btn-spacer">
-      <button pButton pRipple label="Nuevo" icon="pi pi-plus" (click)="dialog()" pTooltip="Agregar Municipio" tooltipPosition="bottom" class="p-button-success"></button>
-    </div>
-    <div class="spacer"></div>
-  </p-toolbar>
-  <br>
-  <p-table
+<div class="content-box">
+  <app-view-province></app-view-province>
+  <div class="content-layout">
+    <p-menubar>
+      <ng-template pTemplate="end">
+        <div class="view-menubar">
+          <button nbButton status="success"><nb-icon icon="plus" (click)="dialog()" nbTooltip="hola"></nb-icon></button>
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="filterByName($event)" placeholder="Buscar Comunidad..." />
+          </span>
+        </div>
+      </ng-template>
+    </p-menubar>
+    <br>
+    <p-table
     #dt
     [value]="municipalityData"
     dataKey="id"
@@ -80,4 +81,8 @@
       </tr>
     </ng-template>
   </p-table>
+  </div>
+</div>
+
+
   

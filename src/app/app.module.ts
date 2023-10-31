@@ -1,15 +1,18 @@
-import { NgModule, isDevMode } from '@angular/core';
+import { LOCALE_ID, NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
 
 /**Componentes */
-import { HomeComponent } from './components/home/home.component';
 import { NavComponent } from './components/nav/nav.component';
+import { LoginComponent } from './components/login/login.component';
+import { DeniedComponent } from './components/denied/denied.component';
 
 /**Modulo de las librerias Graficas */
 import { PrimengLibraryModule } from './modules/primeng-library.module';
@@ -26,14 +29,21 @@ import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
 import { ngxUiLoaderConfigTemplate } from './utils/ngxuiloader';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { MessageService } from 'primeng/api';
+import { ShareDataService } from './services/shared/shared.service';
+import { TokenInterceptor } from './utils/token.interceptor';
+import { LandingComponent } from './components/landing/landing.component';
 const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
+registerLocaleData(localeEs);
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     NavComponent,
+    LoginComponent,
+    DeniedComponent,
+    LandingComponent
   ],
+
   imports: [
     NgApexchartsModule,
     LeafletModule,
@@ -69,7 +79,15 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
       registrationStrategy: 'registerWhenStable:30000'
     }),
   ],
-  providers: [DialogService, MessageService],
+  providers: [DialogService, MessageService, ShareDataService, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptor,
+    multi: true
+  },
+    {
+      provide: LOCALE_ID,
+      useValue: 'es'
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

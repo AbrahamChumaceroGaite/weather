@@ -4,10 +4,44 @@
       <nb-icon icon="menu" style="color: black;"></nb-icon>
     </button>
     <div class="user-container">
-      <nb-actions>
-        <nb-action icon="bell-outline" badgeDot badgePosition="top right" badgeStatus="danger"></nb-action>
+      <div class="menu-title">
+        <h1>
+          <i class="{{ authService.getIcon() }}"></i>
+          {{ authService.getTitle() }}
+        </h1>
+      </div>
+      <div class="space">
+      </div>
+      <nb-actions size="medium">
+        <nb-action id="myNot" icon="bell" badgeText="14" badgeStatus="danger"
+          [nbPopover]="templateRef" nbPopoverPlacement="bottom">
+          <ng-template #templateRef>
+            <p-virtualScroller  scrollHeight="350px" [style]="{'width': '420px'}"
+              [itemSize]="100" [lazy]="true">
+              <ng-template pTemplate="header"> Notificaciones </ng-template>
+              <ng-template let-item pTemplate="item">
+                <nb-card class="notification-content">
+                  <nb-card-body >
+                    <div class="notification-message-content">
+                      <div class="notification-message">
+                        <p>Contenido de Prueba</p>
+                        <div class="down-line">
+                          <small>03/03/2000</small>
+                          <nb-icon icon="info"></nb-icon>
+                        </div>
+                      </div>
+                    </div>
+                  </nb-card-body>
+                </nb-card>
+              </ng-template>
+            </p-virtualScroller>
+
+          </ng-template>
+        </nb-action>
         <nb-action>
-          <nb-user class="user-info" [nbContextMenu]="navMenu" nbContextMenuTag="my-context-menu" [name]="getUserName()" color="#cccccc" [picture]="''" id="myUser"></nb-user>
+          <nb-user class="user-info" [nbContextMenu]="navMenu" nbContextMenuTag="my-context-menu" [name]="username"
+            color="#cccccc" [picture]="''" id="myUser" [title]="rol">
+          </nb-user>
         </nb-action>
       </nb-actions>
     </div>
@@ -22,6 +56,8 @@
   </nb-layout-column>
 
   <nb-layout-footer fixed>
-    <!-- Aquí va el contenido del footer -->
+    <div class="footer">
+      <p>Versión 0.3.0</p>
+    </div>
   </nb-layout-footer>
 </nb-layout>
