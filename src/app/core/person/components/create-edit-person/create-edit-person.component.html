@@ -1,0 +1,98 @@
+<div class="{{formHeader}}">
+    <p-dialog [(visible)]="visible" [breakpoints]="{ '960px': '105vw' }" [style]="{width: 'auto'}" [maximizable]="true"
+        [styleClass]="'custom-dialog-icons'">
+        <p-header>
+            <nb-icon icon="{{ formlogo }}"></nb-icon> {{ formTitle }}
+        </p-header>
+        <br>
+        <form [formGroup]="form" (ngSubmit)="submitForm()" class="form-columns">
+            <div class="columns">
+                <div class="form-content">
+                    <label>
+                        <i class="pi pi-user"></i>Nombre</label>
+                    <input nbInput type="text" [status]="isInvalid('name') ? 'danger' : 'primary'"
+                        formControlName="name" />
+                    <small
+                        *ngIf="form?.get('name')?.invalid && (form?.get('name')?.dirty || form?.get('name')?.touched)"
+                        class="text-danger">
+                        <ng-container *ngIf="form?.get('name')?.hasError('required')">El nombre es
+                            requerido</ng-container>
+                        <ng-container *ngIf="form?.get('name')?.hasError('minlength')">El nombre debe tener al menos 3
+                            caracteres</ng-container>
+                    </small>
+                </div>
+                <div class="form-content">
+                    <label>
+                        <i class="pi pi-id-card"></i>CI o DNI</label>
+                    <input nbInput type="number" [status]="isInvalid('ci') ? 'danger' : 'primary'"
+                        formControlName="ci" />
+                    <small *ngIf="form?.get('ci')?.invalid && (form?.get('ci')?.dirty || form?.get('ci')?.touched)"
+                        class="text-danger">
+                        <ng-container *ngIf="form?.get('ci')?.hasError('required')">El CI o DNI es
+                            requerido</ng-container>
+                    </small>
+                </div>
+                <div class="form-content">
+                    <label>
+                        <i class="pi pi-phone"></i>Telefono</label>
+                    <input nbInput type="number" [status]="isInvalid('phone') ? 'danger' : 'primary'"
+                        formControlName="phone" />
+                    <small
+                        *ngIf="form?.get('phone')?.invalid && (form?.get('phone')?.dirty || form?.get('phone')?.touched)"
+                        class="text-danger">
+                        <ng-container *ngIf="form?.get('phone')?.hasError('required')">El Nº Telefono es
+                            requerido</ng-container>
+                    </small>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="form-content">
+                    <label>
+                        <i class="pi pi-user"></i>Apellido</label>
+                    <input nbInput type="text" [status]="isInvalid('lastname') ? 'danger' : 'primary'"
+                        formControlName="lastname" />
+                    <small
+                        *ngIf="form?.get('lastname')?.invalid && (form?.get('lastname')?.dirty || form?.get('lastname')?.touched)"
+                        class="text-danger">
+                        <ng-container *ngIf="form?.get('lastname')?.hasError('required')">El apellido es
+                            requerido</ng-container>
+                    </small>
+                </div>
+                <div class="form-content">
+                    <label>
+                        <i class="pi pi-map"></i>Locación</label>
+                    <nb-select [nbSpinner]="loading" [status]="isInvalid('idlocation') ? 'danger' : 'primary'"
+                        placeholder="Seleccionar" formControlName="idlocation">
+                        <nb-option *ngFor="let item of locations" [value]="item.id">{{ item.name }}</nb-option>
+                    </nb-select>
+                    <small
+                        *ngIf="form?.get('idlocation')?.invalid && (form?.get('idlocation')?.dirty || form?.get('idlocation')?.touched)"
+                        class="text-danger">
+                        <ng-container *ngIf="form?.get('idlocation')?.hasError('required')">La Locacion es
+                            requerida</ng-container>
+                    </small>
+                </div>
+                <div class="form-content">
+                    <label>
+                        <i class="pi pi-at"></i>Correo</label>
+                    <input nbInput type="email" [status]="isInvalid('email') ? 'danger' : 'primary'"
+                        formControlName="email" />
+                    <small
+                        *ngIf="form?.get('email')?.invalid && (form?.get('email')?.dirty || form?.get('email')?.touched)"
+                        class="text-danger">
+                        <ng-container *ngIf="form?.get('email')?.hasError('email')">El correo es
+                            invalido</ng-container>
+                    </small>
+                </div>
+            </div>
+
+        </form>
+        <ng-template pTemplate="footer">
+            <button nbButton status="success" (click)="submitForm()" [nbSpinner]="loading" type="submit"
+                [disabled]="!form.valid">
+                {{ submitButtonText }}
+            </button>
+            <button nbButton status="basic" (click)="cancel()">Cancelar</button>
+        </ng-template>
+    </p-dialog>
+</div>

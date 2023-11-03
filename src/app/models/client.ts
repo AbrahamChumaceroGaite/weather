@@ -1,14 +1,11 @@
 export interface Client {
     id: number;
-    name: string,
-    pass: string,
-    ci: number,
-    idrol: number,
-    rol: string,
-    idlocation: number,
+    iduser: number;
+    idperson: number,
+    user: string;
     location: string,
-    number: number
-    createdAt: string
+    createdAt: Date,
+    createdUpd: Date
 };
 
 export interface ClientCommunity {

@@ -1,75 +1,99 @@
 <div class="{{formHeader}}">
-    <p-dialog [(visible)]="visible" [breakpoints]="{ '960px': '105vw' }" [style]="{width: '40vw'}" [maximizable]="true" [styleClass]="'custom-dialog-icons'">
-      <p-header>
-        <nb-icon icon="{{ formlogo }}"></nb-icon> {{ formTitle }}
-      </p-header>
-      <br>
-    <form [formGroup]="form" (ngSubmit)="submitForm()" class="form-columns">
-        <div class="columns">
-            <div class="form-group">
-                <nb-form-field>
-                  <nb-icon nbPrefix icon="person"></nb-icon>
-                  <input nbInput fullWidth type="text" placeholder="Nombre Usuario" [status]="form.get('name')?.invalid && form.get('name')?.touched ? 'danger' : 'basic'" formControlName="name" [maxlength]="30" />
-                </nb-form-field>
-                <div class="form-footer">
-                    <div class="form-alert" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
-                        Nombre requerido. Debe tener al menos 5 caracteres.
-                      </div>
-                        <div class="spacer"> </div>
-                  <div class="form-hint">{{ form.get('name')?.value?.length || 0 }} / 30</div>
+    <p-dialog [(visible)]="visible" [breakpoints]="{ '960px': '105vw' }" [style]="{width: '600px'}" [maximizable]="true"
+        [styleClass]="'custom-dialog-icons'">
+        <p-header>
+            <nb-icon icon="{{ formlogo }}"></nb-icon> {{ formTitle }}
+        </p-header>
+        <br>
+        <nb-stepper #stepper style="margin: 10px">
+            <nb-step [stepControl]="form" label="Buscar Persona">
+                <form [formGroup]="form"
+                    style="display: flex; flex-direction: row; justify-content: center; vertical-align: middle; gap: 25px;">
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <label>
+                            <i class="pi pi-user"></i>Persona</label>
+                        <nb-select [nbSpinner]="loading" [status]="isInvalid('idperson') ? 'danger' : 'primary'"
+                            placeholder="Seleccionar" formControlName="idperson">
+                            <nb-option *ngFor="let item of users" [value]="item.id">{{ item.name }}</nb-option>
+                        </nb-select>
+                        <small
+                            *ngIf="form?.get('idperson')?.invalid && (form?.get('idperson')?.dirty || form?.get('idperson')?.touched)"
+                            class="text-danger">
+                            <ng-container *ngIf="form?.get('idperson')?.hasError('required')">La Persona es
+                                requerida</ng-container>
+                        </small>
+                    </div>
+                </form>
+                <div style="display: flex; justify-content: flex-end; margin: 5px;">
+                    <button nbButton status="success" [disabled]="!form.valid" nbStepperNext>Siguiente</button>
                 </div>
-              </div>  
-              <div class="form-group">
-                <nb-form-field>
-                  <nb-icon nbPrefix icon="lock"></nb-icon>
-                  <input nbInput fullWidth type="password" [type]="getInputType()" [status]="form.get('pass')?.invalid && form.get('pass')?.touched ? 'danger' : 'basic'" formControlName="pass"/>
-                  <button nbSuffix nbButton ghost type="button" (click)="toggleShowPassword()">
-                    <nb-icon [icon]="showPassword ? 'eye-outline' : 'eye-off-2-outline'" pack="eva" [attr.aria-label]="showPassword ? 'hide password' : 'show password'">
-                    </nb-icon>
-                  </button>
-                </nb-form-field>
-                <div class="form-footer">
-                  <div class="form-alert" *ngIf="form.get('pass')?.invalid && form.get('pass')?.touched">
-                    Contraseña requerida. Debe tener al menos 6 caracteres y contener al menos un número y un símbolo.
-                  </div>
+            </nb-step>
+            <nb-step [stepControl]="Rolform" label="Asignar Credenciales">
+                <form [formGroup]="Rolform" class="form-columns">
+                    <div class="columns">
+                        <div class="form-content">
+                            <label>
+                                <i class="pi pi-user"></i>Roles</label>
+                            <nb-select [nbSpinner]="loading" [status]="isInvalid('idrol') ? 'danger' : 'primary'"
+                                placeholder="Seleccionar" formControlName="idrol" required>
+                                <nb-option *ngFor="let item of rols" [value]="item.id">{{ item.rol }}</nb-option>
+                            </nb-select>
+                            <small
+                                *ngIf="Rolform?.get('idrol')?.invalid && (Rolform?.get('idrol')?.dirty || Rolform?.get('idrol')?.touched)"
+                                class="text-danger">
+                                <ng-container *ngIf="Rolform?.get('idrol')?.hasError('required')">El Rol es
+                                    requerido</ng-container>
+                            </small>
+                        </div>
+                    </div>
+                    <div class="columns">
+                        <div class="form-content">
+                            <label>
+                                <i class="pi pi-user"></i>Contraseña</label>
+                            <nb-form-field>
+                                <input [type]="getInputType()" [status]="isInvalidR('pass') ? 'danger' : 'primary'"
+                                    placeholder="********" formControlName="pass" nbInput required>
+                                <button nbSuffix nbButton ghost (click)="toggleShowPassword()">
+                                    <nb-icon [icon]="showPassword ? 'eye-outline' : 'eye-off-2-outline'" pack="eva"
+                                        [attr.aria-label]="showPassword ? 'hide password' : 'show password'">
+                                    </nb-icon>
+                                </button>
+                            </nb-form-field>
+                            <small
+                                *ngIf="Rolform?.get('pass')?.invalid && (Rolform?.get('pass')?.dirty || Rolform?.get('pass')?.touched)"
+                                class="text-danger">
+                                <ng-container *ngIf="Rolform?.get('pass')?.hasError('required')">La contraseña es
+                                    requerido</ng-container>
+                            </small>
+                        </div>
+                    </div>
+                </form>
+                <div style="display: flex; justify-content: flex-end; margin: 10px;">
+                    <button nbButton status="success" [disabled]="!Rolform.valid" nbStepperNext>Siguiente</button>
                 </div>
-              </div>
-              
-        </div>
-        <div class="columns">         
-            <div class="form-group">
-                <nb-form-field>
-                  <nb-icon nbPrefix icon="at"></nb-icon>
-                  <input nbInput fullWidth type="email" placeholder="Correo Usuario"  [status]="form.get('email')?.invalid && form.get('email')?.touched ? 'danger' : 'basic'" formControlName="email" [maxlength]="20" />
-                </nb-form-field>
-                <div class="form-footer">
-                    <div class="form-alert" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
-                        El Correo debe ser Valido. </div>
-                        <div class="spacer"> </div>
-                  <div class="form-hint">{{ form.get('email')?.value?.length || 0 }} / 20</div>
+            </nb-step>
+            <nb-step label="Confirmar">
+                <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+                    <div style="display: flex; flex-direction: column; gap:20px; justify-content: center;">
+                        <h3 style="font-weight: bold; margin: 10px">¿Confirmar Registro?</h3>
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center;">
+                            <button nbButton (click)="submitForm()" status="success" [nbSpinner]="loading" type="submit"
+                                [disabled]="!form.valid" nbStepperNext>{{submitButtonText}}</button>
+                            <button nbButton (click)="stepper.reset()">No</button>
+                        </div>
+                    </div>
+
                 </div>
-              </div> 
-              <div class="form-group">
-                <nb-form-field>
-                    <nb-icon nbPrefix icon="award"></nb-icon>
-                    <nb-select placeholder="Seleccione el Rol" formControlName="idrol">
-                        <nb-option *ngFor="let rol of rols" [value]="rol.id">{{ rol.rol }}</nb-option>
-                      </nb-select>
-                </nb-form-field>
-                <div class="form-footer">
-                    <div class="form-alert" *ngIf="form.get('idrol')?.invalid && form.get('idrol')?.touched">
-                        El Rol es requerida. </div>
+            </nb-step>
+            <nb-step [hidden]="true" label="¡Concluido!">
+                <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+                    <div style="display: flex; flex-direction: column; gap:20px; justify-content: center; align-items: center;">
+                        <h3 style="font-weight: bold; margin: 10px">¡HECHO!</h3>
+                        <span style="font-weight: bold;">{{message}}</span>
+                    </div>
+
                 </div>
-              </div>             
-             
-        </div>
-    </form>
-    <ng-template pTemplate="footer">
-        <button nbButton status="success" (click)="submitForm()" [nbSpinner]="loading" type="submit" [disabled]="!form.valid">
-            {{ submitButtonText }}
-          </button>
-          <button nbButton status="basic" (click)="cancel()">Cancelar</button>
-    </ng-template>
-  </p-dialog>
-  </div>  
-  
+              </nb-step>
+        </nb-stepper>
+    </p-dialog>
+</div>

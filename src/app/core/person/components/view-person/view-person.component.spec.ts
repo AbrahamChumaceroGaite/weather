@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewUserTabsComponent } from './view-user-tabs.component';
+import { ViewPersonComponent } from './view-person.component';
 
-describe('ViewUserTabsComponent', () => {
-  let component: ViewUserTabsComponent;
-  let fixture: ComponentFixture<ViewUserTabsComponent>;
+describe('ViewPersonComponent', () => {
+  let component: ViewPersonComponent;
+  let fixture: ComponentFixture<ViewPersonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ViewUserTabsComponent ]
+      declarations: [ ViewPersonComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ViewUserTabsComponent);
+    fixture = TestBed.createComponent(ViewPersonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

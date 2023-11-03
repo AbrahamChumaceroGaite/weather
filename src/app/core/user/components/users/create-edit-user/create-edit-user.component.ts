@@ -4,9 +4,10 @@ import { NbDialogRef } from '@nebular/theme';
 import { MessagesService } from 'src/app/services/dialog/message.service';
 import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/core/user/services/user.service';
-import { RolerService } from 'src/app/core/user/services/roler.service';
+import { ShareDataService } from 'src/app/services/shared/shared.service';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
-import { Roles } from 'src/app/models/rol';
+import { Person } from 'src/app/models/person';
+import { Rol } from 'src/app/models/rol';
 
 @Component({
   selector: 'app-create-edit-user',
@@ -15,8 +16,10 @@ import { Roles } from 'src/app/models/rol';
 })
 export class CreateEditUserComponent implements OnInit {
   @Input() id!: number;
-  rols: Roles[] = [];
+  users: Person[] = [];
+  rols: Rol[] = [];
   form!: FormGroup;
+  Rolform!: FormGroup;
   formTitle!: string;
   formlogo!: string;
   formHeader!: string;
@@ -25,10 +28,11 @@ export class CreateEditUserComponent implements OnInit {
   isFormSubmitted: boolean = false;
   loading = false;
   visible = true;
+  message : string = '';
 
- constructor(
+  constructor(
+    private ShareDataService: ShareDataService,
     private userService: UserService,
-    private rolService: RolerService,
     private confirmService: ConfirmService,
     private MessagesService: MessagesService,
     private fb: FormBuilder,
@@ -36,22 +40,39 @@ export class CreateEditUserComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.loadForm();
+    this.checkForm();
+  }
+
+  loadForm() {
     this.form = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(5)]],
-      email: ['', [Validators.required, Validators.email]],
-      idrol: ['', Validators.required],
-      pass: ['']
+      idperson: ['', Validators.required],
     });
-    
+
+    this.Rolform = this.fb.group({
+      idrol: ['', Validators.required],
+      pass: ['', Validators.required],
+    });
+
+    this.ShareDataService.getPersonList().subscribe((data: Person[]) => {
+      this.users = data;
+      this.loading = false;
+    });
+    this.ShareDataService.getRolList().subscribe((data: Rol[]) => {
+      this.rols = data;
+      this.loading = false;
+    });
+  }
+
+  checkForm() {
     if (this.id) {
       this.userService.getById(this.id).subscribe((data: User[]) => {
         for (let i of data) {
           this.formHeader = 'edit-header';
           this.formlogo = 'edit';
-          this.formTitle = `Editar: ` + i.name;
-          this.form.controls['name'].setValue(i.name);
-          this.form.controls['email'].setValue(i.email);
-          this.form.controls['idrol'].setValue(i.idrol);
+          this.formTitle = `Editar: ` + i.user;
+          this.form.controls['idperson'].setValue(i.idperson);
+          this.Rolform.controls['idrol'].setValue(i.idrol);
         }
         this.form.updateValueAndValidity();
       });
@@ -60,14 +81,13 @@ export class CreateEditUserComponent implements OnInit {
       this.formHeader = 'create-header';
       this.formlogo = 'person-add';
       this.formTitle = 'Nuevo Usuario';
-      this.submitButtonText = 'Crear';
-      this.form.get('pass')?.setValidators([Validators.required, Validators.minLength(6), Validators.pattern('^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,}$')]);
+      this.submitButtonText = 'Si';
     };
-    this.getRols();
   }
 
+
   submitForm() {
-    if (this.form.valid) {
+    if (this.form.valid && this.Rolform.valid) {
       this.loading = true;
       const formValue = this.form.value;
       this.saveForm(formValue);
@@ -77,43 +97,56 @@ export class CreateEditUserComponent implements OnInit {
   }
 
   saveForm(formValue: any) {
-    if (this.id) {
-      this.confirmService.editDialog(this.formTitle).then((result) => {
-        if (result === 'Confirmed') {
-          this.userService.put(this.id, formValue).subscribe(
-            () => {
-              this.MessagesService.showConfirmEdit();
-              this.cancel();
-              this.loading = false;
-            },
-            (err) => {
-              this.MessagesService.showMsjError(err.error.message);
-              this.loading = false;
-              
-            }
-          );
-        } 
-      });
-    } else {
-      this.userService.post(formValue).subscribe((res)=>{
-        this.MessagesService.showConfirmPost();
-        this.cancel();
-      }, (err) => {
-              this.MessagesService.showMsjError(err.error.message);
-        this.cancel();
-      });
-    }
+   try{
+      const body = {
+        idperson: this.form.value.idperson,
+        idrol: this.Rolform.value.idrol,
+        pass: this.Rolform.value.pass,
+      };
+
+      if(this.id) {
+        this.userService.put(this.id, body).subscribe((data) => {
+          this.loading = false;
+          this.MessagesService.showConfirmPost();
+          this.message = "Registro actualizado con éxito";
+        }, (err) => {
+          console.log(err)
+          this.loading = false;
+          this.MessagesService.showMsjError(err.error.message);
+          this.message = err.error.message;
+        })
+      } else {
+        this.userService.post(body).subscribe((data) => {
+          this.loading = false;
+          this.MessagesService.showConfirmPost();
+          this.message = "Registro guardado con éxito";
+        }, (err) => {
+          console.log(err)
+          this.loading = false;
+          this.MessagesService.showMsjError(err.error.message);
+          this.message = err.error.message;
+        })
+      }
+
+      
+      
+   } catch (error) {
+    this.loading = false;
+  
+   }
   }
 
-  getRols() {
-    this.rolService.get().subscribe((data: Roles[]) => {
-      // Filtrar los roles deseados (Administrador, Operador e Institucional)
-      this.rols = data.filter((rol) => ['Administrador', 'Operador', 'Institucional'].includes(rol.rol));
-    }, (err) => {
-      console.log("Error: ", err);
-    });
+
+  isInvalid(fieldName: string) {
+    const control = this.form.get(fieldName);
+    return control && control.invalid && (control.dirty || control.touched);
   }
- 
+
+  isInvalidR(fieldName: string) {
+    const control = this.Rolform.get(fieldName);
+    return control && control.invalid && (control.dirty || control.touched);
+  }
+
   getInputType() {
     if (this.showPassword) {
       return 'text';

@@ -15,7 +15,7 @@ import { ShareDataService } from 'src/app/services/shared/shared.service';
 })
 export class CreateEditLocationComponent {
   @Input() id!: number;
-  communities: Community [] = [];
+  communities: Community[] = [];
   form!: FormGroup;
   formTitle!: string;
   formlogo!: string;
@@ -24,7 +24,7 @@ export class CreateEditLocationComponent {
   isFormSubmitted: boolean = false;
   loading = false;
   visible = true;
-  dataSelected : any;
+  dataSelected: any;
 
   constructor(
     private ShareDataService: ShareDataService,
@@ -34,9 +34,11 @@ export class CreateEditLocationComponent {
     private MessagesService: MessagesService,
     private fb: FormBuilder,
     private dialogRef: NbDialogRef<CreateEditLocationComponent>
-  ) { this.ShareDataService.selectedValue$.subscribe((value) => {
-    this.dataSelected = value;
-  }); }
+  ) {
+    this.ShareDataService.selectedValue$.subscribe((value) => {
+      this.dataSelected = value;
+    });
+  }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -64,7 +66,7 @@ export class CreateEditLocationComponent {
   }
 
   getCommunity() {
-    this.communityService.getByDept(this.dataSelected).subscribe((data:Community[])=>{
+    this.communityService.getByDept(this.dataSelected).subscribe((data: Community[]) => {
       this.communities = data;
     })
   }
@@ -92,22 +94,22 @@ export class CreateEditLocationComponent {
             (err) => {
               this.MessagesService.showMsjError(err.error.message);
               this.loading = false;
-              
+
             }
           );
-        } 
+        }
       });
     } else {
-      this.locationService.post(formValue).subscribe((res)=>{
+      this.locationService.post(formValue).subscribe((res) => {
         this.MessagesService.showConfirmPost();
         this.cancel();
-      }, (err)=>{
+      }, (err) => {
         this.MessagesService.showMsjError(err.error.message);
         this.cancel();
       });
     }
   }
-  
+
   cancel() {
     this.dialogRef.close();
     this.visible = false;

@@ -24,20 +24,20 @@ export class DepartmentService {
       first: event.first, // Índice del primer elemento a cargar
       rows: event.rows, // Cantidad de elementos a cargar por página
     };
-  
+
     // Agregar los parámetros para la búsqueda global y el ordenamiento
     if (event.globalFilter) {
       params.globalFilter = event.globalFilter;
     }
-  
+
     if (event.sortField) {
       params.sortField = event.sortField;
     }
-  
+
     if (event.sortOrder) {
       params.sortOrder = event.sortOrder;
     }
-  
+
     return this.httpClient.get<{ items: Department[]; totalRecords: number; totalUsers: number }>(this.api + '/getLazy', {
       params
     });
@@ -49,19 +49,19 @@ export class DepartmentService {
 
   post(body: FormData) {
     return this.httpClient.post(this.api + '/post', body).pipe(
-      map((response:any) => response.message) 
+      map((response: any) => response.message)
     );
   }
 
   put(id: number, body: any) {
     return this.httpClient.put(this.api + '/update/' + id, body).pipe(
-      map((response:any) => response.message) 
+      map((response: any) => response.message)
     );
   }
 
   delete(id: number) {
     return this.httpClient.delete(this.api + '/delete/' + id).pipe(
-      map((response:any) => response.message) 
+      map((response: any) => response.message)
     );
   }
 }

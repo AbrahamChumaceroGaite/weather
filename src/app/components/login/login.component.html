@@ -18,7 +18,7 @@
     <div class="form-content">
       <label htmlFor="username">
         <i class="pi pi-lock"></i>Contraseña</label>
-      <input pInputText type="password" name="password" placeholder="******" formControlName="pass" />
+      <input pInputText type="password" name="password" placeholder="********" formControlName="pass" />
       <small *ngIf="form?.get('pass')?.invalid && (form?.get('pass')?.dirty || form?.get('pass')?.touched)"
         class="text-danger">
         <ng-container *ngIf="form?.get('pass')?.hasError('required')">La contraseña es requerida</ng-container>

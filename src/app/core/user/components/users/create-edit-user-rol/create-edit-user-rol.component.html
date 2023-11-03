@@ -1,0 +1,55 @@
+<div class="{{formHeader}}">
+    <p-dialog [(visible)]="visible" [breakpoints]="{ '960px': '105vw' }" [style]="{width: 'auto'}" [maximizable]="true"
+        [styleClass]="'custom-dialog-icons'">
+        <p-header>
+            <nb-icon icon="{{ formlogo }}"></nb-icon> {{ formTitle }}
+        </p-header>
+        <br>
+        <form [formGroup]="form" class="form-columns">
+            <div class="columns">
+                <div class="form-content">
+                    <label>
+                        <i class="pi pi-user"></i>Roles</label>
+                    <nb-select [nbSpinner]="loading" [status]="isInvalid('idrol') ? 'danger' : 'primary'"
+                        placeholder="Seleccionar" formControlName="idrol" required>
+                        <nb-option *ngFor="let item of rols" [value]="item.id">{{ item.rol }}</nb-option>
+                    </nb-select>
+                    <small
+                        *ngIf="form?.get('idrol')?.invalid && (form?.get('idrol')?.dirty || form?.get('idrol')?.touched)"
+                        class="text-danger">
+                        <ng-container *ngIf="form?.get('idrol')?.hasError('required')">El Rol es
+                            requerido</ng-container>
+                    </small>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="form-content">
+                    <label>
+                        <i class="pi pi-user"></i>Contraseña</label>
+                    <nb-form-field>
+                        <input [type]="getInputType()" [status]="isInvalid('pass') ? 'danger' : 'primary'"
+                            placeholder="********" formControlName="pass" nbInput >
+                        <button nbSuffix nbButton ghost (click)="toggleShowPassword()">
+                            <nb-icon [icon]="showPassword ? 'eye-outline' : 'eye-off-2-outline'" pack="eva"
+                                [attr.aria-label]="showPassword ? 'hide password' : 'show password'">
+                            </nb-icon>
+                        </button>
+                    </nb-form-field>
+                    <small
+                        *ngIf="form?.get('pass')?.invalid && (form?.get('pass')?.dirty || form?.get('pass')?.touched)"
+                        class="text-danger">
+                        <ng-container *ngIf="form?.get('pass')?.hasError('required')">La contraseña es
+                            requerido</ng-container>
+                    </small>
+                </div>
+            </div>
+        </form>
+        <ng-template pTemplate="footer">
+            <button nbButton status="success" (click)="submitForm()" [nbSpinner]="loading" type="submit"
+                [disabled]="!form.valid">
+                {{ submitButtonText }}
+            </button>
+            <button nbButton status="basic" (click)="cancel()">Cancelar</button>
+        </ng-template>
+    </p-dialog>
+</div>

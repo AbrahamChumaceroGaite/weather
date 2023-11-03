@@ -1,93 +1,32 @@
 <div class="{{formHeader}}">
-  <p-dialog [(visible)]="visible" [breakpoints]="{ '960px': '105vw' }" [style]="{width: '40vw'}" [maximizable]="true"
-    [styleClass]="'custom-dialog-icons'">
-    <p-header>
-      <nb-icon icon="{{ formlogo }}"></nb-icon> {{ formTitle }}
-    </p-header>
-    <br>
-    <form [formGroup]="form" (ngSubmit)="submitForm()" class="form-columns">
-      <div class="columns">
-        <div class="form-group">
-          <nb-form-field>
-            <nb-icon nbPrefix icon="person"></nb-icon>
-            <input nbInput fullWidth type="text" placeholder="Nombre Cliente"
-              [status]="form.get('name')?.invalid && form.get('name')?.touched ? 'danger' : 'basic'"
-              formControlName="name" [maxlength]="30" />
-          </nb-form-field>
-          <div class="form-footer">
-            <div class="form-alert" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
-              Nombre requerido. Debe tener al menos 5 caracteres. </div>
-            <div class="spacer"> </div>
-            <div class="form-hint">{{ form.get('name')?.value?.length || 0 }} / 30</div>
-          </div>
-        </div>
-        <div class="form-group">
-          <nb-form-field>
-            <nb-icon nbPrefix icon="credit-card-outline"></nb-icon>
-            <input nbInput fullWidth type="number" placeholder="Carnet de Identidad"
-              [status]="form.get('ci')?.invalid && form.get('ci')?.touched ? 'danger' : 'basic'" formControlName="ci" />
-          </nb-form-field>
-          <div class="form-footer">
-            <div class="form-alert" *ngIf="form.get('ci')?.invalid && form.get('ci')?.touched">
-              El Numero de Carnet es Requerido. </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <nb-form-field>
-            <nb-icon nbPrefix icon="lock"></nb-icon>
-            <input nbInput fullWidth type="password" [type]="getInputType()"
-              [status]="form.get('pass')?.invalid && form.get('pass')?.touched ? 'danger' : 'basic'"
-              formControlName="pass" />
-            <button nbSuffix nbButton ghost type="button" (click)="toggleShowPassword()">
-              <nb-icon [icon]="showPassword ? 'eye-outline' : 'eye-off-2-outline'" pack="eva"
-                [attr.aria-label]="showPassword ? 'hide password' : 'show password'">
-              </nb-icon>
-            </button>
-          </nb-form-field>
-          <div class="form-footer">
-            <div class="form-alert" *ngIf="form.get('pass')?.invalid && form.get('pass')?.touched">
-              Contraseña requerida. Debe tener al menos 6 caracteres y contener al menos un número y un símbolo.
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="columns">
-        <div class="form-group">
-          <nb-form-field>
-            <nb-icon nbPrefix icon="phone"></nb-icon>
-            <input nbInput fullWidth type="number" placeholder="Numero de Telefono"
-              [status]="form.get('number')?.invalid && form.get('number')?.touched ? 'danger' : 'basic'"
-              formControlName="number" maxlength="8" (input)="validatePhoneNumberLength()" />
-          </nb-form-field>
-          <div class="form-footer">
-            <div class="form-alert" *ngIf="form.get('number')?.invalid && form.get('number')?.touched">
-              El Nº Telefono es Requerido.
-            </div>
-            <div class="spacer"> </div>
-            <div class="form-hint">{{ form.get('number')?.value?.length || 0 }} / 8</div>
-          </div>
-        </div>
-        <div class="form-group">
-          <nb-form-field>
-            <nb-icon nbPrefix icon="pin"></nb-icon>
-            <nb-select placeholder="Seleccione la Locacion" formControlName="idlocation">
-              <nb-option *ngFor="let location of locations" [value]="location.id">{{ location.name }}</nb-option>
+    <p-dialog [(visible)]="visible" [breakpoints]="{ '960px': '105vw' }" [style]="{width: '600px'}" [maximizable]="true"
+        [styleClass]="'custom-dialog-icons'">
+        <p-header>
+            <nb-icon icon="{{ formlogo }}"></nb-icon> {{ formTitle }}
+        </p-header>
+        <br>
+        <form [formGroup]="form" (ngSubmit)="submitForm()" style="display: flex; flex-direction: row; justify-content: center; vertical-align: middle; gap: 25px;">
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label>
+                <i class="pi pi-user"></i>Persona</label>
+            <nb-select [nbSpinner]="loading" [status]="isInvalid('idperson') ? 'danger' : 'primary'"
+                placeholder="Seleccionar" formControlName="idperson">
+                <nb-option *ngFor="let item of persons" [value]="item.id">{{ item.name }}</nb-option>
             </nb-select>
-          </nb-form-field>
-          <div class="form-footer">
-            <div class="form-alert" *ngIf="form.get('idlocation')?.invalid && form.get('idlocation')?.touched">
-              La Locacion es requerida. </div>
-          </div>
+            <small
+                *ngIf="form?.get('idperson')?.invalid && (form?.get('idperson')?.dirty || form?.get('idperson')?.touched)"
+                class="text-danger">
+                <ng-container *ngIf="form?.get('idperson')?.hasError('required')">La Persona es
+                    requerida</ng-container>
+            </small>
         </div>
-
-      </div>
     </form>
     <ng-template pTemplate="footer">
-      <button nbButton status="success" (click)="submitForm()" [nbSpinner]="loading" type="submit"
-        [disabled]="!form.valid">
-        {{ submitButtonText }}
-      </button>
-      <button nbButton status="basic" (click)="cancel()">Cancelar</button>
+        <button nbButton status="success" (click)="submitForm()" [nbSpinner]="loading" type="submit"
+            [disabled]="!form.valid">
+            {{ submitButtonText }}
+        </button>
+        <button nbButton status="basic" (click)="cancel()">Cancelar</button>
     </ng-template>
-  </p-dialog>
+    </p-dialog>
 </div>

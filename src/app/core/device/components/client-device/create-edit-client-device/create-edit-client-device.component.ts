@@ -9,6 +9,7 @@ import { ClientService } from 'src/app/core/user/services/client.service';
 import { DeviceID } from 'src/app/models/device';
 import { DeviceService } from 'src/app/core/device/services/device.service';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
+import { ShareDataService } from 'src/app/services/shared/shared.service';
 
 @Component({
   selector: 'app-create-edit-client-device',
@@ -29,7 +30,7 @@ export class CreateEditClientDeviceComponent {
   visible = true;
   constructor(
     private deviceService: DeviceService,
-    private clientService: ClientService,
+    private clientService: ShareDataService,
     private clientDeviceService: ClientDeviceService,
     private confirmService: ConfirmService,
     private MessagesService: MessagesService,
@@ -63,7 +64,7 @@ export class CreateEditClientDeviceComponent {
 
 
   getData(){
-    this.clientService.get().subscribe((data:Client[])=>{
+    this.clientService.getClientList().subscribe((data:Client[])=>{
       this.clients = data;
     });
     this.deviceService.getIdentityList().subscribe((data:DeviceID[])=>{

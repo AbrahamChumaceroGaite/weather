@@ -21,9 +21,14 @@ export const MENU_ITEMS: any[] = [
     "icon": "people-outline",
     "children": [
       {
-        "title": "Clientes",
+        "title": "Personas",
         "icon": "person-outline",
-        "link": "view/client/tabs"
+        "link": "view/person"
+      },
+      {
+        "title": "Clientes",
+        "icon": "person",
+        "link": "view/client"
       },
       {
         "title": "Operadores",
@@ -33,31 +38,10 @@ export const MENU_ITEMS: any[] = [
     ]
   },
   {
-    "title": "Municipio",
+    "title": "Demografia",
     "icon": "globe-2-outline",
     "link": "view/demography"
   },
-  {
-    "title": "Organizacion Territorial",
-    "icon": "map-outline",
-    "children": [
-      {
-        "title": "Municipio",
-        "icon": "globe-2-outline",
-        "link": "view/municipality"
-      },
-      {
-        "title": "Comunidad",
-        "icon": "npm-outline",
-        "link": "view/community"
-      },
-      {
-        "title": "Locacion",
-        "icon": "flag-outline",
-        "link": "view/location"
-      }
-    ]
-  }
 ];
 
 export const OPTION_ITEMS: any[] = [

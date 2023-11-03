@@ -1,5 +1,3 @@
-
-
 export const menu = [
     {
         label: 'Provincia',

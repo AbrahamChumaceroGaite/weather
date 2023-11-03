@@ -2,11 +2,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
 import { CreateEditClientComponent } from '../create-edit-client/create-edit-client.component';
-import { Table } from 'primeng/table';
+import { AuthService } from 'src/app/auth/auth.service';
 import { Client } from 'src/app/models/client';
 import { ClientService } from 'src/app/core/user/services/client.service';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
 import { MessagesService } from 'src/app/services/dialog/message.service';
+import { LazyLoadEvent } from 'primeng/api';
+import { Table } from 'primeng/table';
+import { MenuItem } from 'primeng/api';
+import { Menu_generic } from 'src/app/templates/menu_generic';
+
 
 @Component({
   selector: 'app-view-client',
@@ -15,24 +20,58 @@ import { MessagesService } from 'src/app/services/dialog/message.service';
 })
 export class ViewClientComponent implements OnInit {
   @ViewChild('dt') dt!: Table;
-  clientData: Client[] = [];
-  loading: boolean = true;
+  items: Client[] = [];
   filterValue: string = '';
 
-  constructor(private clientService: ClientService,   
+  itemsMenu: MenuItem[] = Menu_generic;
+  loading: boolean = true;
+  totalRecords = 0;
+  totalUsers = 0;
+  dataSelected: any;
+  rolSelected: any;
+
+  constructor(
+    private AuthService: AuthService,
+    private clientService: ClientService,
     private dialogService: NbDialogService,
     private confirmService: ConfirmService,
     private MessagesService: MessagesService) { }
 
   ngOnInit(): void {
-    this.getData();
+    this.getMenuItems();
   }
 
-  getData(){
-    this.clientService.get().subscribe((data:Client[]) => {
-      this.clientData = data;
-      this.loading = false
-    })
+
+  getData(event: LazyLoadEvent) {
+    setTimeout(() => {
+      this.clientService.get(event).subscribe((data) => {
+        this.items = data.items;
+        this.totalRecords = data.totalRecords;
+        this.loading = false;
+      }, (error) => {
+        this.loading = false;
+        this.MessagesService.showMsjError(error.error.message)
+      });
+    }, 1000);
+  }
+
+  getMenuItems() {
+    this.itemsMenu = Menu_generic.map((item: any) => {
+      const convertedItem: MenuItem = {
+        label: item.label,
+        icon: item.icon,
+        command: (event: any) => this.handleCommand(item.command.toString()),
+      };
+      return convertedItem;
+    });
+  }
+
+  handleCommand(command: string) {
+    switch (command) {
+      case "() => 'New'":
+        this.dialog();
+        break;
+    }
   }
 
   dialog(id?: number) {
@@ -40,29 +79,44 @@ export class ViewClientComponent implements OnInit {
       context: {
         id
       }
-    }).onClose.subscribe( res=> this.getData());
+    }).onClose.subscribe(res => this.refreshTable());
   }
 
-  filterByName(event: Event) {
-    const value = (event.target as HTMLInputElement)?.value;
-    if (value) {
-      this.filterValue = value.trim().toLowerCase();
-      this.dt.filter(this.filterValue, 'name', 'contains');
+  filterByName() {
+    this.loading = true;
+    if (this.filterValue) {
+      this.dt.filterGlobal(this.filterValue, 'contains');
+    } else {
+      this.dt.filterGlobal(null, 'contains'); // Restablecer el filtro global
     }
   }
-  
-  dialogDelete(id: number){
+
+
+  setTitle(name: any) {
+    this.AuthService.setTitle("Clientes" + name, '');
+  }
+
+  dialogDelete(id: number) {
     this.confirmService.deleteDialog(id).then(result => {
-      if (result === 'Confirmed'){
-        this.clientService.delete(id).subscribe(res=>{
-            this.MessagesService.showConfirmDelete();
-            this.getData();
-        },(err)=>{
+      if (result === 'Confirmed') {
+        this.clientService.delete(id).subscribe(res => {
+          this.MessagesService.showConfirmDelete();
+          this.refreshTable();
+        }, (err) => {
           this.MessagesService.showError();
         })
       }
     })
 
+  }
+
+  refreshTable() {
+    this.loading = true;
+    const lazyLoadEvent: LazyLoadEvent = {
+      first: 0,
+      rows: 10,
+    };
+    this.getData(lazyLoadEvent);
   }
 
 }

@@ -57,7 +57,20 @@
     vertical-align: middle;
     align-content: center;
     gap: 20px;
+
+    .form-content {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      i {
+        margin-right: 5px;
+      }
+
+      background-color: white;
+    }
   }
+
 }
 
 .form-extra {
@@ -86,7 +99,7 @@
   justify-content: left;
 }
 
-.view-menubar{
+.view-menubar {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

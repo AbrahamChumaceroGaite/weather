@@ -41,6 +41,7 @@ export class AdminDemographyComponent implements OnInit {
     this.getMenuItems();
     this.getData();
   }
+
   getData(): void {
     this.DepartmentService.getList().subscribe(data => {
       this.items = data
@@ -49,6 +50,7 @@ export class AdminDemographyComponent implements OnInit {
       this.setTitle(' Demografia - ' + this.items[0].name);
     });
   }
+  
   getMenuItems() {
     this.itemsMenu = menu.map((item: any) => {
       const convertedItem: MenuItem = {
@@ -135,7 +137,7 @@ export class AdminDemographyComponent implements OnInit {
     this.loading = true;
     this.idDepartment = event;
     const name = this.items.find(x => x.id === event)?.name;
-    this.setTitle(' Demografia - ' + name);
+    this.setTitle('Demografia - ' + name);
     this.ShareDataService.setSelectedValue(event);
     this.refreshTable();
   }
