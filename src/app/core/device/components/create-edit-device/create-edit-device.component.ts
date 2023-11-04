@@ -5,15 +5,17 @@ import { MessagesService } from 'src/app/services/dialog/message.service';
 import { DeviceID } from 'src/app/models/device';
 import { DeviceService } from 'src/app/core/device/services/device.service';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
-import { LocationService } from 'src/app/core/demography/services/location.service';
+import { ShareDataService } from 'src/app/services/shared/shared.service';
 import { Location } from 'src/app/models/demography';
+
 @Component({
   selector: 'app-create-edit-device',
   templateUrl: './create-edit-device.component.html',
   styleUrls: ['./create-edit-device.component.scss']
 })
+
 export class CreateEditDeviceComponent {
- @Input() id!: number;
+  @Input() id!: number;
   toggleValue!: boolean;
   deviceID: DeviceID[] = [];
   locations: Location[] = [];
@@ -28,21 +30,34 @@ export class CreateEditDeviceComponent {
   isFormSubmitted: boolean = false;
   loading = false;
   visible = true;
+
   constructor(
     private deviceService: DeviceService,
-    private locationService: LocationService,
+    private ShareDataService: ShareDataService,
     private confirmService: ConfirmService,
     private MessagesService: MessagesService,
     private fb: FormBuilder,
     private dialogRef: NbDialogRef<CreateEditDeviceComponent>
   ) { }
 
-ngOnInit(): void {
+  ngOnInit(): void {
+    this.loadForm();
+    this.checkForm();
+  }
+
+  loadForm() {
     this.form = this.fb.group({
       name: ['', Validators.required],
       idlocation: ['', Validators.required],
       status: ['0', Validators.required]
     });
+
+    this.ShareDataService.getLocationList().subscribe((data: Location[]) => {
+      this.locations = data;
+    })
+  }
+
+  checkForm() {
     if (this.id) {
       this.deviceService.getIdentityById(this.id).subscribe((data: DeviceID[]) => {
         for (let i of data) {
@@ -63,7 +78,6 @@ ngOnInit(): void {
       this.status = 'Estado Inicial ';
       this.submitButtonText = 'Crear';
     };
-    this.getLocations();
   }
 
   submitForm() {
@@ -89,28 +103,21 @@ ngOnInit(): void {
             (err) => {
               this.MessagesService.showMsjError(err.error.message);
               this.loading = false;
-              
+
             }
           );
-        } 
+        }
       });
     } else {
-      this.deviceService.postIdentity(formValue).subscribe((res)=>{
+      this.deviceService.postIdentity(formValue).subscribe((res) => {
         this.MessagesService.showConfirmPost();
         this.cancel();
-      }, (err)=>{
-        console.log("ERROR",err)
+      }, (err) => {
+        console.log("ERROR", err)
         this.MessagesService.showMsjError(err.error.message);
         this.cancel();
       });
     }
-  }
-  
-
-  getLocations(){
-    this.locationService.getList().subscribe((data: Location[])=>{
-      this.locations = data
-    })
   }
 
   generateRandomString() {
@@ -124,12 +131,18 @@ ngOnInit(): void {
     }
 
     this.randomString = result;
-     this.form.controls['name'].setValue(this.randomString) 
+    this.form.controls['name'].setValue(this.randomString)
   }
 
   onToggleChange() {
     this.toggleValue = !this.toggleValue;
     this.form.controls['status'].setValue(this.toggleValue ? '1' : '0');
+  }
+
+
+  isInvalid(fieldName: string) {
+    const control = this.form.get(fieldName);
+    return control && control.invalid && (control.dirty || control.touched);
   }
 
   cancel() {

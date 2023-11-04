@@ -1,34 +1,37 @@
+
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Person } from 'src/app/models/person';
+import { NbDialogService } from '@nebular/theme';
+import { CreateEditDeviceClientComponent } from '../create-edit-device-client/create-edit-device-client.component';
+import { CreateEditDeviceComponent } from '../create-edit-device/create-edit-device.component';
 import { AuthService } from 'src/app/auth/auth.service';
-import { PersonService } from '../../services/person.service';
+import { Table } from 'primeng/table';
+import { DeviceID } from 'src/app/models/device';
+import { DeviceService } from 'src/app/core/device/services/device.service';
+import { ConfirmService } from 'src/app/services/dialog/confirm.service';
 import { MessagesService } from 'src/app/services/dialog/message.service';
 import { LazyLoadEvent } from 'primeng/api';
-import { Table } from 'primeng/table';
 import { MenuItem } from 'primeng/api';
 import { Menu_generic } from 'src/app/templates/menu_generic';
-import { NbDialogService } from '@nebular/theme';
-import { CreateEditPersonComponent } from '../create-edit-person/create-edit-person.component';
-import { ConfirmService } from 'src/app/services/dialog/confirm.service';
+import { ViewDeviceReadComponent } from '../view-device-read/view-device-read.component';
 
 @Component({
-  selector: 'app-view-person',
-  templateUrl: './view-person.component.html',
-  styleUrls: ['./view-person.component.scss']
+  selector: 'app-view-device',
+  templateUrl: './view-device.component.html',
+  styleUrls: ['./view-device.component.scss']
 })
-export class ViewPersonComponent implements OnInit {
-  @ViewChild('dt') dt!: Table;
-  items: Person[] = [];
 
+export class ViewDeviceComponent {
+  @ViewChild('dt') dt!: Table;
+  items: DeviceID[] = [];
   itemsMenu: MenuItem[] = Menu_generic;
-  loading: boolean = true;
-  filterValue: string = '';
   totalRecords = 0;
   totalUsers = 0;
+  loading: boolean = true;
+  filterValue: string = '';
 
   constructor(
-    private PersonService: PersonService,
     private AuthService: AuthService,
+    private deviceService: DeviceService,
     private dialogService: NbDialogService,
     private confirmService: ConfirmService,
     private MessagesService: MessagesService) { }
@@ -40,7 +43,7 @@ export class ViewPersonComponent implements OnInit {
 
   getData(event: LazyLoadEvent) {
     setTimeout(() => {
-      this.PersonService.get(event).subscribe((data) => {
+      this.deviceService.getIdentity(event).subscribe((data: any) => {
         this.items = data.items;
         this.totalRecords = data.totalRecords;
         this.loading = false;
@@ -80,7 +83,23 @@ export class ViewPersonComponent implements OnInit {
   }
 
   dialog(id?: number) {
-    this.dialogService.open(CreateEditPersonComponent, {
+    this.dialogService.open(CreateEditDeviceComponent, {
+      context: {
+        id
+      }
+    }).onClose.subscribe(res => this.refreshTable());
+  }
+
+  dialogData(id?: number) {
+    this.dialogService.open(ViewDeviceReadComponent, {
+      context: {
+        id
+      }
+    });
+  }
+
+  dialoClient(id?: number) {
+    this.dialogService.open(CreateEditDeviceClientComponent, {
       context: {
         id
       }
@@ -90,11 +109,11 @@ export class ViewPersonComponent implements OnInit {
   dialogDelete(id: number) {
     this.confirmService.deleteDialog(id).then(result => {
       if (result === 'Confirmed') {
-        this.PersonService.delete(id).subscribe(res => {
+        this.deviceService.deleteIdentity(id).subscribe(res => {
           this.MessagesService.showConfirmDelete();
           this.refreshTable();
         }, (err) => {
-          this.MessagesService.showError();
+          this.MessagesService.showMsjError(err.error.message);
         })
       }
     })
@@ -102,7 +121,7 @@ export class ViewPersonComponent implements OnInit {
   }
 
   setTitle() {
-    this.AuthService.setTitle("Personas", '');
+    this.AuthService.setTitle("Dispositivos", '');
   }
 
   refreshTable() {
@@ -113,4 +132,6 @@ export class ViewPersonComponent implements OnInit {
     };
     this.getData(lazyLoadEvent);
   }
+
 }
+

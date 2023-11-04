@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NavComponent } from 'src/app/components/nav/nav.component';
-import { ViewDevicesTabsComponent } from './devices/view-devices-tabs/view-devices-tabs.component';
+import { ViewDeviceComponent } from './components/view-device/view-device.component';
 import { AuthGuard } from 'src/app/guard/auth-guard.guard';
 
 const routes: Routes = [
@@ -10,7 +10,7 @@ const routes: Routes = [
     path: '',
     component: NavComponent,
     children: [
-      { path: 'view/device/tabs', component: ViewDevicesTabsComponent, canActivate: [AuthGuard], data: { component: '25', action: 'ver' } },
+      { path: 'view/device', component: ViewDeviceComponent, canActivate: [AuthGuard], data: { component: '25', action: 'ver' } },
 
     ],
   },

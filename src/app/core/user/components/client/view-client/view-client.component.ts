@@ -38,6 +38,7 @@ export class ViewClientComponent implements OnInit {
     private MessagesService: MessagesService) { }
 
   ngOnInit(): void {
+    this.setTitle();
     this.getMenuItems();
   }
 
@@ -92,8 +93,8 @@ export class ViewClientComponent implements OnInit {
   }
 
 
-  setTitle(name: any) {
-    this.AuthService.setTitle("Clientes" + name, '');
+  setTitle() {
+    this.AuthService.setTitle("Clientes", '');
   }
 
   dialogDelete(id: number) {

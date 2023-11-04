@@ -1,76 +1,75 @@
 <p-menubar [model]="itemsMenu">
-  <ng-template let-item pTemplate="end">
-      <button nbButton status="success">
-          {{ item.label }}
-      </button>
-  </ng-template>
-  <ng-template pTemplate="end">
-      <span class="p-input-icon-left">
-          <i class="pi pi-search"></i>
-          <input pInputText type="text" [(ngModel)]="filterValue" (input)="filterByName()"
-              placeholder="Busqueda Global..." />
-      </span>
-  </ng-template>
+    <ng-template let-item pTemplate="end">
+        <button nbButton status="success">
+            {{ item.label }}
+        </button>
+    </ng-template>
+    <ng-template pTemplate="end">
+        <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" [(ngModel)]="filterValue" (input)="filterByName()"
+                placeholder="Busqueda Global..." />
+        </span>
+    </ng-template>
 </p-menubar>
 <br>
 <p-table #dt [value]="items" [rowHover]="true" [totalRecords]="totalRecords" [rows]="10" [showCurrentPageReport]="true"
-  [rowsPerPageOptions]="[5, 10, 25, 50]" [loading]="loading" [lazy]="true" (onLazyLoad)="getData($event)"
-  [paginator]="true" responsiveLayout="stack" [breakpoint]="'960px'" styleClass="p-datatable-sm"
-  currentPageReportTemplate="Pagina {first} con {last} de {totalRecords} filas" [filterDelay]="0"
-  [globalFilterFields]="['name, lastname']">
-  <ng-template pTemplate="header">
-      <tr>
-          <th pSortableColumn="id" class="table-column">
-              ID
-              <p-sortIcon field="id"></p-sortIcon>
-          </th>
-          <th pSortableColumn="user" class="table-column">
-              Usuario
-              <p-sortIcon field="user"></p-sortIcon>
-          </th>
-          <th pSortableColumn="location" class="table-column">
-            Locacion
-            <p-sortIcon field="location"></p-sortIcon>
-        </th>
-          <th pSortableColumn="createdAt" class="table-column">
-              Creado
-              <p-sortIcon field="createdAt"></p-sortIcon>
-          </th>
-          <th pSortableColumn="createdUpd" class="table-column">
-              Ult. Actualización
-              <p-sortIcon field="createdUpd"></p-sortIcon>
-          </th>
-          <th> Acciones </th>
-      </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-client>
-      <tr>
-          <td><span class="p-column-title">ID</span>{{ client.id }}</td>
-          <td><span class="p-column-title">Usuario</span>{{ client.user }}</td>
-        <td><span class="p-column-title">Locacion</span>{{ client.location }}</td>
-          <td><span class="p-column-title">Creado</span>{{ client.createdAt | date : "dd/MM/yy HH:mm"
-              }}</td>
-          <td><span class="p-column-title">Ult. Actualización</span>
-              {{ client.createdUpd | date : "dd/MM/yy HH:mm" }}
-          </td>
-          <td>
-              <div class="btn-spacer">
-                  <button (click)="dialog(client.id)" nbButton size="tiny" status="warning">
-                      <nb-icon icon="edit"></nb-icon>
-                  </button>
-                  <button (click)="dialogDelete(client.id)" nbButton size="tiny" status="danger">
-                      <nb-icon icon="trash"></nb-icon>
-                  </button>
-              </div>
-          </td>
-      </tr>
-  </ng-template>
-  <ng-template pTemplate="paginatorleft">
-      <p-button type="button" icon="pi pi-replay" (click)="refreshTable()" styleClass="p-button-text"></p-button>
-  </ng-template>
-  <ng-template pTemplate="emptymessage">
-      <tr>
-          <td colspan="7">Tabla Vacia.</td>
-      </tr>
-  </ng-template>
+    [rowsPerPageOptions]="[5, 10, 25, 50]" [loading]="loading" [lazy]="true" (onLazyLoad)="getData($event)"
+    [paginator]="true" responsiveLayout="stack" [breakpoint]="'960px'" styleClass="p-datatable-sm"
+    currentPageReportTemplate="Pagina {first} con {last} de {totalRecords} filas" [filterDelay]="0"
+    [globalFilterFields]="['name, lastname']">
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="id" class="table-column">
+                ID
+                <p-sortIcon field="id"></p-sortIcon>
+            </th>
+            <th pSortableColumn="user" class="table-column">
+                Usuario
+                <p-sortIcon field="user"></p-sortIcon>
+            </th>
+            <th pSortableColumn="location" class="table-column">
+                Locacion
+                <p-sortIcon field="location"></p-sortIcon>
+            </th>
+            <th pSortableColumn="createdAt" class="table-column">
+                Creado
+                <p-sortIcon field="createdAt"></p-sortIcon>
+            </th>
+            <th pSortableColumn="createdUpd" class="table-column">
+                Ult. Actualización
+                <p-sortIcon field="createdUpd"></p-sortIcon>
+            </th>
+            <th> Acciones </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-client>
+        <tr>
+            <td><span class="p-column-title">ID</span>{{ client.id }}</td>
+            <td><span class="p-column-title">Usuario</span>{{ client.user }}</td>
+            <td><span class="p-column-title">Locacion</span>{{ client.location }}</td>
+            <td><span class="p-column-title">Creado</span>{{ client.createdAt | date : "dd/MM/yy HH:mm" }}</td>
+            <td><span class="p-column-title">Ult. Actualización</span>
+                {{ client.createdUpd | date : "dd/MM/yy HH:mm" }}
+            </td>
+            <td>
+                <div class="btn-spacer">
+                    <button (click)="dialog(client.id)" nbButton size="tiny" status="warning">
+                        <nb-icon icon="edit"></nb-icon>
+                    </button>
+                    <button (click)="dialogDelete(client.id)" nbButton size="tiny" status="danger">
+                        <nb-icon icon="trash"></nb-icon>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft">
+        <p-button type="button" icon="pi pi-replay" (click)="refreshTable()" styleClass="p-button-text"></p-button>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="7">Tabla Vacia.</td>
+        </tr>
+    </ng-template>
 </p-table>

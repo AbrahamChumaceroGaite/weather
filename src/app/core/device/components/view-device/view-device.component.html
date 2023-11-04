@@ -1,0 +1,98 @@
+<p-menubar [model]="itemsMenu">
+  <ng-template let-item pTemplate="end">
+      <button nbButton status="success">
+          {{ item.label }}
+      </button>
+  </ng-template>
+  <ng-template pTemplate="end">
+      <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" [(ngModel)]="filterValue" (input)="filterByName()"
+              placeholder="Busqueda Global..." />
+      </span>
+  </ng-template>
+</p-menubar>
+<br>
+<p-table #dt [value]="items" [rowHover]="true" [totalRecords]="totalRecords" [rows]="10" [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[5, 10, 25, 50]" [loading]="loading" [lazy]="true" (onLazyLoad)="getData($event)"
+    [paginator]="true" responsiveLayout="stack" [breakpoint]="'960px'" styleClass="p-datatable-sm"
+    currentPageReportTemplate="Pagina {first} con {last} de {totalRecords} filas" [filterDelay]="0"
+    [globalFilterFields]="['code, client, ci, department, community, location lastname']">
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="id">
+        ID
+      </th>
+      <th pSortableColumn="code" class="table-column">
+        Codigo
+      </th>
+      <th pSortableColumn="client" class="table-column">
+        Cliente
+      </th>
+      <th pSortableColumn="ci" class="table-column">
+        CI
+      </th>
+      <th pSortableColumn="department" class="table-column">
+        Departamento
+      </th>
+      <th pSortableColumn="community" class="table-column">
+        Comunidad
+      </th>
+      <th pSortableColumn="location" class="table-column">
+        Locación
+      </th>
+      <th pSortableColumn="status" class="table-column">
+        Estado
+      </th>    
+      <th pSortableColumn="createdAt" class="table-column">
+        Creado
+      </th>
+      <th pSortableColumn="createdUpd" class="table-column">
+        Ult. Actualización
+      </th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-device>
+    <tr>
+      <td><span class="p-column-title">ID</span>{{ device.id }}</td>
+      <td><span class="p-column-title">Codigo</span>{{ device.code }}</td>
+      <td><span class="p-column-title">Cliente</span>{{ device.client }}</td>
+      <td><span class="p-column-title">CI</span>{{ device.ci }}</td>
+      <td><span class="p-column-title">Departamento</span>{{ device.department }}</td>
+      <td><span class="p-column-title">Comunidad</span>{{ device.community }}</td>
+      <td><span class="p-column-title">Locación</span>{{ device.location}}</td>
+      <td><span class="p-column-title">Estado</span>{{ device.status.toString() === '1' ? 'Activo' : 'Suspendido' }} </td>
+      <td>
+        <span class="p-column-title">Creado</span>{{ device.createdAt | date : "dd/MM/yy HH:mm" }}
+      </td>
+      <td>
+        <span class="p-column-title">Ult. Actualización</span>{{ device.createdUpd | date : "dd/MM/yy HH:mm" }}
+      </td>
+      <td>
+        <div class="btn-spacer">
+          <button (click)="dialogData(device.id)" size="tiny" nbButton status="info">
+            <nb-icon icon="pie-chart-2"></nb-icon>
+          </button>
+          <button (click)="dialoClient(device.id)" size="tiny" nbButton status="success">
+            <nb-icon icon="person"></nb-icon>
+          </button>        
+          <button (click)="dialog(device.id)" size="tiny"nbButton status="warning">
+            <nb-icon icon="edit"></nb-icon>
+          </button>
+          <button (click)="dialogDelete(device.id)" size="tiny" nbButton status="danger">
+            <nb-icon icon="trash"></nb-icon>
+          </button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="paginatorleft">
+    <p-button type="button" icon="pi pi-replay" (click)="refreshTable()" styleClass="p-button-text"></p-button>
+</ng-template>
+<ng-template pTemplate="emptymessage">
+    <tr>
+        <td colspan="7">Tabla Vacia.</td>
+    </tr>
+</ng-template>
+</p-table>

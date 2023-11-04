@@ -1,0 +1,70 @@
+<div class="{{formHeader}}">
+    <p-dialog [(visible)]="visible" [breakpoints]="{ '960px': '105vw' }" [style]="{width: '90%'}" [maximizable]="true"
+        [styleClass]="'custom-dialog-icons'">
+        <p-header>
+            <nb-icon icon="{{ formlogo }}"></nb-icon> {{ formTitle }}
+        </p-header>
+        <br>
+        <div class="dashboard-info">
+            <nb-card class="carousel-cards" status="">
+                <nb-card-body [ngStyle]="{ 'background-image': getBackground(dataTemp) }" class="temp-report">
+                    <p-carousel [value]="dataCarousel" [numVisible]="4" [numScroll]="1" [circular]="true"
+                        verticalViewPortHeight="100px" [responsiveOptions]="responsiveOptions"
+                        [autoplayInterval]="7000">
+                        <ng-template let-item pTemplate="item">
+                            <div class="border-1 surface-border border-round text-center py-5 px-3">
+                                <div class="carousel-item">
+                                    <span class="carousel-values">{{ item.title }}</span>
+                                    <img [src]="item.img" alt="Image" style="height: 50px">
+                                    <div class="mb-3"></div>
+                                    <div class="carousel-values">
+                                        <span class="value">{{ item.values }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </p-carousel>
+                </nb-card-body>
+            </nb-card>
+            <div class="graph-content">
+                <nb-card class="map-card">
+                    <nb-card-header class="dashboard-header">Ubicación Dispositivo</nb-card-header>
+                    <div id="leaflet-map" class="map" leaflet [leafletOptions]="options" [nbSpinner]="loading"
+                        (leafletMapReady)="onMapReady($event)">
+                    </div>
+                </nb-card>
+
+                <div class="dashboard-graph">
+                    <p-menubar>
+                        <ng-template  pTemplate="start">
+                            <nb-select status="warning" placeholder="Seleccionar" [nbSpinner]="loading" [(selected)]="selectedItem" (selectedChange)="filterData($event)">
+                                <nb-option *ngFor="let item of dataDeviceGraph"
+                                    [value]="item.value">{{item.label}}</nb-option>
+                            </nb-select>
+                        </ng-template>
+                        <ng-template pTemplate="end">
+                            <div class="spacer"></div>
+                            <label> Fecha inicio </label>
+                            <input nbInput type="date" [(ngModel)]="startDate" (change)="onDateRangeChange()" />
+                            <label> Fecha final </label>
+                            <input nbInput type="date" [(ngModel)]="endDate" (change)="onDateRangeChange()" />
+                          </ng-template>
+                    </p-menubar>
+                    <nb-card accent="info" class="dash-graph" >
+                        <nb-card-header>
+                          <span>Registro de Históricos</span>
+                        </nb-card-header>
+                        <nb-card-body [nbSpinner]="loading">
+                          <apx-chart [series]="DeviceHistoricData.series" [chart]="DeviceHistoricData.chart"
+                            [dataLabels]="DeviceHistoricData.dataLabels" [markers]="DeviceHistoricData.markers"
+                            [title]="DeviceHistoricData.title" [fill]="DeviceHistoricData.fill" [yaxis]="DeviceHistoricData.yaxis"
+                            [xaxis]="DeviceHistoricData.xaxis" [tooltip]="DeviceHistoricData.tooltip" [autoUpdateSeries]="true">
+                          </apx-chart>
+                        </nb-card-body>
+                      </nb-card>
+                </div>
+
+            </div>
+        </div>
+    </p-dialog>
+</div>

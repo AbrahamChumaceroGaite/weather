@@ -1,5 +1,6 @@
 export interface Device {
     Id: number; 
+    name: string;
     device_id: string;
     client: string;
     temp: number;
@@ -15,6 +16,7 @@ export interface Device {
     lon: number;
     number: number;
     createdAt: string;
+    newCreatedAt: string;
 };
 
 export interface DeviceID {
@@ -26,7 +28,10 @@ export interface DeviceID {
 }
 
 export interface DeviceClient {
+    id: number,
+    client: string;
     idclient: number;
     idevice: number;
     cretedAt: Date;
+    createdUpd: Date;
 }

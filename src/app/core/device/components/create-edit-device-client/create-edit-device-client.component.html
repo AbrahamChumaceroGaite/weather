@@ -1,0 +1,34 @@
+<div class="{{formHeader}}">
+    <p-dialog [(visible)]="visible" [breakpoints]="{ '960px': '105vw' }" [style]="{width: 'auto'}" [maximizable]="true"
+        [styleClass]="'custom-dialog-icons'">
+        <p-header>
+            <nb-icon icon="{{ formlogo }}"></nb-icon> {{ formTitle }}
+        </p-header>
+        <br>
+        <form [formGroup]="form" class="form-columns">
+            <div class="columns">
+                <div class="form-content">
+                    <label>
+                        <i class="pi pi-user"></i>Cliente</label>
+                    <nb-select [nbSpinner]="loading" [status]="isInvalid('idclient') ? 'danger' : 'primary'"
+                        placeholder="Seleccionar" formControlName="idclient" required>
+                        <nb-option *ngFor="let item of clients" [value]="item.id">{{ item.client }}</nb-option>
+                    </nb-select>
+                    <small
+                        *ngIf="form?.get('idclient')?.invalid && (form?.get('idclient')?.dirty || form?.get('idclient')?.touched)"
+                        class="text-danger">
+                        <ng-container *ngIf="form?.get('idclient')?.hasError('required')">El Cliente es
+                            requerido</ng-container>
+                    </small>
+                </div>
+            </div>
+        </form>
+        <ng-template pTemplate="footer">
+            <button nbButton status="success" (click)="submitForm()" [nbSpinner]="loading" type="submit"
+                [disabled]="!form.valid">
+                {{ submitButtonText }}
+            </button>
+            <button nbButton status="basic" (click)="cancel()">Cancelar</button>
+        </ng-template>
+    </p-dialog>
+</div>

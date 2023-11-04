@@ -1,0 +1,58 @@
+<div class="{{formHeader}}">
+  <p-dialog [(visible)]="visible" [breakpoints]="{ '960px': '105vw' }" [style]="{width: 'auto'}" [maximizable]="true"
+    [styleClass]="'custom-dialog-icons'">
+    <p-header>
+      <nb-icon icon="{{ formlogo }}"></nb-icon> {{ formTitle }}
+    </p-header>
+    <br>
+    <form [formGroup]="form" (ngSubmit)="submitForm()" class="form-columns">
+      <div class="columns">
+        <div class="form-content">
+          <label>
+            <i class="pi pi-cog"></i>Randomizar</label>
+          <button nbButton size="medium" status="warning" type="submit" (click)="generateRandomString()"> Generar Codigo </button>
+        </div>
+        <div class="form-content">
+          <label>
+            <i class="pi pi-power-off"></i>{{status}}</label>
+          <nb-toggle style="margin: 5px; justify-content: center;" formControlName="status" [checked]="toggleValue" status="success"
+            (change)="onToggleChange()"></nb-toggle>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="form-content">
+          <label>
+            <i class="pi pi-tablet"></i>Codigo</label>
+          <input nbInput type="text" [status]="isInvalid('name') ? 'danger' : 'primary'" formControlName="name"
+            required />
+          <small *ngIf="form?.get('name')?.invalid && (form?.get('name')?.dirty || form?.get('name')?.touched)"
+            class="text-danger">
+            <ng-container *ngIf="form?.get('name')?.hasError('required')">El nombre es
+              requerido</ng-container>
+            <ng-container *ngIf="form?.get('name')?.hasError('minlength')">El nombre debe tener al menos 3
+              caracteres</ng-container>
+          </small>
+        </div>
+        <div class="form-content">
+          <label>
+            <i class="pi pi-map"></i>Locacion</label>
+            <nb-select placeholder="Seleccione la Locacion" formControlName="idlocation">
+              <nb-option *ngFor="let location of locations" [value]="location.id">{{ location.name }}</nb-option>
+            </nb-select>
+          <small *ngIf="form?.get('idlocation')?.invalid && (form?.get('idlocation')?.dirty || form?.get('idlocation')?.touched)"
+            class="text-danger">
+            <ng-container *ngIf="form?.get('idlocation')?.hasError('required')">La locación es
+              requerido</ng-container>
+          </small>
+        </div>
+      </div> 
+    </form>
+    <ng-template pTemplate="footer">
+      <button nbButton status="success" (click)="submitForm()" [nbSpinner]="loading" type="submit"
+        [disabled]="!form.valid">
+        {{ submitButtonText }}
+      </button>
+      <button nbButton status="basic" (click)="cancel()">Cancelar</button>
+    </ng-template>
+  </p-dialog>
+</div>
