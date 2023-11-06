@@ -150,51 +150,6 @@ export class AdminDemographyComponent implements OnInit {
 
   }
 
-  handleCommand(command: string) {
-    switch (command) {
-      case "() => 'PNew'":
-        createProvince(this.NbDialogService).then((ref) => {
-          this.refreshTable();
-        });
-        break;
-      case "() => 'PList'":
-        showProvince(this.DialogService).then((ref) => {
-          this.refreshTable();
-        });
-        break;
-      case "() => 'MNew'":
-        createMunicipality(this.NbDialogService).then((ref) => {
-          this.refreshTable();
-        });
-        break;
-      case "() => 'MList'":
-        showMunicipality(this.DialogService).then((ref) => {
-          this.refreshTable();
-        });
-        break;
-      case "() => 'CNew'":
-        createCommunity(this.NbDialogService).then((ref) => {
-          this.refreshTable();
-        });
-        break;
-      case "() => 'CList'":
-        showCommunity(this.DialogService).then((ref) => {
-          this.refreshTable();
-        });
-        break;
-      case "() => 'LNew'":
-        createLocation(this.NbDialogService).then((ref) => {
-          this.refreshTable();
-        });
-        break;
-      case "() => 'LList'":
-        showLocation(this.DialogService).then((ref) => {
-          this.refreshTable();
-        });
-        break;
-    }
-  }
-
   getTableData(event: LazyLoadEvent) {
     setTimeout(() => {
       this.DepartmentService.get(this.idDepartment, event).subscribe((data) => {

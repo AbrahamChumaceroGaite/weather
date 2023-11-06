@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { Socket } from 'ngx-socket-io';
+import { SwPush, SwUpdate } from '@angular/service-worker';
 import { SocketMasterService } from 'src/app/services/miscellaneous/socket.service';
+import { NotificationService } from '../services/notification.service';
+import { environment } from 'src/environments/environment';
+
 
 @Component({
   selector: 'app-home',
@@ -13,8 +17,22 @@ export class HomeComponent implements OnInit {
   estadoConexion!: string;
   constructor(
     private CookieService: CookieService,
-    private socketService: SocketMasterService){
-
+    private socketService: SocketMasterService,
+    private swPush: SwPush,
+    private NotificationService: NotificationService){
+      if (this.swPush.isEnabled) {
+        this.swPush.requestSubscription({
+          serverPublicKey: environment.VAPID_PUBLIC_KEY, // Debes generar una clave pública y privada para tus notificaciones.
+        }).then(sub => {
+          this.NotificationService.postUser(sub).subscribe(data=>{
+          
+          });
+          // Enviar la suscripción al servidor backend.
+        })
+          .catch(error => {
+            console.error('Error al solicitar la suscripción a notificaciones push', error);
+          });
+      }
  
   }
 
