@@ -29,6 +29,8 @@ export class ViewDeviceComponent {
   loading: boolean = true;
   filterValue: string = '';
 
+  room: string = 'Testing'
+
   constructor(
     private AuthService: AuthService,
     private deviceService: DeviceService,
@@ -39,6 +41,7 @@ export class ViewDeviceComponent {
   ngOnInit(): void {
     this.setTitle();
     this.getMenuItems();
+
   }
 
   getData(event: LazyLoadEvent) {

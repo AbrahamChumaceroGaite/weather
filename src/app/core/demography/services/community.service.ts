@@ -26,7 +26,7 @@ export class CommunityService {
 
   get(id: number, event: LazyLoadEvent): Observable<{ items: Community[]; totalRecords: number }> {
     const params: any = {
-      id: id,
+      id: id,      
       first: event.first, // Índice del primer elemento a cargar
       rows: event.rows, // Cantidad de elementos a cargar por página
     };

@@ -32,7 +32,9 @@ import { MessageService } from 'primeng/api';
 import { ShareDataService } from './services/shared/shared.service';
 import { TokenInterceptor } from './utils/token.interceptor';
 import { LandingComponent } from './components/landing/landing.component';
-const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
+import { CookieService } from 'ngx-cookie-service';
+import { SocketMasterService } from './services/miscellaneous/socket.service';
+
 registerLocaleData(localeEs);
 
 @NgModule({
@@ -71,15 +73,15 @@ registerLocaleData(localeEs);
     PrimengLibraryModule,
     NbThemeModule.forRoot({ name: 'corporate' }),
     NbLayoutModule,
-    SocketIoModule.forRoot(config),
+    SocketIoModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+      registrationStrategy: 'registerWhenStable:10000'
     }),
   ],
-  providers: [DialogService, MessageService, ShareDataService, {
+  providers: [DialogService, MessageService, SocketMasterService,  ShareDataService,CookieService, {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true

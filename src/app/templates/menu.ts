@@ -3,7 +3,7 @@ export const MENU_ITEMS: any[] = [
   {
     "title": "Tablero Administrativo",
     "icon": "book-outline",
-    "link": "home/admin/device"
+    "link": "home"
   },
   {
     "title": "Estaciones",

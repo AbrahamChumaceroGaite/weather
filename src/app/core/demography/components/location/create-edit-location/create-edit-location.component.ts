@@ -7,6 +7,7 @@ import { CommunityService } from 'src/app/core/demography/services/community.ser
 import { Community, Location } from 'src/app/models/demography';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
 import { ShareDataService } from 'src/app/services/shared/shared.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-create-edit-location',
@@ -27,6 +28,7 @@ export class CreateEditLocationComponent {
   dataSelected: any;
 
   constructor(
+    private AuthService: AuthService,
     private ShareDataService: ShareDataService,
     private locationService: LocationService,
     private communityService: CommunityService,
@@ -41,10 +43,22 @@ export class CreateEditLocationComponent {
   }
 
   ngOnInit(): void {
+    this.loadForm();
+    this.checkForm();
+  }
+
+  loadForm() {
+    const idautor = this.AuthService.getIdUser();
     this.form = this.fb.group({
       idcommunity: ['', Validators.required],
       name: ['', Validators.required],
+      idautor: parseInt(idautor)
     });
+
+    this.getCommunity();
+  }
+
+  checkForm() {
     if (this.id) {
       this.locationService.getById(this.id).subscribe((data: Location[]) => {
         for (let i of data) {
@@ -62,8 +76,8 @@ export class CreateEditLocationComponent {
       this.formTitle = 'Nueva Locacion';
       this.submitButtonText = 'Crear';
     };
-    this.getCommunity();
   }
+
 
   getCommunity() {
     this.communityService.getByDept(this.dataSelected).subscribe((data: Community[]) => {

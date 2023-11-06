@@ -7,6 +7,7 @@ import { DeviceService } from 'src/app/core/device/services/device.service';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
 import { ShareDataService } from 'src/app/services/shared/shared.service';
 import { Location } from 'src/app/models/demography';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-create-edit-device',
@@ -32,6 +33,7 @@ export class CreateEditDeviceComponent {
   visible = true;
 
   constructor(
+    private AuthService: AuthService,
     private deviceService: DeviceService,
     private ShareDataService: ShareDataService,
     private confirmService: ConfirmService,
@@ -46,10 +48,12 @@ export class CreateEditDeviceComponent {
   }
 
   loadForm() {
+    const idautor = this.AuthService.getIdUser();
     this.form = this.fb.group({
       name: ['', Validators.required],
       idlocation: ['', Validators.required],
-      status: ['0', Validators.required]
+      status: ['0', Validators.required],
+      idautor: parseInt(idautor)
     });
 
     this.ShareDataService.getLocationList().subscribe((data: Location[]) => {
@@ -110,6 +114,7 @@ export class CreateEditDeviceComponent {
       });
     } else {
       this.deviceService.postIdentity(formValue).subscribe((res) => {
+        console.log(formValue)
         this.MessagesService.showConfirmPost();
         this.cancel();
       }, (err) => {
@@ -136,7 +141,8 @@ export class CreateEditDeviceComponent {
 
   onToggleChange() {
     this.toggleValue = !this.toggleValue;
-    this.form.controls['status'].setValue(this.toggleValue ? '1' : '0');
+    
+    this.form.controls['status'].setValue(this.toggleValue ? 1 : 0);
   }
 
 

@@ -1,4 +1,3 @@
-import { ClientService } from './../../../user/services/client.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
@@ -8,6 +7,7 @@ import { ShareDataService } from 'src/app/services/shared/shared.service';
 import { ClientDeviceService } from '../../services/clientdevice.service';
 import { Client } from 'src/app/models/client';
 import { DeviceClient } from 'src/app/models/device';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-create-edit-device-client',
@@ -29,6 +29,7 @@ export class CreateEditDeviceClientComponent {
   visible = true;
 
   constructor(
+    private AuthService: AuthService,
     private ShareDataService: ShareDataService,
     private ClientDeviceService: ClientDeviceService,
     private confirmService: ConfirmService,
@@ -44,9 +45,11 @@ export class CreateEditDeviceClientComponent {
 
 
   loadForm() {
+    const idautor = this.AuthService.getIdUser();
     this.form = this.fb.group({
       idclient: ['', Validators.required],
-      idevice: [this.id]
+      idevice: [this.id],
+      idautor: parseInt(idautor)
     });
 
     this.ShareDataService.getClientList().subscribe((data: Client[]) => {

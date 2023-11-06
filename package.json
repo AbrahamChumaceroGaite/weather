@@ -36,6 +36,7 @@
     "leaflet-control-geocoder": "^2.4.0",
     "mapbox-gl": "^2.15.0",
     "ng-apexcharts": "^1.7.4",
+    "ngx-cookie-service": "^15.0.0",
     "ngx-echarts": "^16.1.1",
     "ngx-owl-carousel-o": "^15.0.1",
     "ngx-socket-io": "^4.4.0",

@@ -53,7 +53,7 @@ export class AuthService {
     return permisosString ? JSON.parse(permisosString) : null;
   }
 
-  getIdUser(): string {
+  getIdUser(): any {
     const idUser = sessionStorage.getItem('iduser');
     return idUser !== null ? idUser : '';
   }

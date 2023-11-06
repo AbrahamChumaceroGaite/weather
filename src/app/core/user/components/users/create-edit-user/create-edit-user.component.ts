@@ -8,6 +8,7 @@ import { ShareDataService } from 'src/app/services/shared/shared.service';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
 import { Person } from 'src/app/models/person';
 import { Rol } from 'src/app/models/rol';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-create-edit-user',
@@ -32,8 +33,8 @@ export class CreateEditUserComponent implements OnInit {
 
   constructor(
     private ShareDataService: ShareDataService,
-    private userService: UserService,
-    private confirmService: ConfirmService,
+    private userService: UserService,    
+    private AuthService: AuthService,
     private MessagesService: MessagesService,
     private fb: FormBuilder,
     private dialogRef: NbDialogRef<CreateEditUserComponent>
@@ -45,13 +46,16 @@ export class CreateEditUserComponent implements OnInit {
   }
 
   loadForm() {
+    const idautor = this.AuthService.getIdUser();
     this.form = this.fb.group({
       idperson: ['', Validators.required],
+      idautor: parseInt(idautor)
     });
 
     this.Rolform = this.fb.group({
       idrol: ['', Validators.required],
       pass: ['', Validators.required],
+      idautor: parseInt(idautor)
     });
 
     this.ShareDataService.getPersonList().subscribe((data: Person[]) => {
@@ -97,11 +101,13 @@ export class CreateEditUserComponent implements OnInit {
   }
 
   saveForm(formValue: any) {
+    const idautor = this.AuthService.getIdUser();
    try{
       const body = {
         idperson: this.form.value.idperson,
         idrol: this.Rolform.value.idrol,
         pass: this.Rolform.value.pass,
+        idautor: parseInt(idautor)
       };
 
       if(this.id) {

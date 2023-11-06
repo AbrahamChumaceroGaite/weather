@@ -7,6 +7,7 @@ import { ProvinceService } from 'src/app/core/demography/services/province.servi
 import { Province, Municipality } from 'src/app/models/demography';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
 import { ShareDataService } from 'src/app/services/shared/shared.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-create-edit-municipality',
@@ -27,7 +28,8 @@ export class CreateEditMunicipalityComponent {
   visible = true;
   dataSelected: any;
 
-  constructor(
+  constructor(    
+    private AuthService: AuthService,
     private ShareDataService: ShareDataService,
     private municipalityService: MunicipalityService,
     private provinceService: ProvinceService,
@@ -42,11 +44,22 @@ export class CreateEditMunicipalityComponent {
   }
 
   ngOnInit(): void {
-    console.log("EDIT: ", this.id)
+   this.loadForm();
+   this.checkForm();
+  }
+
+  loadForm(){
+    const idautor = this.AuthService.getIdUser();
     this.form = this.fb.group({
       idprovince: ['', Validators.required],
       name: ['', Validators.required],
+      idautor: parseInt(idautor)
     });
+   
+    this.getProvince();
+  }
+
+  checkForm(){
     if (this.id) {
       this.municipalityService.getById(this.id).subscribe((data: Municipality[]) => {
         for (let i of data) {
@@ -65,7 +78,6 @@ export class CreateEditMunicipalityComponent {
       this.formTitle = 'Nuevo Municipio';
       this.submitButtonText = 'Crear';
     };
-    this.getProvince();
   }
 
   getProvince() {

@@ -7,6 +7,7 @@ import { CommunityService } from 'src/app/core/demography/services/community.ser
 import { Municipality, Community } from 'src/app/models/demography';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
 import { ShareDataService } from 'src/app/services/shared/shared.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-create-edit-community',
@@ -27,6 +28,7 @@ export class CreateEditCommunityComponent {
   dataSelected: any;
 
   constructor(
+    private AuthService: AuthService,
     private ShareDataService: ShareDataService,
     private municipalityService: MunicipalityService,
     private communityService: CommunityService,
@@ -41,10 +43,22 @@ export class CreateEditCommunityComponent {
    }
 
 ngOnInit(): void {
+   this.loadForm();
+   this.checkForm();
+       
+  }
+
+  loadForm(){
+    const idautor = this.AuthService.getIdUser();
     this.form = this.fb.group({
       idmunicipality: ['', Validators.required],
       name: ['', Validators.required],
+      idautor: parseInt(idautor)
     });
+    this.getMunicipality();
+  }
+
+  checkForm(){
     if (this.id) {
       this.communityService.getById(this.id).subscribe((data: Community[]) => {
         for (let i of data) {
@@ -63,7 +77,6 @@ ngOnInit(): void {
       this.formTitle = 'Nueva Comunidad';
       this.submitButtonText = 'Crear';
     };
-    this.getMunicipality();
   }
 
   getMunicipality() {

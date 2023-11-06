@@ -7,6 +7,7 @@ import { ShareDataService} from 'src/app/services/shared/shared.service';
 import { UserService } from '../../../services/user.service';
 import { Rol } from 'src/app/models/rol';
 import { User } from 'src/app/models/user';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-create-edit-user-rol',
@@ -26,7 +27,8 @@ export class CreateEditUserRolComponent implements OnInit  {
   loading = true;
   visible = true;
 
-  constructor(
+  constructor(    
+    private AuthService: AuthService,
     private ShareDataService: ShareDataService,
     private userService: UserService,
     private confirmService: ConfirmService,
@@ -41,21 +43,24 @@ export class CreateEditUserRolComponent implements OnInit  {
   }
 
   loadForm() {
+    const idautor = this.AuthService.getIdUser(); 
     this.form = this.fb.group({
       iduser: [this.id],
       idrol: ['', Validators.required],      
       pass: [''],
+      idautor: parseInt(idautor)
     });
 
     this.ShareDataService.getRolList().subscribe((data: Rol[]) => {
       this.rols = data;
       this.loading = false;
     });
-  }
+   }
 
   checkForm() {
     if (this.id) {
       this.userService.getById(this.id).subscribe((data: User[]) => {
+        console.log(data)
         for (let i of data) {
           this.formHeader = 'edit-header';
           this.formlogo = 'edit';

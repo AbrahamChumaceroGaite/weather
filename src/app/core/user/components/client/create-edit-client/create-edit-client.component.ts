@@ -7,7 +7,7 @@ import { ClientService } from 'src/app/core/user/services/client.service';
 import { ShareDataService } from 'src/app/services/shared/shared.service';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
 import { Person } from 'src/app/models/person';
-
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-create-edit-client',
@@ -28,6 +28,7 @@ export class CreateEditClientComponent implements OnInit {
   visible = true;
 
   constructor(
+    private AuthService: AuthService,
     private clientService: ClientService,
     private ShareDataService: ShareDataService,
     private confirmService: ConfirmService,
@@ -44,8 +45,10 @@ export class CreateEditClientComponent implements OnInit {
   }
 
   loadForm() {
+    const idautor = this.AuthService.getIdUser();
     this.form = this.fb.group({
-      idperson: ['', Validators.required]      
+      idperson: ['', Validators.required],
+      idautor: parseInt(idautor)   
     });
 
     this.ShareDataService.getPersonList().subscribe((data: Person[]) => {

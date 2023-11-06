@@ -6,7 +6,7 @@ import { DepartmentService } from 'src/app/core/demography/services/department.s
 import { ProvinceService } from 'src/app/core/demography/services/province.service';
 import { Department, Province } from 'src/app/models/demography';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
-
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-create-edit-province',
@@ -26,8 +26,9 @@ export class CreateEditProvinceComponent {
   visible = true;
 
   constructor(
+    private AuthService: AuthService,
     private departmentService: DepartmentService,
-    private provinceService: ProvinceService, 
+    private provinceService: ProvinceService,
     private confirmService: ConfirmService,
     private MessagesService: MessagesService,
     private fb: FormBuilder,
@@ -35,11 +36,22 @@ export class CreateEditProvinceComponent {
   ) { }
 
   ngOnInit(): void {
-    console.log("EDIT: ", this.id)
+    this.loadForm();
+    this.checkForm();
+  }
+
+  loadForm() {
+    const idautor = this.AuthService.getIdUser();
     this.form = this.fb.group({
       iddepartment: ['', Validators.required],
       name: ['', Validators.required],
+      idautor: parseInt(idautor)
     });
+
+    this.getDeparment();
+  }
+
+  checkForm() {
     if (this.id) {
       this.provinceService.getById(this.id).subscribe((data: Province[]) => {
         for (let i of data) {
@@ -58,7 +70,6 @@ export class CreateEditProvinceComponent {
       this.formTitle = 'Nueva Provincia';
       this.submitButtonText = 'Crear';
     };
-    this.getDeparment();
   }
 
   getDeparment() {
@@ -91,7 +102,7 @@ export class CreateEditProvinceComponent {
             (err) => {
               this.MessagesService.showMsjError(err.error.message);
               this.loading = false;
-              
+
             }
           );
         }
@@ -108,7 +119,7 @@ export class CreateEditProvinceComponent {
     }
   }
 
-  
+
 
   cancel() {
     this.dialogRef.close();

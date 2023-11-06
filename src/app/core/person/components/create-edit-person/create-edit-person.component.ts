@@ -7,6 +7,7 @@ import { Person } from 'src/app/models/person';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
 import { ShareDataService} from 'src/app/services/shared/shared.service';
 import { Location } from 'src/app/models/demography';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-create-edit-person',
@@ -26,6 +27,7 @@ export class CreateEditPersonComponent {
   visible = true;
 
   constructor(
+    private AuthService: AuthService,
     private personService: PersonService,
     private locationService: ShareDataService,
     private confirmService: ConfirmService,
@@ -40,6 +42,8 @@ export class CreateEditPersonComponent {
   }
 
   loadForm() {
+    const idautor = this.AuthService.getIdUser()
+    console.log(idautor);
     this.form = this.fb.group({
       idlocation: ['', Validators.required],
       name: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ\s]*$/), Validators.maxLength(50)]],
@@ -47,6 +51,7 @@ export class CreateEditPersonComponent {
       ci: ['', Validators.required],
       phone: ['', Validators.required],
       email: ['', Validators.email],
+      idautor: parseInt(idautor)
     });
     this.locationService.getLocationList().subscribe((data: Location[]) => {
       this.locations = data;
