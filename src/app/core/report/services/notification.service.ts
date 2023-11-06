@@ -49,7 +49,7 @@ export class NotificationService {
   postUser(data: any) {
     const body: any = {
       body: data,
-      id: sessionStorage.getItem('idsser'),
+      id: sessionStorage.getItem('iduser'),
     }
     return this.httpClient.post(this.apiUrl + '/register/subscription/user', body).pipe(
       map((response: any) => response.mensaje)
