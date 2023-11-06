@@ -50,19 +50,104 @@ export class AdminDemographyComponent implements OnInit {
       this.setTitle(' Demografia - ' + this.items[0].name);
     });
   }
-  
+
   getMenuItems() {
-    this.itemsMenu = menu.map((item: any) => {
-      const convertedItem: MenuItem = {
-        label: item.label,
-        items: item.items.map((subItem: any) => ({
-          label: subItem.label,
-          icon: subItem.icon,
-          command: (event: any) => this.handleCommand(subItem.command.toString()),
-        })),
-      };
-      return convertedItem;
-    });
+    this.itemsMenu = [
+      {
+        label: 'Provincia',
+        items: [
+          {
+            label: 'Nuevo',
+            icon: 'pi pi-fw pi-plus',
+            command: () => {
+              createProvince(this.NbDialogService).then((ref) => {
+                this.refreshTable();
+              });
+            }
+          },
+          {
+            label: 'Registros',
+            icon: 'pi pi-fw pi-align-justify',
+            command: () => {
+              showProvince(this.DialogService).then((ref) => {
+                this.refreshTable();
+              });
+            }
+          },
+        ]
+      },
+      {
+        label: 'Municipio',
+        items: [
+          {
+            label: 'Nuevo',
+            icon: 'pi pi-fw pi-plus',
+            command: () => {
+              createMunicipality(this.NbDialogService).then((ref) => {
+                this.refreshTable();
+              });
+            }
+          },
+          {
+            label: 'Registros',
+            icon: 'pi pi-fw pi-align-justify',
+            command: () => {
+              showMunicipality(this.DialogService).then((ref) => {
+                this.refreshTable();
+              });
+            }
+          },
+        ]
+      },
+      {
+        label: 'Comunidad',
+        items: [
+          {
+            label: 'Nuevo',
+            icon: 'pi pi-fw pi-plus',
+            command: () => {
+              createCommunity(this.NbDialogService).then((ref) => {
+                this.refreshTable();
+              });
+            }
+          },
+          {
+            label: 'Registros',
+            icon: 'pi pi-fw pi-align-justify',
+            command: () => {
+              showCommunity(this.DialogService).then((ref) => {
+                this.refreshTable();
+              });
+            }
+          },
+        ]
+      },
+      {
+        label: 'Locacion',
+        items: [
+          {
+            label: 'Nuevo',
+            icon: 'pi pi-fw pi-plus',
+            command: () => {
+              createLocation(this.NbDialogService).then((ref) => {
+                this.refreshTable();
+              });
+            }
+          },
+          {
+            label: 'Registros',
+            icon: 'pi pi-fw pi-align-justify',
+            command: () => {
+              showLocation(this.DialogService).then((ref) => {
+                this.refreshTable();
+              });
+            }
+          },
+        ]
+      }
+    ];
+
+
   }
 
   handleCommand(command: string) {

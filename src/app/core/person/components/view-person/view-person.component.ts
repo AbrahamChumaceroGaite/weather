@@ -52,22 +52,15 @@ export class ViewPersonComponent implements OnInit {
   }
 
   getMenuItems() {
-    this.itemsMenu = Menu_generic.map((item: any) => {
-      const convertedItem: MenuItem = {
-        label: item.label,
-        icon: item.icon,
-        command: (event: any) => this.handleCommand(item.command.toString()),
-      };
-      return convertedItem;
-    });
-  }
-
-  handleCommand(command: string) {
-    switch (command) {
-      case "() => 'New'":
-        this.dialog();
-        break;
+    this.itemsMenu =[
+      {
+        label: 'Nuevo',
+        icon: 'pi pi-fw pi-plus',
+        command: (event: any) => {
+          this.dialog();
+        }
     }
+    ]
   }
 
   filterByName() {
