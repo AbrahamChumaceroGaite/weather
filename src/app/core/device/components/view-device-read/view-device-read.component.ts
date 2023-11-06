@@ -177,7 +177,6 @@ export class ViewDeviceReadComponent {
     );
   }
   
-
   loadDefaultData() {
     const startDate = calculateLastWeekStartDate();
     const endDate = new Date(); 

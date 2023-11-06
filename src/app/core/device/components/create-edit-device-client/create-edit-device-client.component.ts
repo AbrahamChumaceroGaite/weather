@@ -61,7 +61,7 @@ export class CreateEditDeviceClientComponent {
   checkForm() {
     if (this.id) {
       this.ClientDeviceService.getById(this.id).subscribe((data: DeviceClient[]) => {
-        console.log(data)
+         
         for (let i of data) {
           this.idDeviceClient = i.id;
           this.formHeader = 'edit-header';
@@ -103,7 +103,6 @@ export class CreateEditDeviceClientComponent {
               this.loading = false;
             },
             (err) => {
-              console.log(err)
               this.MessagesService.showMsjError(err.error.message);
               this.loading = false;
 

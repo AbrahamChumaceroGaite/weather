@@ -13,20 +13,20 @@
       <div class="space">
       </div>
       <nb-actions size="medium">
-        <nb-action id="myNot" icon="bell" badgeText="14" badgeStatus="danger"
+        <nb-action id="myNot" icon="bell" badgeText="{{totalnotificactions}}" badgeStatus="danger"
           [nbPopover]="templateRef" nbPopoverPlacement="bottom">
           <ng-template #templateRef>
-            <p-virtualScroller  scrollHeight="350px" [style]="{'width': '420px'}"
-              [itemSize]="100" [lazy]="true">
+            <p-virtualScroller [value]="notifications" scrollHeight="350px" [style]="{'width': '420px'}"
+              [itemSize]="100">
               <ng-template pTemplate="header"> Notificaciones </ng-template>
               <ng-template let-item pTemplate="item">
                 <nb-card class="notification-content">
-                  <nb-card-body >
+                  <nb-card-body (click)="readNotification(item.id)">
                     <div class="notification-message-content">
                       <div class="notification-message">
-                        <p>Contenido de Prueba</p>
+                        <p>{{item.message}}</p>
                         <div class="down-line">
-                          <small>03/03/2000</small>
+                          <small>{{item.createdAt | date : "dd/MM/yy HH:mm"}}</small>
                           <nb-icon icon="info"></nb-icon>
                         </div>
                       </div>
@@ -35,7 +35,6 @@
                 </nb-card>
               </ng-template>
             </p-virtualScroller>
-
           </ng-template>
         </nb-action>
         <nb-action>

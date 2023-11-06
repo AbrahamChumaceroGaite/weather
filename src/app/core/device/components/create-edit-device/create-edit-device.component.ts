@@ -114,11 +114,10 @@ export class CreateEditDeviceComponent {
       });
     } else {
       this.deviceService.postIdentity(formValue).subscribe((res) => {
-        console.log(formValue)
+   
         this.MessagesService.showConfirmPost();
         this.cancel();
       }, (err) => {
-        console.log("ERROR", err)
         this.MessagesService.showMsjError(err.error.message);
         this.cancel();
       });

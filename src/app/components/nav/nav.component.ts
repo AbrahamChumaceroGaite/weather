@@ -1,9 +1,12 @@
+import { NotificationService } from '../../services/notification/notification.service';
 import { Component, OnInit } from '@angular/core';
 import { NbMenuItem, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 import { filter, map } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { navMenuModel } from 'src/app/models/nav';
 import { MENU_ITEMS, OPTION_ITEMS } from 'src/app/templates/menu';
+import { LazyLoadEvent } from 'primeng/api';
+import { SocketMasterService } from 'src/app/services/miscellaneous/socket.service';
 
 interface CustomMenuItem extends NbMenuItem {
   id?: string;
@@ -28,16 +31,37 @@ export class NavComponent implements OnInit {
   isCollapsed = false;
   isPhone!: boolean;
   router: any;
+  loading: boolean = false;
+  notifications: any[] = []
+  virtualnotifications: any[] = []
+  totalnotificactions: any;
 
   constructor(
     public authService: AuthService,
     private nbmenuService: NbMenuService,
-    private sidebarService: NbSidebarService) { }
+    private socketService: SocketMasterService,
+    private sidebarService: NbSidebarService,
+    private NotificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.getMenu();
     this.checkViewport();
+    this.getNotifications();
     window.addEventListener('resize', this.checkViewport);
+    // Escuchar eventos de notificación en la sala del usuario
+    this.socketService.on('notification', (res: any) => {
+      this.getNotifications();
+    });
+  }
+
+  getNotifications() {
+    this.loading = true;
+    this.NotificationService.getNotifications().subscribe((data: any) => {
+      this.notifications = data.items
+      this.totalnotificactions = data.total
+      this.loading = false;
+    });
+    this.virtualnotifications = Array.from({ length: 10000 });
   }
 
   getMenu() {
@@ -71,6 +95,12 @@ export class NavComponent implements OnInit {
       }
       return true;
     }) as CustomMenuItem[];
+  }
+
+  readNotification(id: number) {
+    this.NotificationService.readNotification(id).subscribe((data: any) => {
+      this.getNotifications();
+    })
   }
 
   toggleSidebar(): void {

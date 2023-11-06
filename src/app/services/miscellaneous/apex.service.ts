@@ -20,8 +20,6 @@ export class ApexService {
       xaxis: {
         labels: {
           formatter: function (value: string) {
-            // Puedes usar librerías de manejo de fechas como Moment.js o Date-fns para darle formato a la fecha
-            // En este ejemplo se asume que la fecha está en formato 'dd/mm/yyyy'
             const dateParts = value.split('/');
             const day = dateParts[0];
             const month = dateParts[1];
@@ -82,7 +80,6 @@ export class ApexService {
     return options;
   }
   
-
   public generateBarsChart(
     series: any[],
     series2: any[],
@@ -146,13 +143,14 @@ export class ApexService {
     return options;
   }
 
-  public generateDonutChart(series: any[], categories: string[]): ApexOptions {
+  public generateDonutChart(data : any[]): ApexOptions {
     const options: ApexOptions = {
       chart: {
-        type: 'donut',
+        width: 380,
+        type: "pie"
       },
-      series: series,
-      labels: categories,
+      series: data.map((item:any) => item.value),
+      labels: data.map((item:any) => item.name)
     };
     return options;
   }

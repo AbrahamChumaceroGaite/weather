@@ -1,3 +1,4 @@
+import { AuthService } from './../../auth/auth.service';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { environment } from 'src/environments/environment';
@@ -8,12 +9,12 @@ export class SocketMasterService extends Socket {
 
   @Output() outEven: EventEmitter<any> = new EventEmitter();
 
-  constructor(private CookieService: CookieService) {
+  constructor(private AuthService: AuthService) {
     super({
       url: environment.apiSocket,
       options: {
         query: {
-          nameRoom: CookieService.get('room')
+          nameRoom: AuthService.getIdUser()
         }
       }
     });
@@ -22,7 +23,9 @@ export class SocketMasterService extends Socket {
   }
 
   listenFromClient() {
-    this.ioSocket.on('notification', (res: any) => this.outEven.emit(res))
+    this.ioSocket.on('notification', (res: any) => {
+      this.outEven.emit(res);
+    });
   }
 
 }

@@ -60,7 +60,7 @@ export class CreateEditUserRolComponent implements OnInit  {
   checkForm() {
     if (this.id) {
       this.userService.getById(this.id).subscribe((data: User[]) => {
-        console.log(data)
+         
         for (let i of data) {
           this.formHeader = 'edit-header';
           this.formlogo = 'edit';

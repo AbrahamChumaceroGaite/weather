@@ -45,7 +45,7 @@ export class ViewProvinceComponent {
   getData(event: LazyLoadEvent) {
     setTimeout(() => {
       this.provinceService.get(this.dataSelected, event).subscribe((data) => {
-        console.log(data)
+         
         this.items = data.items;
         this.totalRecords = data.totalRecords;
         this.loading = false;

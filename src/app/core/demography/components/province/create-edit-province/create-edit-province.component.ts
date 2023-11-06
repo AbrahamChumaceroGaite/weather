@@ -112,7 +112,7 @@ export class CreateEditProvinceComponent {
         this.MessagesService.showConfirmPost();
         this.cancel();
       }, (err) => {
-        console.log("ERROR", err)
+  
         this.MessagesService.showMsjError(err.error.message);
         this.cancel();
       });

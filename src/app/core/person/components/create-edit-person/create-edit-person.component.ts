@@ -43,7 +43,6 @@ export class CreateEditPersonComponent {
 
   loadForm() {
     const idautor = this.AuthService.getIdUser()
-    console.log(idautor);
     this.form = this.fb.group({
       idlocation: ['', Validators.required],
       name: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ\s]*$/), Validators.maxLength(50)]],

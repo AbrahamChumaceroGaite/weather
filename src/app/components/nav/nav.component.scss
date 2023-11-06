@@ -48,6 +48,18 @@ nb-layout-column{
  
 }
 
+.notification-content{
+
+  transition: box-shadow 0.3s;
+        /* Agrega una transición para el cambio de sombra */
+
+        &:hover {
+          background-color: rgb(196, 194, 194)(0, 255, 255, 0.911);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            /* Cambia la sombra en hover */
+        }
+}
+
 .space{
   display: flex;
   flex: 1;

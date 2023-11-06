@@ -116,7 +116,6 @@ export class CreateEditUserComponent implements OnInit {
           this.MessagesService.showConfirmPost();
           this.message = "Registro actualizado con éxito";
         }, (err) => {
-          console.log(err)
           this.loading = false;
           this.MessagesService.showMsjError(err.error.message);
           this.message = err.error.message;
@@ -127,7 +126,6 @@ export class CreateEditUserComponent implements OnInit {
           this.MessagesService.showConfirmPost();
           this.message = "Registro guardado con éxito";
         }, (err) => {
-          console.log(err)
           this.loading = false;
           this.MessagesService.showMsjError(err.error.message);
           this.message = err.error.message;

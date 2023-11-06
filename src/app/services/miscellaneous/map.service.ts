@@ -58,10 +58,9 @@ export class MapServicio {
   private markerClicked(event: any): void {
     const markerIndex = this.markers.indexOf(event.target);
     const markerData = this.markers[markerIndex].getPopup()?.getContent();
-    console.log(markerData); // Mostrar los datos completos en la consola
   }
 
   private markerDragEnd(event: any): void {
-    console.log(event.target.getLatLng());
+
   }
 }
