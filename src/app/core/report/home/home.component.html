@@ -1,27 +1,28 @@
 <div class="dashboard-super">
   <div class="dashboard-container">
     <div class="content-layout">
-      <p-menubar>
-       
-        <ng-template pTemplate="start">
-          <div class="menubar">
+      <p-toolbar styleClass="menubar">
+
+        <ng-template pTemplate="left">
+          <div class="toolbar">
             <label> Fecha inicio </label>
             <input nbInput type="datetime-local" [(ngModel)]="startDate" (change)="onDateRangeChange()" />
             <label> Fecha final </label>
             <input nbInput type="datetime-local" [(ngModel)]="endDate" (change)="onDateRangeChange()" />
           </div>
-        
-        </ng-template>>
-        <ng-template pTemplate="end">
+
+        </ng-template>
+        <ng-template pTemplate="right">
           <span class="p-input-icon-left">
             <i class="pi pi-search"></i>
-            <input pInputText type="text" [(ngModel)]="filterValue" (input)="filterByName()" placeholder="Busqueda Global..." />
+            <input pInputText type="text" [(ngModel)]="filterValue" (input)="filterByName()"
+              placeholder="Busqueda Global..." />
           </span>
         </ng-template>
-     
-       
-      </p-menubar>
-      
+
+
+      </p-toolbar>
+
       <br>
       <p-table #dt [value]="items" [rowHover]="true" [totalRecords]="totalRecords" [rows]="10"
         [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50]" [loading]="loading" [lazy]="true"
@@ -72,7 +73,7 @@
                 {{ location.status === 0 ? 'Suspendido' : 'Activo' }}
               </span>
             </td>
-            
+
             <td><span class="p-column-title">Temperatura</span>{{ location.temp }}</td>
             <td><span class="p-column-title">Humedad</span>{{ location.hum }}</td>
             <td><span class="p-column-title">Presion</span>{{ location.pres }}</td>

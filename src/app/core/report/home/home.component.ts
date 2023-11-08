@@ -82,13 +82,15 @@ export class HomeComponent implements OnInit {
 
     });
     this.getReportUser()
+    this.socketService.on('devicedata', (res: any) => {
+      this.loading = true;
+      this.refreshTable();
+    });
 
     this.socketService.on('notification', (res: any) => {
       this.getReportUser();
     });
-    this.socketService.on('devicedata', (res: any) => {
-      this.refreshTable();
-    });
+
     setTimeout((a: any) => {
       this.setMapData();
       window.dispatchEvent(new Event('resize'));
@@ -126,6 +128,7 @@ export class HomeComponent implements OnInit {
   }
 
   getTableData(event: LazyLoadEvent) {
+    this.loading = true;
     const formattedStartDate = this.datePipe.transform(this.startDate, 'yyyy-MM-dd HH:mm:ss');
     const formattedEndDate = this.datePipe.transform(this.endDate, 'yyyy-MM-dd HH:mm:ss');
 

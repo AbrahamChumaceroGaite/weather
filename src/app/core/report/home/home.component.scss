@@ -3,6 +3,19 @@
     height: 200px;
 }
 
+.toolbar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .date-input{
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        
+    }
+}
+
 .dashboard-super{
     display: flex;
     flex-direction: row;
@@ -53,6 +66,14 @@
 @media screen and (max-width: 768px) {
 
     .menubar{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .toolbar{   
+        display: flex;
+        justify-content: center;
         flex-direction: column;
     }
     .dashboard-super{
