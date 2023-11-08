@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
   filterValue: string = '';
   totalRecords = 0;
   startDate!: string | null;
-  endDate: string = '';
+  endDate!: string | null;
   loading: boolean = true;
   notifications: any[] = []
   virtualnotifications: any[] = []
@@ -82,13 +82,12 @@ export class HomeComponent implements OnInit {
 
     });
     this.getReportUser()
-    this.loadDefaultData()
 
     this.socketService.on('notification', (res: any) => {
       this.getReportUser();
     });
     this.socketService.on('devicedata', (res: any) => {
-      this.loadDefaultData();
+      this.refreshTable();
     });
     setTimeout((a: any) => {
       this.setMapData();
@@ -99,7 +98,7 @@ export class HomeComponent implements OnInit {
   ngAfterViewInit() {
     this.NotificationService.getDashboard().subscribe((data: any) => {
 
-        this.coordinates = data.totalLocations
+      this.coordinates = data.totalLocations
       const dataDeviceGraph = [
         { name: 'Activas', value: data.totalDeviceON },
         { name: 'Inactivas', value: data.totalDeviceOFF },
@@ -109,10 +108,6 @@ export class HomeComponent implements OnInit {
         { name: 'Usuarios', value: data.totalUsers },
         { name: 'Clientes', value: data.totalClients },
         { name: 'Personas', value: data.totalPersons },
-      ]
-
-      const dataClientLocations = [
-        { name: 'Locaciones', value: data.totalLocations },
       ]
 
       this.loading = false
@@ -131,9 +126,9 @@ export class HomeComponent implements OnInit {
   }
 
   getTableData(event: LazyLoadEvent) {
-    this.loading = true;
     const formattedStartDate = this.datePipe.transform(this.startDate, 'yyyy-MM-dd HH:mm:ss');
     const formattedEndDate = this.datePipe.transform(this.endDate, 'yyyy-MM-dd HH:mm:ss');
+
     setTimeout(() => {
       this.SharedDataService.getDataTable(event, formattedStartDate, formattedEndDate).subscribe((data) => {
         this.items = data.items;
@@ -157,24 +152,10 @@ export class HomeComponent implements OnInit {
     if (this.startDate && this.endDate) {
       const startDate = new Date(this.startDate);
       const endDate = new Date(this.endDate);
-      this.refreshTable(startDate, endDate)
+      this.refreshTable()
     }
   }
 
-  loadDefaultData() {
-    const startDate = this.calculateLastWeekStartDate();
-    const endDate = new Date();
-    this.refreshTable(startDate, endDate)
-  }
-
-  calculateLastWeekStartDate() {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    const tomo =  tomorrow.setDate(tomorrow.getDate() + 3); // Suma un día
-    const lastWeek = new Date(tomo);
-    lastWeek.setDate(lastWeek.getDate() - 30); // Resta una semana
-    return lastWeek;
-  }
 
   setMapData() {
     const markerIcon = Leaflet.icon({
@@ -200,13 +181,11 @@ export class HomeComponent implements OnInit {
     this.map = map;
   }
 
-  refreshTable(startDate: Date, endDate: Date) {
+  refreshTable() {
     const lazyLoadEvent: LazyLoadEvent = {
       first: 0,
       rows: 10,
     };
-    this.startDate = startDate.toISOString();
-    this.endDate = endDate.toISOString();
     this.getTableData(lazyLoadEvent);
   }
 

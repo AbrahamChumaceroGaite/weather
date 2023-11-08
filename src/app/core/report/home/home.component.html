@@ -2,20 +2,26 @@
   <div class="dashboard-container">
     <div class="content-layout">
       <p-menubar>
+       
         <ng-template pTemplate="start">
-          <label> Fecha inicio </label>
-          <input nbInput type="date" [(ngModel)]="startDate" (change)="onDateRangeChange()" />
-          <label> Fecha final </label>
-          <input nbInput type="date" [(ngModel)]="endDate" (change)="onDateRangeChange()" />
+          <div class="menubar">
+            <label> Fecha inicio </label>
+            <input nbInput type="datetime-local" [(ngModel)]="startDate" (change)="onDateRangeChange()" />
+            <label> Fecha final </label>
+            <input nbInput type="datetime-local" [(ngModel)]="endDate" (change)="onDateRangeChange()" />
+          </div>
+        
         </ng-template>>
         <ng-template pTemplate="end">
           <span class="p-input-icon-left">
             <i class="pi pi-search"></i>
-            <input pInputText type="text" [(ngModel)]="filterValue" (input)="filterByName()"
-              placeholder="Busqueda Global..." />
+            <input pInputText type="text" [(ngModel)]="filterValue" (input)="filterByName()" placeholder="Busqueda Global..." />
           </span>
         </ng-template>
+     
+       
       </p-menubar>
+      
       <br>
       <p-table #dt [value]="items" [rowHover]="true" [totalRecords]="totalRecords" [rows]="10"
         [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50]" [loading]="loading" [lazy]="true"
@@ -32,6 +38,10 @@
             <th pSortableColumn="name" class="table-column">
               Estación
               <p-sortIcon field="name"></p-sortIcon>
+            </th>
+            <th pSortableColumn="status" class="table-column">
+              Estado
+              <p-sortIcon field="status"></p-sortIcon>
             </th>
             <th pSortableColumn="temp" class="table-column">
               Temperatura
@@ -66,18 +76,24 @@
           <tr>
             <td><span class="p-column-title">ID</span>{{ location.id }}</td>
             <td><span class="p-column-title">Estación</span>{{ location.name }}</td>
+            <td><span class="p-column-title">Estado</span>
+              <span [ngClass]="location.status === 0 ? 'suspendido' : 'activo'">
+                {{ location.status === 0 ? 'Suspendido' : 'Activo' }}
+              </span>
+            </td>
+            
             <td><span class="p-column-title">Temperatura</span>{{ location.temp }}</td>
             <td><span class="p-column-title">Humedad</span>{{ location.hum }}</td>
             <td><span class="p-column-title">Presion</span>{{ location.press }}</td>
             <td><span class="p-column-title">UV</span>{{ location.uv }}</td>
             <td><span class="p-column-title">Altitud</span>{{ location.altitude }}</td>
             <td><span class="p-column-title">LLuvia</span>{{ location.rain }}</td>
-            <td><span class="p-column-title">Creado</span>{{ location.newCreatedAt | date : "dd/MM/yy HH:mm" }}</td>
+            <td><span class="p-column-title">Creado</span>{{ location.createdAt | date : "dd/MM/yy HH:mm" }}</td>
           </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="7">Tabla Vacia.</td>
+            <td colspan="10">Tabla Vacia.</td>
           </tr>
         </ng-template>
       </p-table>
