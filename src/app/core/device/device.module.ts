@@ -1,3 +1,4 @@
+import { ViewProductsComponent } from './components/view-products/view-products.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -11,17 +12,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateEditDeviceClientComponent } from './components/create-edit-device-client/create-edit-device-client.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { CarouselModule } from 'ngx-owl-carousel-o';
 
 @NgModule({
   declarations: [
     CreateEditDeviceComponent,
     ViewDeviceComponent,
     ViewDeviceReadComponent,
-    CreateEditDeviceClientComponent
+    CreateEditDeviceClientComponent,
+    ViewProductsComponent
   ],
   imports: [
     NgApexchartsModule,
     LeafletModule,
+    CarouselModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,

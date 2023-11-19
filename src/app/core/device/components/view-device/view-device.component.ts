@@ -12,7 +12,9 @@ import { MessagesService } from 'src/app/services/dialog/message.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { MenuItem } from 'primeng/api';
 import { Menu_generic } from 'src/app/templates/menu_generic';
+import { ShareDataService } from 'src/app/services/shared/shared.service';
 import { ViewDeviceReadComponent } from '../view-device-read/view-device-read.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-device',
@@ -36,7 +38,9 @@ export class ViewDeviceComponent {
     private deviceService: DeviceService,
     private dialogService: NbDialogService,
     private confirmService: ConfirmService,
-    private MessagesService: MessagesService) { }
+    private MessagesService: MessagesService,
+    private ShareDataService: ShareDataService,
+    private Router: Router) { }
 
   ngOnInit(): void {
     this.setTitle();
@@ -86,12 +90,14 @@ export class ViewDeviceComponent {
     }).onClose.subscribe(res => this.refreshTable());
   }
 
-  dialogData(id?: number) {
-    this.dialogService.open(ViewDeviceReadComponent, {
+  dialogData(id: number) {
+    this.ShareDataService.setSelectedDevice(id);
+    this.Router.navigate(['/view/device/report']);
+/*     this.dialogService.open(ViewDeviceReadComponent, {
       context: {
         id
       }
-    });
+    }); */
   }
 
   dialoClient(id?: number) {

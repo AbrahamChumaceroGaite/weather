@@ -34,7 +34,7 @@
         Creado
       </th>
       <th pSortableColumn="createdUpd" class="table-column">
-        Ult. Actualizacion
+        Actualizado
       </th>
       <th>Acciones</th>
     </tr>
@@ -46,7 +46,7 @@
       <td><span class="p-column-title">Municipio</span>{{ community.municipality }}</td>
       <td><span class="p-column-title">Comunidad</span>{{ community.name }}</td>
       <td><span class="p-column-title">Creado</span>{{ community.createdAt | date : "dd/MM/yy HH:mm" }}</td>
-      <td><span class="p-column-title">Ult. Actualizacion </span>{{ community.createdUpd | date : "dd/MM/yy HH:mm" }}</td>
+      <td><span class="p-column-title">Actualizado </span>{{ community.createdUpd | date : "dd/MM/yy HH:mm" }}</td>
       <td>
         <div class="btn-spacer">
           <button (click)="dialog(community.id)" nbButton size="tiny" status="warning">

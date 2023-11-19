@@ -159,7 +159,6 @@ export class HomeComponent implements OnInit {
     }
   }
 
-
   setMapData() {
     const markerIcon = Leaflet.icon({
       iconUrl: '/assets/icons/marker.png',

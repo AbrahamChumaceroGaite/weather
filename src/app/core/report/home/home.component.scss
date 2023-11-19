@@ -1,22 +1,22 @@
-.graph-content-certifieds{
+.graph-content-certifieds {
     width: 350px;
     height: 200px;
 }
 
-.toolbar{
+.toolbar {
     display: flex;
     flex-direction: row;
     align-items: center;
 
-    .date-input{
+    .date-input {
         display: flex;
         flex-direction: column;
         gap: 5px;
-        
+
     }
 }
 
-.dashboard-super{
+.dashboard-super {
     display: flex;
     flex-direction: row;
     gap: 10px;
@@ -28,16 +28,16 @@
         flex-direction: column;
         gap: 10px;
         justify-content: center;
-    
-    
-        .dashboard-cards{
-            display:flex;
+
+
+        .dashboard-cards {
+            display: flex;
             flex-direction: row;
             gap: 15px;
             justify-content: space-between;
         }
-    
-        .dashboard-table{
+
+        .dashboard-table {
             width: 100%;
         }
     }
@@ -45,7 +45,7 @@
 
 .dashboard-header {
     color: white;
-    background-color: rgba(42, 91, 155, 0.87) !important;    
+    background-color: rgba(42, 91, 155, 0.87) !important;
 }
 
 .map {
@@ -53,30 +53,21 @@
     height: 400px;
 }
 
-.suspendido {
-    color: rgb(161, 42, 42);
-    font-weight: bold;
-  }
-  
-  .activo {
-    color: rgb(65, 153, 65);
-    font-weight: bold;
-  }
-  
 @media screen and (max-width: 768px) {
 
-    .menubar{
+    .menubar {
         display: flex;
         flex-direction: column;
         justify-content: center;
     }
 
-    .toolbar{   
+    .toolbar {
         display: flex;
         justify-content: center;
         flex-direction: column;
     }
-    .dashboard-super{
+
+    .dashboard-super {
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -87,19 +78,19 @@
             flex-direction: column;
             gap: 5px;
             justify-content: center;
-        
-        
-            .dashboard-cards{
-                display:flex;
+
+
+            .dashboard-cards {
+                display: flex;
                 flex-direction: column;
                 gap: 15px;
                 justify-content: space-between;
             }
-        
-            .dashboard-table{
+
+            .dashboard-table {
                 width: 100%;
             }
         }
     }
-    
+
 }

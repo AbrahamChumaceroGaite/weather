@@ -37,7 +37,7 @@
                 <p-sortIcon field="createdAt"></p-sortIcon>
             </th>
             <th pSortableColumn="createdUpd" class="table-column">
-                Ult. Actualización
+                Actualizado
                 <p-sortIcon field="createdUpd"></p-sortIcon>
             </th>
             <th> Acciones </th>
@@ -49,7 +49,7 @@
             <td><span class="p-column-title">Usuario</span>{{ client.user }}</td>
             <td><span class="p-column-title">Locacion</span>{{ client.location }}</td>
             <td><span class="p-column-title">Creado</span>{{ client.createdAt | date : "dd/MM/yy HH:mm" }}</td>
-            <td><span class="p-column-title">Ult. Actualización</span>
+            <td><span class="p-column-title">Actualizado</span>
                 {{ client.createdUpd | date : "dd/MM/yy HH:mm" }}
             </td>
             <td>

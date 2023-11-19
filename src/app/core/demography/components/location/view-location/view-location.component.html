@@ -42,7 +42,7 @@
         <p-sortIcon field="createdAt"></p-sortIcon>
       </th>
       <th pSortableColumn="createdUpd" class="table-column">
-        Ult. Actualizacion
+        Actualizado
         <p-sortIcon field="createdUpd"></p-sortIcon>
       </th>
       <th>Acciones</th>
@@ -57,7 +57,7 @@
       <td><span class="p-column-title">Locacion</span>{{ location.community }}</td>
       <td><span class="p-column-title">Comunidad</span>{{ location.name }}</td>
       <td><span class="p-column-title">Creado</span>{{ location.createdAt | date : "dd/MM/yy HH:mm" }}</td>
-      <td><span class="p-column-title">Ult. Actualizacion</span>{{ location.createdUpd | date : "dd/MM/yy HH:mm" }}</td>
+      <td><span class="p-column-title">Actualizado</span>{{ location.createdUpd | date : "dd/MM/yy HH:mm" }}</td>
       <td>
         <div class="btn-spacer">
           <button (click)="dialog(location.id)" nbButton size="tiny" status="warning">

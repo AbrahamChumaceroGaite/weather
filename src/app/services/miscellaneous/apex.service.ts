@@ -5,18 +5,22 @@ import { ApexOptions } from 'ng-apexcharts';
   providedIn: 'root',
 })
 export class ApexService {
-  constructor() {}
+  constructor() { }
 
   public generateLineChart(series: number[], categories: string[]): ApexOptions {
     const options: ApexOptions = {
       chart: {
         type: 'line',
+        brush: {
+          enabled: true,
+        },
+
       },
-    series: [
-      {
-        data: series, // Agrega la propiedad 'data' al objeto de la serie
-      },
-    ],
+      series: [
+        {
+          data: series, // Agrega la propiedad 'data' al objeto de la serie
+        },
+      ],
       xaxis: {
         labels: {
           formatter: function (value: string) {
@@ -28,12 +32,13 @@ export class ApexService {
           },
         },
         categories: categories,
+
       },
     };
     return options;
   }
 
-  public generateHystoricLineChart( name: string, series: any[], categories: string[]): ApexOptions {
+  public generateHystoricLineChart(name: string, series: any[], categories: string[]): ApexOptions {
     const options: ApexOptions = {
       series: [
         {
@@ -42,25 +47,37 @@ export class ApexService {
         },
       ],
       chart: {
-        type: 'line',
-        height: 150,
+        type: "area",
+        height: 250,
+        zoom: {
+          enabled: true
+        }
       },
       dataLabels: {
         enabled: false,
       },
       fill: {
-        type: 'gradient',
-        opacity: 0.8,
+        type: "gradient",
+        gradient: {
+          shadeIntensity: 1,
+          opacityFrom: 0.7,
+          opacityTo: 0.9,
+          stops: [0, 100]
+        }
       },
       legend: {
         position: 'top',
         horizontalAlign: 'left',
       },
+      title: {
+        text: "Historico",
+        align: "left"
+      },
       xaxis: {
-        type: 'datetime', // Establece el tipo de etiquetas como datetime
-        tickAmount: 6,
+        type: 'datetime',
         categories: categories,
         labels: {
+          datetimeUTC: false,
           datetimeFormatter: {
             year: 'yyyy',
             month: 'MMM',
@@ -74,12 +91,12 @@ export class ApexService {
         }
       },
       stroke: {
-        curve: 'straight',
-      },
+        curve: "smooth"
+      }
     };
     return options;
   }
-  
+
   public generateBarsChart(
     series: any[],
     series2: any[],
@@ -111,8 +128,16 @@ export class ApexService {
         },
       },
       xaxis: {
-        categories: categories,
-        tickPlacement: 'on',
+        type: 'datetime',
+        tickAmount: 6,
+        categories: categories.map(date => new Date(date).toLocaleString()), // Ajusta a la zona horaria local
+        labels: {
+          datetimeFormatter: {
+            year: 'yyyy',
+            month: 'MMM',
+            day: 'dd'
+          },
+        },
       },
       yaxis: {
         title: {
@@ -143,14 +168,14 @@ export class ApexService {
     return options;
   }
 
-  public generateDonutChart(data : any[]): ApexOptions {
+  public generateDonutChart(data: any[]): ApexOptions {
     const options: ApexOptions = {
       chart: {
         width: 380,
         type: "pie"
       },
-      series: data.map((item:any) => item.value),
-      labels: data.map((item:any) => item.name)
+      series: data.map((item: any) => item.value),
+      labels: data.map((item: any) => item.name)
     };
     return options;
   }
@@ -195,7 +220,7 @@ export class ApexService {
           }
         }
       ]
-      
+
     };
     return options;
   }

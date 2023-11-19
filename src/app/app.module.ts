@@ -24,7 +24,6 @@ import { NbThemeModule, NbSidebarModule, NbMenuModule, NbDialogModule, NbFormFie
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from 'src/environments/environment';
 import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
 import { ngxUiLoaderConfigTemplate } from './utils/ngxuiloader';
 import { CarouselModule } from 'ngx-owl-carousel-o';
@@ -81,7 +80,7 @@ registerLocaleData(localeEs);
       registrationStrategy: 'registerWhenStable:10000'
     }),
   ],
-  providers: [DialogService, MessageService, SocketMasterService,  ShareDataService,CookieService, {
+  providers: [DialogService, MessageService, SocketMasterService, ShareDataService, CookieService, {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true

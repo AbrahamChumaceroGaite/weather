@@ -1,0 +1,62 @@
+<p-menubar styleClass="graph-menu">
+    <ng-template pTemplate="start">
+        <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" tyle="width: auto" [(ngModel)]="filterValue" (input)="filterByName()"
+                placeholder="Buscar Producto..." />
+        </span> </ng-template>
+    <ng-template pTemplate="end">
+        <nb-select status="warning" placeholder="Seleccionar" [nbSpinner]="loading" [(selected)]="selectedCategory"
+            (selectedChange)="filterDataProduct($event)">
+            <nb-option *ngFor="let item of categories" [value]="item.id">{{item.name}}</nb-option>
+        </nb-select> </ng-template>
+</p-menubar>
+<nb-card> 
+    <nb-card-header class="map-card-header">
+        ESTANDARES CLIMATICOS DE CULTIVOS
+    </nb-card-header>
+    <nb-card-body>
+        <p-table #dt [value]="productData" dataKey="id" [rowHover]="true" [totalRecords]="totalRecords" [rows]="5"
+            [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50]" [loading]="loading" [lazy]="true"
+            (onLazyLoad)="getProducts($event)" [paginator]="true" responsiveLayout="stack" [breakpoint]="'960px'"
+            styleClass="p-datatable-sm" [filterDelay]="0" [globalFilterFields]="['name, heat_hour, cold_hour']">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="name" class="table-column">
+                        Producto
+                    </th>
+                    <th pSortableColumn="cold_hour" class="table-column">
+                        H.Frio
+                    </th>
+                    <th pSortableColumn="heat_hour" class="table-column">
+                        H.Calor
+                    </th>
+                    <th pSortableColumn="temp_optim" class="table-column">
+                        Temp. Optima
+                    </th>
+                    <th pSortableColumn="hum_optim" class="table-column">
+                        Hum. Optima
+                    </th>
+                    <th pSortableColumn="rain_optim" class="table-column">
+                        Prec. Optima
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product>
+                <tr>
+                    <td><span class="p-column-title">Producto</span>{{ product.name }}</td>
+                    <td><span class="p-column-title">H. Frio</span>{{ product.cold_hour }}</td>
+                    <td><span class="p-column-title">H. Calor</span>{{ product.heat_hour }}</td>
+                    <td><span class="p-column-title">Temp. Optima</span>{{ product.temp_optim }}</td>
+                    <td><span class="p-column-title">Hum. Optima</span>{{ product.hum_optim }}</td>
+                    <td><span class="p-column-title">Prec. Optima</span>{{ product.rain_optim }}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="7">Tabla Vacia.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </nb-card-body>
+</nb-card>

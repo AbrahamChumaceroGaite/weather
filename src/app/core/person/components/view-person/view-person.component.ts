@@ -73,11 +73,6 @@ export class ViewPersonComponent implements OnInit {
   }
 
   dialog(id?: number) {
-    this.dialogService.open(CreateEditPersonComponent, {
-      context: {
-        id
-      }
-    }).onClose.subscribe(res => this.refreshTable());
   }
 
   dialogDelete(id: number) {

@@ -17,7 +17,6 @@ export const responsiveOptions = [
   ];
 
   export const setSelectWeather =[
-    { label: 'Temperatura', value: 'temp' },
     { label: 'Humedad', value: 'hum' },
     { label: 'Presión', value: 'pres' },
     { label: 'UV', value: 'uv' },

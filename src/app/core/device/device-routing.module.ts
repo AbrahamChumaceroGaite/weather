@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NavComponent } from 'src/app/components/nav/nav.component';
 import { ViewDeviceComponent } from './components/view-device/view-device.component';
+import { ViewDeviceReadComponent } from './components/view-device-read/view-device-read.component';
 import { AuthGuard } from 'src/app/guard/auth-guard.guard';
 
 const routes: Routes = [
@@ -11,7 +12,7 @@ const routes: Routes = [
     component: NavComponent,
     children: [
       { path: 'view/device', component: ViewDeviceComponent, canActivate: [AuthGuard], data: { component: '25', action: 'ver' } },
-
+      { path: 'view/device/report', component: ViewDeviceReadComponent, canActivate: [AuthGuard], data: { component: '25', action: 'ver' } },
     ],
   },
   { path: '', redirectTo: '/welcome', pathMatch: 'full' },
