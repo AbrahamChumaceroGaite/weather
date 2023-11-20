@@ -12,8 +12,6 @@ import { CreateEditClientComponent } from './components/client/create-edit-clien
 import { NebularLibraryModule } from 'src/app/modules/nebular-library.module';
 import { PrimengLibraryModule } from 'src/app/modules/primeng-library.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ViewRolComponent } from '../access/components/rol/view-rol/view-rol.component';
-import { CreateEditRolComponent } from '../access/components/rol/create-edit-rol/create-edit-rol.component';
 import { CreateEditUserRolComponent } from './components/users/create-edit-user-rol/create-edit-user-rol.component';
 
 
@@ -24,8 +22,6 @@ import { CreateEditUserRolComponent } from './components/users/create-edit-user-
     CreateEditClientComponent,
     ViewUserComponent,
     ViewClientComponent,
-    ViewRolComponent,
-    CreateEditRolComponent,
     CreateEditUserRolComponent
   ],
   imports: [

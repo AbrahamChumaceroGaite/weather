@@ -8,7 +8,6 @@ import { Table } from 'primeng/table';
 import { MenuItem } from 'primeng/api';
 import { Menu_generic } from 'src/app/templates/menu_generic';
 import { NbDialogService } from '@nebular/theme';
-import { CreateEditPersonComponent } from '../create-edit-person/create-edit-person.component';
 import { ConfirmService } from 'src/app/services/dialog/confirm.service';
 
 @Component({

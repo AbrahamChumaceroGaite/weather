@@ -1,0 +1,126 @@
+<div class="canvas">
+
+  <div class=item>
+    <nb-card style="width: auto;">
+      <p-table #dt2 responsiveLayout="stack" [value]="moduleData" [rowHover]="true" selectionMode="single"
+        [scrollable]="true" scrollHeight="480px" styleClass="p-datatable-sm" [showCurrentPageReport]="true"
+        [loading]="loading" styleClass="p-datatable-sm" [globalFilterFields]="['nombre']" [breakpoint]="'960px'">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th pSortableColumn="nombre" class="actions-column">
+              MODULOS
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-module let-expanded="expanded">
+          <tr (click)="filterMenu(module)">
+            <td class="custom-cell" nbPopoverTrigger="hover" nbPopoverPlacement="left" [nbPopover]="templateRef">
+              {{ module.name }}
+              <ng-template #templateRef>
+                <div class="section dialog-button">
+                  <ng-container >
+                    <button (click)="dialogCreateEditModules(module.id)" size="medium" nbTooltip="Editar Modulo" nbButton
+                      outline size="medium" status="success">
+                      <nb-icon icon="edit"></nb-icon>
+                    </button>
+                  </ng-container>
+                  <ng-container >
+                    <button (click)="dialogDeleteModules(module.id)" nbButton outline size="medium" size="medium"
+                      status="danger" nbTooltip="Eliminar Modulo" nbTooltipPlacement="top" nbButton>
+                      <nb-icon icon="trash"></nb-icon>
+                    </button>
+                  </ng-container>
+                </div>
+              </ng-template>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="6">Vacia</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </nb-card>
+  </div>
+ 
+
+  <div class="item">
+    <p-menubar styleClass="mb-3">
+      <div class="dialog-button">
+
+        <ng-container >
+          <button nbButton (click)="dialogCreateEditModules()" nbTooltip="Crear Modulo" nbTooltipStatus="info" nbButton
+            outline status="info"><nb-icon icon="plus"></nb-icon></button>
+        </ng-container>
+
+        <ng-container >
+          <button nbButton (click)="dialogCreateEdit()" nbTooltip="Asignar Componente" status="success"><nb-icon
+              icon="plus-circle"></nb-icon></button>
+        </ng-container>
+
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText class="p-inputtext-sm" type="text" class="search-input" [(ngModel)]="searchText"
+            (input)="filterGlobal()" placeholder="Busqueda Global..." />
+        </span>
+      </div>
+    </p-menubar>
+
+    <p-table #dt responsiveLayout="stack" [value]="structureData" [rows]="10" [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[5, 10, 25, 50]" [paginator]="true" styleClass="p-datatable-sm"
+      currentPageReportTemplate="Pagina {first} con {last} de {totalRecords} filas" [filterDelay]="0"
+      [globalFilterFields]="['nombre', 'modulo']">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pSortableColumn="id">
+            <p-sortIcon field="id"></p-sortIcon>
+            ID
+          </th>
+          <th pSortableColumn="nombre">
+            <p-sortIcon field="nombre"></p-sortIcon>
+            Nombre
+          </th>
+          <th>Creado</th>
+          <th>Actualizado</th>
+          <th class="actions-column">Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-component>
+        <tr>
+          <td><span class="p-column-title">ID</span>{{ component.id }}</td>
+          <td><span class="p-column-title">Nombre</span>{{ component.name }}</td>
+          <td><span class="p-column-title">Creado</span>{{ component.fecha_c | date : "dd/MM/yy HH:mm" }}</td>
+          <td><span class="p-column-title">Actualizado</span>{{ component.fecha_a | date : "dd/MM/yy HH:mm" }}
+          </td>
+          <td>
+            <div class="actions-column">
+              <ng-container >
+                <button (click)="dialogCreateEdit(component.id,  component.id)" nbButton outline size="tiny"
+                  status="success">
+                  <nb-icon icon="edit"></nb-icon>
+                </button>
+              </ng-container>
+
+              <ng-container >
+                <button (click)="dialogDelete(component.id)" nbButton outline size="tiny" status="danger">
+                  <nb-icon icon="trash"></nb-icon>
+                </button>
+              </ng-container>
+
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6">Tabla Vacia</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+        <p-button styleClass="p-button-rounded p-button-text" icon="pi pi-refresh" (click)="refreshTable()"></p-button>
+      </ng-template>
+    </p-table>
+  </div>
+
+</div>

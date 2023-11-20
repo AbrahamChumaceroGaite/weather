@@ -1,0 +1,53 @@
+
+<div class="{{formHeader}}">
+    <p-dialog [(visible)]="visible" [breakpoints]="{ '960px': '105vw' }" [style]="{width: 'auto'}" [maximizable]="true"
+        [styleClass]="'custom-dialog-icons'">
+        <p-header>
+            <nb-icon icon="{{ formlogo }}"></nb-icon> {{ formTitle }}
+        </p-header>
+        <br>
+        <form [formGroup]="form" (ngSubmit)="submitForm()" class="form-class">
+            <div class="form-group">
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-user"></i>
+                  </span>
+                  <span class="p-float-label">
+                     <nb-select placeholder="Modulo" fullWidth formControlName="idmodule" [(selected)]="selectedModule">
+                      <nb-option *ngFor="let mod of moduleData" [value]="mod.id">{{ mod.name }}</nb-option>
+                     </nb-select>
+                  </span>
+                </div>
+                <div class="form-small">
+                  <small class="p-error" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+                    El Campo es requerido
+                  </small>
+                </div>
+              </div>
+            <div class="form-group">
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-bookmark"></i>
+                  </span>
+                  <span class="p-float-label">
+                    <input pInputText type="text" placeholder="Componente..."  class="p-inputtext-sm" formControlName="name" />
+                    <label for="direccion">Nombre del Componente</label>
+                  </span>
+                </div>
+                <div class="form-small">
+                  <small class="p-error" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+                    El Campo es requerido
+                  </small>
+                  <div class="spacer"></div>
+                  <div class="form-hint">{{ form.get('name')?.value?.length || 0 }} / 100</div>
+                </div>
+              </div>
+              
+        </form>
+      <ng-template pTemplate="footer">
+      <div class="dialog-button">
+        <button nbButton status="success" type="submit" [disabled]="!form.valid" (click)="submitForm()"><nb-icon icon="checkmark"></nb-icon>{{submitButtonText}}</button>
+        <button nbButton status="danger" (click)="cancel()"><nb-icon icon="close"></nb-icon>Cancelar</button>   </div>
+    </ng-template>
+    </p-dialog>
+</div>

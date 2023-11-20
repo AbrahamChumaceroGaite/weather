@@ -34,9 +34,19 @@ export const MENU_ITEMS: any[] = [
         "icon": "shield-outline",
         "link": "view/user"
       }
+    
     ]
   },
-  
+  {
+    "title": 'Control',
+    "icon": 'shield',
+    "link": 'user/admin/account/access-control',
+  },
+  {
+    "title": "Estructura",
+    "icon": "layers",
+    "link": 'panel/components/list',
+  }
 ];
 
 export const OPTION_ITEMS: any[] = [

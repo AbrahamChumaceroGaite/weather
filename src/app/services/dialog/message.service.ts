@@ -35,6 +35,10 @@ export class MessagesService {
     this.MessagesService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo iniciar su sesión' });
   }
 
+  showFailedAccess(): void {
+    this.MessagesService.add({ severity: 'error', summary: 'Error', detail: 'No dispone de permisos' });
+  }
+
   showMsjError(msj: string): void {
     this.toastrService.danger(msj, '¡Algo salio mal!', { destroyByClick: true });
   }

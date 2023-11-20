@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
-
+import { AccesService } from '../core/access/services/access.service';
+import { MessagesService } from '../services/dialog/message.service';
 interface LoginResponse {
   token: string;
   name: string;
@@ -18,14 +19,14 @@ interface LoginResponse {
 })
 
 export class AuthService {
-  private baseUrl = environment.apiUrl; 
+  private api = environment.apiUrl; 
   titulo: string = '';
   icon: string = '';
   userPermissions: any;
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private AccesService: AccesService, private MessagesService: MessagesService) { }
 
   login(body: any): Observable<any> {
-    const url = `${this.baseUrl}/login/`;
+    const url = `${this.api}/login/`;
   
     return this.http.post<LoginResponse>(url, body).pipe(
       tap(res => {
@@ -33,9 +34,20 @@ export class AuthService {
         sessionStorage.setItem('iduser', res.iduser);
         sessionStorage.setItem('name', res.name);
         sessionStorage.setItem('rol', res.rol);
-        this.router.navigate(['/home']);
+        const id =  res.iduser
+        this.getPermissions(id);
       })
     );
+  }
+
+  getPermissions(id: any){
+    this.AccesService.getPermissions(id).subscribe((data: any) => {
+      sessionStorage.setItem('pageaccess', JSON.stringify(data));
+      this.router.navigate(['/home']);
+    }, (error: any) => {
+      console.log(error);
+      this.MessagesService.showFailedAccess();
+    });
   }
 
   logout(): void {
@@ -52,6 +64,13 @@ export class AuthService {
     // Verifica si permisosString es null y proporciona un valor predeterminado si es así
     return permisosString ? JSON.parse(permisosString) : null;
   }
+
+  hasPermission(componentId: string, action: string): boolean {
+    return this.userPermissions.some(
+      (permission:any) => permission.idcomponente == componentId && permission[action] === 1
+    );
+  }
+  
 
   getIdUser(): any {
     const idUser = sessionStorage.getItem('iduser');
