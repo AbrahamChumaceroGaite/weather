@@ -24,8 +24,8 @@
           <li><a class="nav-link scrollto" (click)="scrollToSection('about')">Proyecto P3</a></li>
           <li><a class="nav-link scrollto" (click)="scrollToSection('services')">Servicio</a></li>
           <li><a class="nav-link scrollto" (click)="scrollToSection('mapping')">Mapa</a></li>
-          <li><a class="nav-link scrollto" href="https://ucb-weather-client.dev.404.codes/">Cliente</a></li>
-          <li><a class="nav-link scrollto" (click)="showLoginModal()"><i class="bx bx-user-circle"></i></a>
+          <li><a class="nav-link scrollto" (click)="openClientAccess()">Acceso Cliente</a></li>
+          <li><a class="nav-link scrollto" (click)="showLoginModal()">Iniciar Sesión<i class="bx bx-user-circle"></i></a>
           </li>
         </ul>
       </nav>
@@ -48,8 +48,8 @@
               <h2 class="animated fadeInDown">{{header_info.subtitle}}</h2>
               <p class="animated fadeInUp">{{header_info.content}}</p>
               <div style="flex-direction: column; display: flex; gap: 5px;">
-                <p-button label="Iniciar Sesión" icon="pi pi-user" class="login-togle" iconPos="left" severity="success" (click)="showLoginModal()"></p-button>
-                <p-button label="Acceso Cliente" icon="pi pi-user" class="login-togle" iconPos="left" severity="success"  href="https://ucb-weather-client.dev.404.codes/"></p-button>
+                <p class="btn-get-started scrollto" (click)="showLoginModal()">Iniciar Sesión </p>
+                <p class="btn-get-started scrollto" (click)="openClientAccess()">Acceder Cliente </p>
                 <p-button pRipple class="p-button-success" label="Ver mas"  icon="pi pi-angle-down" iconPos="left" (click)="scrollToSection('about')"></p-button>      
               </div>
             </div>

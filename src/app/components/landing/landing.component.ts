@@ -63,6 +63,11 @@ export class LandingComponent {
     }
   }
 
+  openClientAccess(): void {
+    const clientAccessUrl = 'https://ucb-weather-client.dev.404.codes/';
+    window.open(clientAccessUrl, '_blank');
+  }
+
   scrollToSection(sectionId: string): void {
     const element = document.getElementById(sectionId);
     if (element) {

@@ -30,16 +30,12 @@
                     <div #historic class="echart"></div>
                 </nb-card-body>
             </nb-card>
-            <p-menubar styleClass="graph-menu">
-                <ng-template pTemplate="start">
-                    <label> Fecha inicio </label>
-                    <input nbInput type="datetime-local" [(ngModel)]="startDate" (change)="onDateRangeChange()" />
-                </ng-template>
-                <ng-template pTemplate="end">
-                    <label> Fecha final </label>
-                    <input nbInput type="datetime-local" [(ngModel)]="endDate" (change)="onDateRangeChange()" />
-                </ng-template>
-            </p-menubar>
+            <div class="menu-items-2">
+                <label> Fecha inicio </label>
+                <input nbInput type="datetime-local" [(ngModel)]="startDate" (change)="onDateRangeChange()" />
+                <label> Fecha final </label>
+                <input nbInput type="datetime-local" [(ngModel)]="endDate" (change)="onDateRangeChange()" />          
+              </div>
             <nb-card>
                 <nb-card-header class="map-card-header">
                     TEMPERATURAS
