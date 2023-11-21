@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { LoginComponent } from '../login/login.component';
 import { OwlOptions } from 'ngx-owl-carousel-o';
@@ -35,6 +35,15 @@ export class LandingComponent {
     center: { lat: -17.290603833387916, lng: -64.56279996977497 }
   };
   ref: DynamicDialogRef | undefined;
+
+  public promptEvent : any;
+
+  @HostListener('window:beforeinstallprompt', ['$event'])
+  onbeforeinstallprompt(e:any) {
+    e.preventDefault();
+    this.promptEvent = e;
+  }
+  
   constructor(public dialogService: DialogService) { }
 
   ngOnInit(): void {
@@ -43,6 +52,18 @@ export class LandingComponent {
       window.dispatchEvent(new Event('resize'));
     }, 1000);
   }
+  public installPWA() {
+    this.promptEvent.prompt();
+  }
+  
+  public shouldInstall(): boolean {
+    return !this.isRunningStandalone() && this.promptEvent;
+  }
+  
+  public isRunningStandalone(): boolean {
+    return (window.matchMedia('(display-mode: standalone)').matches);
+  }
+
 
   showLoginModal(): void {
     this.ref = this.dialogService.open(LoginComponent, {

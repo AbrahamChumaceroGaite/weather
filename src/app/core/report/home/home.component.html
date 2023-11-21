@@ -13,39 +13,19 @@
             placeholder="Busqueda Global..." />
         </span>
       </div>
-  <!--     <p-toolbar styleClass="menubar">
-
-        <ng-template pTemplate="left">
-          <div class="toolbar">
-           
-          </div>
-
-        </ng-template>
-        <ng-template pTemplate="right">
-        
-        </ng-template>
-
-
-      </p-toolbar> -->
 
       <br>
       <p-table #dt [value]="items" [rowHover]="true" [totalRecords]="totalRecords" [rows]="10"
         [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50]" [loading]="loading" [lazy]="true"
-        (onLazyLoad)="getTableData($event)" [paginator]="true" responsiveLayout="stack" [breakpoint]="'960px'"
+        (onLazyLoad)="getTableData($event)" [paginator]="true" responsiveLayout="row" [breakpoint]="'960px'"
         styleClass="p-datatable-sm" currentPageReportTemplate="Pagina {first} con {last} de {totalRecords} filas"
         [filterDelay]="0" [globalFilterFields]="['name, province, municipality, community, location']">
 
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="id" class="table-column">
-              ID
-            </th>
             <th pSortableColumn="name" class="table-column">
               Estación
-            </th>
-            <th pSortableColumn="status" class="table-column">
-              Estado
-            </th>
+            </th>          
             <th pSortableColumn="temp" class="table-column">
               Temperatura
             </th>
@@ -71,16 +51,9 @@
         </ng-template>
         <ng-template pTemplate="body" let-location>
           <tr>
-            <td><span class="p-column-title">ID</span>{{ location.id }}</td>
             <td><span class="p-column-title">Estación</span>{{ location.name }}</td>
-            <td><span class="p-column-title">Estado</span>
-              <span [ngClass]="location.status === 0 ? 'suspendido' : 'activo'">
-                {{ location.status === 0 ? 'Suspendido' : 'Activo' }}
-              </span>
-            </td>
-
-            <td><span class="p-column-title">Temperatura</span>{{ location.temp }}</td>
-            <td><span class="p-column-title">Humedad</span>{{ location.hum }}</td>
+            <td><span class="p-column-title">Temperatura</span>{{ location.temp }} ºC</td>
+            <td><span class="p-column-title">Humedad</span>{{ location.hum }} %</td>
             <td><span class="p-column-title">Presion</span>{{ location.pres }}</td>
             <td><span class="p-column-title">UV</span>{{ location.uv }}</td>
             <td><span class="p-column-title">Altitud</span>{{ location.altitude }}</td>
