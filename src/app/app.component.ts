@@ -12,9 +12,7 @@ export class AppComponent {
   constructor(private swUpdate: SwUpdate, public authService: AuthService) {
     if (this.swUpdate.isEnabled) {
       this.swUpdate.available.subscribe(() => {
-        if (confirm('Hay una nueva versión disponible. ¿Desea cargar la nueva versión?')) {
-          window.location.reload();
-        }
+        window.location.reload();
       });
     }}
 }
